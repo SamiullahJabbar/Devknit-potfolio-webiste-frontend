@@ -1,0 +1,56 @@
+/* Custom Yellow Trailing Circle */
+.custom-cursor {
+  position: fixed;
+  width: 24px; /* Normal size: 24px */
+  height: 24px;
+  background: #ffd700; /* Pure yellow */
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  /* Default scale (1.0) and centering */
+  transform: translate(-50%, -50%) scale(1); 
+  
+  transition: 
+    left 0.15s ease-out, 
+    top 0.15s ease-out, 
+    transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), /* Smoother scale transition */
+    width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.3s ease;
+  will-change: transform, left, top, width, height;
+  
+  box-shadow: 
+    0 0 0 1px rgba(255, 215, 0, 0.4),
+    0 0 15px rgba(255, 215, 0, 0.7);
+    
+  opacity: 0.8; 
+}
+
+/* New: Styles for when the cursor is hovering over an interactive element */
+/* Size will be 40px (1.66 times the original 24px) */
+.custom-cursor.is-hovering {
+  /* We can either change width/height, or use scale. Using width/height here */
+  width: 70px; 
+  height: 70px;
+  background: #ffcc00; 
+  box-shadow: 
+    0 0 0 2px rgba(255, 215, 0, 0.6),
+    0 0 20px rgba(255, 215, 0, 0.9);
+}
+
+/* Allow the default cursor to show over the trailing circle */
+html, body, * {
+  cursor: default; 
+}
+
+/* Optional: Change the default cursor to a pointer when over interactive elements */
+button, a, img {
+    cursor: pointer !important;
+}
+
+/* Mobile devices - default cursor remains visible */
+@media (max-width: 768px) {
+  .custom-cursor {
+    display: none; 
+  }
+}

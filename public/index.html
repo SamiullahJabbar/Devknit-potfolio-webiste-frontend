@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Web site created using create-react-app" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    
+    <link rel="icon" type="image/png" href="%PUBLIC_URL%/favicons.png?v=2" />
+    
+    <title>DEVKNIT</title>
+    <style type="text/css">
+      /* 🚀 FINAL FORCEFUL FIX CSS (Keep all anti-bar fixes) */
+      html {
+        top: 0 !important;
+        margin-top: 0 !important;
+      }
+      body {
+        top: 0 !important;
+        margin-top: 0 !important;
+        position: relative !important;
+      }
+      /* Hide Google Translate bar with maximum specificity */
+      iframe.goog-te-banner-frame,
+      .goog-te-banner-frame,
+      [id^="goog-te-banner"] {
+        display: none !important;
+        height: 0 !important;
+        width: 0 !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        position: absolute !important;
+        z-index: -10000 !important;
+        pointer-events: none !important;
+      }
+      /* Prevent any overflow or repositioning */
+      html, body {
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+      }
+      /* Widget styling */
+      .goog-logo-link, .goog-te-info-container {
+        display: none !important;
+      }
+      .goog-te-gadget-simple {
+        padding: 6px 5px !important;
+        border: 1px solid #dcdcdc !important;
+        border-radius: 6px !important;
+        background-color: #ffffff !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        font-family: inherit;
+        line-height: 1.5;
+      }
+      .goog-te-gadget {
+        font-size: 0px !important;
+      }
+      .goog-te-combo {
+        font-size: 14px !important;
+        border: none !important;
+        outline: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      /* Prevent Translate bar from affecting layout */
+      body > div:first-child {
+        display: none !important;
+      }
+
+      /* 📱 MOBILE CENTERING FIX (NEW) */
+      /* Default desktop position (top right) */
+      #google_translate_element {
+        position:fixed;
+        top:5px;
+        right:5px;
+        left: auto; /* Ensure it stays right on desktop */
+        z-index:9999;
+      }
+
+      /* Apply centering for screens smaller than 600px (common mobile breakpoint) */
+      @media (max-width: 600px) {
+        #google_translate_element {
+          /* Remove fixed right/left positioning */
+          right: auto;
+          left: 50%; /* Start the left edge at 50% */
+          /* Pull the element back by half its width to truly center it */
+          transform: translateX(-50%); 
+          top: 15px; /* Keep the same top margin */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+   
+    <div id="google_translate_element"></div>
+
+    <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        autoDisplay: false, // Disable auto-display of the bar
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        includedLanguages: 'en,ru,uk,kk,uz,ky,tk'
+      }, 'google_translate_element');
+    }
+    </script>
+   
+    <script
+        type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+    ></script>
+    <script type="text/javascript">
+        window.onload = function() {
+            function hideTranslateBar() {
+                var frames = document.getElementsByTagName('iframe');
+                for (var i = 0; i < frames.length; i++) {
+                    if (frames[i].src && frames[i].src.indexOf('translate.google.com') > -1) {
+                        frames[i].parentNode.removeChild(frames[i]);
+                    }
+                }
+                var banners = document.querySelectorAll('.goog-te-banner-frame, [id^="goog-te-banner"]');
+                banners.forEach(function(banner) {
+                    banner.parentNode.removeChild(banner);
+                });
+                // Hide any unexpected top divs added by Translate
+                var topDiv = document.body.firstElementChild;
+                if (topDiv && topDiv.className.includes('goog-te')) {
+                    topDiv.style.display = 'none';
+                }
+            }
+
+            // Run on load
+            hideTranslateBar();
+
+            // Use MutationObserver to handle dynamic content
+            var observer = new MutationObserver(function(mutations) {
+                hideTranslateBar();
+            });
+            observer.observe(document.body, { childList: true, subtree: true });
+
+            // Fallback interval check
+            setInterval(hideTranslateBar, 500);
+        };
+    </script>
+  </body>
+</html>

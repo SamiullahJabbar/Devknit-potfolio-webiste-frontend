@@ -1,0 +1,1432 @@
+/* ======================================= */
+/* 1. NEW HERO SECTION STYLES (Existing) */
+/* ======================================= */
+
+.project-detail-page .new-project-hero-section {
+    position: relative;
+    width: 100%;
+    min-height: 65vh; 
+    display: flex;
+    align-items: center; 
+    justify-content: flex-start;
+    padding: 80px 0; 
+    overflow: hidden;
+}
+
+.project-detail-page .hero-background-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.project-detail-page .hero-background-image-new {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    display: block;
+    transform: scale(1.05); 
+    filter: blur(1.5px) brightness(0.7); 
+    transition: transform 0.5s ease;
+}
+
+.project-detail-page .hero-overlay-dark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); 
+    z-index: 2;
+}
+
+.project-detail-page .hero-content-new {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    max-width: 1200px; 
+    margin: 0 auto;
+    padding: 0 40px;
+    color: #ffffff; 
+}
+
+.project-detail-page .hero-text-area {
+    max-width: 750px; 
+}
+
+.project-detail-page .project-main-title-new {
+    font-size: 3.8rem; 
+    font-weight: 600; 
+    margin-bottom: 20px; 
+    line-height: 1.1;
+    white-space: normal; 
+    overflow: visible; 
+}
+
+.project-detail-page .project-hero-description-new {
+    font-size: 1.1rem; 
+    font-weight: 300;
+    margin-bottom: 40px; 
+    opacity: 0.9;
+    padding-left: 0; 
+    border-left: none; 
+    display: block;
+    overflow: visible;
+}
+
+.project-detail-page .project-meta-container {
+    display: flex;
+    flex-direction: row; 
+    gap: 40px; 
+    margin-top: 0; 
+}
+
+.project-detail-page .meta-block {
+    display: flex;
+    flex-direction: column;
+}
+
+.project-detail-page .meta-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #ffffff; 
+    text-transform: none; 
+    letter-spacing: normal;
+    margin-bottom: 15px;
+    opacity: 0.9;
+}
+
+.project-detail-page .meta-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.project-detail-page .meta-tag {
+    display: inline-flex;
+    padding: 6px 15px; 
+    border-radius: 4px; 
+    font-size: 0.9rem;
+    font-weight: 400;
+    background-color: transparent; 
+    color: #ffffff; 
+    border: 1px solid #FFD700; /* Yellow accent */
+}
+
+
+
+/* ======================================= */
+/* 2. NEW TECH STACK SECTION STYLES */
+/* ======================================= */
+
+.project-detail-page .tech-stack-section {
+    width: 100%;
+    /* White background to contrast the dark hero */
+    background-color: #ffffff; 
+    padding: 40px 0; 
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.project-detail-page .tech-stack-container {
+    display: flex;
+    justify-content: center; /* Center the icons */
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 60px; /* Space between items */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+.project-detail-page .stack-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    /* Fixed width for uniform spacing */
+    width: 150px; 
+}
+
+.project-detail-page .stack-icon {
+    height: 60px; /* Size of the icon image */
+    width: auto;
+    object-fit: contain;
+    margin-bottom: 10px;
+    /* Optional: Convert color icons to monochrome gray if needed */
+    filter: grayscale(100%) brightness(0.6); 
+    opacity: 0.7;
+}
+
+.project-detail-page .stack-caption {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+}
+
+/* ======================================= */
+/* 3. ABOUT/MORE ABOUT SECTION STYLES (Fixed Mirroring) */
+/* ======================================= */
+
+.project-detail-page .about-project-section, .project-detail-page .more-about-section {
+    width: 100%;
+    background-color: #ffffff; 
+    padding: 100px 0; 
+}
+
+/* Light gray background for the mirrored section for contrast */
+.project-detail-page .more-about-section {
+    background-color: #f7f9fb; 
+}
+
+.project-detail-page .about-content-wrapper {
+    display: flex;
+    flex-direction: row; /* Default: Image (JSX 1) Left, Text (JSX 2) Right */
+    align-items: center; 
+    
+    justify-content: flex-end; 
+    
+    max-width: 1500px; /* Increased max width */
+    margin: 0 auto;
+    padding: 0 40px;
+    gap: 120px; /* Increased gap */
+}
+
+/* MIRRORED LAYOUT: Text Left, Image Right */
+.project-detail-page .about-content-wrapper.mirrored {
+    /* Reverses the order of children (Image [JSX 1] becomes right, Text [JSX 2] becomes left) */
+    flex-direction: row-reverse; 
+    justify-content: flex-start; 
+}
+
+
+.project-detail-page .about-image-side {
+    /* Image width: 65% */
+    flex: 0 0 65%; 
+    min-width: 55%;
+    
+    position: relative; 
+    width: 65%; 
+    padding-bottom: 50%; /* Height: 50% of its width */
+    
+    margin: 0;
+    padding-top: 0; 
+    overflow: hidden; 
+    border-radius: 12px; 
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); 
+}
+
+.project-detail-page .about-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    display: block;
+    border-radius: 0; 
+    box-shadow: none; 
+    transition: transform 0.3s ease;
+}
+
+.project-detail-page .about-image:hover {
+    transform: scale(1.02); 
+}
+
+.project-detail-page .about-text-side {
+    /* Text width: 40% */
+    flex: 0 0 40%; 
+    min-width: 250px; 
+    color: #333; 
+}
+
+.project-detail-page .about-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    line-height: 1.2;
+}
+
+.project-detail-page .about-description p {
+    font-size: 1.10rem; 
+    line-height: 1.7; 
+    margin-bottom: 20px; 
+    color: #555; 
+}
+
+.project-detail-page .about-description strong {
+    font-weight: 700;
+    color: #000; 
+}
+
+/* ======================================= */
+/* 4. RELATED SERVICES SECTION STYLES (Existing) */
+/* (Assuming these were already scoped correctly in your previous update) */
+/* ======================================= */
+
+/* ======================================= */
+/* 5. NEW FEATURES SECTION STYLES (Final Update: Cards Simple Grey, NO HOVER EFFECT) */
+/* ======================================= */
+
+/* The outer wrapper ensures the section itself has space around it */
+.project-detail-page .features-container-wrapper {
+    width: 100%;
+    padding: 80px 40px; /* Provides padding around the main dark container */
+    background-color: #ffffff; /* Keep the page background white/light */
+}
+
+.project-detail-page .features-section {
+    /* Main dark, rounded container - Black */
+    width: 100%;
+    max-width: 1800px;
+    margin: 0 auto;
+    
+    background-color: #000000ea; /* DARK BLACK BACKGROUND for the main container */
+    color: #ffffff;
+    padding: 60px 0; /* Vertical padding inside the dark container */
+    border-radius: 20px; /* Rounded corners */
+    overflow: hidden; 
+}
+
+.project-detail-page .features-header-content {
+    /* Content is centered */
+    max-width: 900px;
+    margin: 0 auto 40px auto;
+    padding: 0 60px; /* Horizontal padding inside the dark container */
+    text-align: center;
+}
+
+.project-detail-page .features-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.project-detail-page .features-subtitle {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #ffffff; 
+}
+
+.project-detail-page .features-carousel-container {
+    position: relative;
+    padding-bottom: 30px; 
+    max-width: 100%; 
+}
+
+.project-detail-page .features-carousel-wrapper {
+    /* KEY FOR HORIZONTAL SCROLLING */
+    display: flex;
+    overflow-x: auto; 
+    scroll-snap-type: x mandatory; 
+    -webkit-overflow-scrolling: touch;
+    
+    padding: 0 60px; 
+    margin: 0;
+    gap: 20px;
+}
+
+/* Hide scrollbar for aesthetics */
+.project-detail-page .features-carousel-wrapper::-webkit-scrollbar {
+    display: none;
+}
+.project-detail-page .features-carousel-wrapper {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.project-detail-page .feature-card {
+    /* Simple Grey card with White text - NO HOVER */
+    flex: 0 0 320px; 
+    scroll-snap-align: start;
+    background-color: #333333; /* DARK GREY BACKGROUND for the feature cards */
+    border-radius: 8px;
+    padding: 30px;
+    height: 250px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    
+    /* Remove any border, outline, or box-shadow that might create white styling */
+    border: none;
+    outline: none;
+    box-shadow: none;
+    
+    /* Hover effect and transition removed for simplicity */
+    transition: none; 
+}
+
+/* Ensure no changes on hover */
+.project-detail-page .feature-card:hover {
+    background-color: #333333; /* Keep background fixed on hover */
+    /* Remove any hover effects that might create white styling */
+    border: none;
+    outline: none;
+    box-shadow: none;
+    transform: none;
+}
+
+.project-detail-page .feature-card-title {
+    /* Bold Title */
+    font-size: 1.5rem;
+    font-weight: 700; 
+    margin-bottom: 15px;
+    color: #ffffff; /* WHITE text */
+    /* text-shadow: none; removed for simple text */
+}
+
+.project-detail-page .feature-card-description {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #ffffff; /* WHITE TEXT */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 6; 
+    -webkit-box-orient: vertical;
+}
+
+/* Scroll Navigation (Optional) */
+.project-detail-page .carousel-nav {
+    display: flex;
+    position: absolute;
+    right: 60px; 
+    bottom: -10px; 
+    transform: translateY(100%);
+    gap: 10px;
+}
+
+.project-detail-page .nav-button {
+    background: #555555;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1.2rem;
+    line-height: 1;
+    transition: background 0.2s;
+}
+
+.project-detail-page .nav-button:hover {
+    background: #050505;
+}
+
+
+/* ======================================= */
+/* 6. NEW RESULT SECTION STYLES */
+/* (Text Left, Media Right - Similar to About Section) */
+/* ======================================= */
+
+.project-detail-page .result-section {
+    padding: 80px 0;
+    width: 100%;
+    background-color: #ffffff; /* Typically a light background */
+}
+
+.project-detail-page .result-content-wrapper {
+    /* Reuses the styling of the two-column layout */
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    gap: 60px;
+    align-items: flex-start; /* Align content to the top */
+}
+
+/* Use generic column classes or define specific ones if needed */
+.project-detail-page .result-text-side {
+    flex: 1;
+    max-width: 50%;
+}
+
+.project-detail-page .result-media-side {
+    flex: 1;
+    max-width: 50%;
+    /* Container for the video/image */
+    background-color: #f0f0f0; /* Light background behind media */
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.project-detail-page .result-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #1a1a1a;
+}
+
+.project-detail-page .result-description {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #555555;
+}
+
+/* Style for the media element (image or video) */
+.project-detail-page .result-media {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 992px) {
+    .project-detail-page .new-project-hero-section {
+        min-height: 60vh;
+        padding: 60px 0;
+    }
+
+    .project-detail-page .hero-content-new {
+        padding: 0 20px;
+    }
+
+    .project-detail-page .project-main-title-new {
+        font-size: 2.5rem;
+    }
+
+    .project-detail-page .project-hero-description-new {
+        font-size: 1rem;
+        margin-bottom: 30px;
+    }
+    
+    .project-detail-page .project-meta-container {
+        flex-direction: column; 
+        gap: 20px;
+    }
+
+    .project-detail-page .tech-stack-section {
+        padding: 30px 0;
+    }
+
+    .project-detail-page .tech-stack-container {
+        justify-content: space-around;
+        gap: 20px 10px;
+        padding: 0 20px;
+    }
+    
+    .project-detail-page .stack-item {
+        width: 80px;
+    }
+
+    .project-detail-page .stack-icon {
+        height: 35px;
+    }
+
+    .project-detail-page .about-content-wrapper {
+        /* Stack image and text vertically on tablets/mobiles */
+        flex-direction: column; 
+        gap: 40px;
+        padding: 0 30px;
+    }
+    
+    /* On mobile, both layouts stack naturally (Image then Text, based on JSX order) */
+    .project-detail-page .about-content-wrapper.mirrored {
+        flex-direction: column; 
+    }
+
+    .project-detail-page .about-project-section, .project-detail-page .more-about-section {
+        padding: 60px 0; 
+    }
+
+    .project-detail-page .about-image-side {
+        flex: 1 1 100%; 
+        min-width: 100%;
+        width: 100%;
+        padding-bottom: 60%; 
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .project-detail-page .about-text-side {
+        flex: 1 1 100%;
+        min-width: 100%; 
+    }
+
+    .project-detail-page .about-title {
+        font-size: 2rem;
+        text-align: center; 
+    }
+
+    .project-detail-page .about-description p {
+        font-size: 1.10rem;
+        text-align: left;
+    }
+    
+    /* Features Section Mobile */
+    .project-detail-page .features-container-wrapper {
+        padding: 40px 20px; 
+    }
+    
+    .project-detail-page .features-section {
+        padding: 40px 0;
+        border-radius: 12px;
+    }
+    
+    .project-detail-page .features-header-content {
+        padding: 0 20px;
+        margin-bottom: 30px;
+    }
+
+    .project-detail-page .features-title {
+        font-size: 2rem;
+    }
+
+    .project-detail-page .features-carousel-wrapper {
+        padding: 0 20px;
+        gap: 15px;
+    }
+
+    .project-detail-page .feature-card {
+        flex: 0 0 80vw; 
+        height: 220px; 
+        padding: 25px;
+    }
+    
+    .project-detail-page .carousel-nav {
+        display: none; 
+    }
+    
+    /* Result Section Mobile */
+    .project-detail-page .result-section {
+        padding: 40px 0;
+    }
+    
+    .project-detail-page .result-content-wrapper {
+        flex-direction: column;
+        gap: 30px;
+        padding: 0 20px;
+    }
+
+    .project-detail-page .result-text-side,
+    .project-detail-page .result-media-side {
+        max-width: 100%; /* Full width on small screens */
+    }
+    
+    .project-detail-page .result-title {
+        font-size: 2rem;
+    }
+}
+
+/* Additional responsive adjustments for very small screens */
+@media (max-width: 480px) {
+    .project-detail-page .about-content-wrapper {
+        padding: 0 20px;
+        gap: 30px;
+    }
+    
+    .project-detail-page .about-project-section, .project-detail-page .more-about-section {
+        padding: 40px 0;
+    }
+
+    .project-detail-page .about-image-side {
+        padding-bottom: 70%; 
+        border-radius: 8px;
+    }
+
+    .project-detail-page .about-title {
+        font-size: 1.8rem;
+    }
+
+    .project-detail-page .about-description p {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+}
+
+
+
+
+
+
+/* ======================================= */
+/* 7. NEW GALLERY SECTION STYLES */
+/* (Scoped to prevent conflicts) */
+/* ======================================= */
+
+.project-detail-page .gallery-section {
+    padding: 80px 0;
+    width: 100%;
+    background-color: #f7f7f7; /* Slightly distinct background */
+}
+
+.project-detail-page .gallery-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 40px;
+    text-align: center;
+}
+
+.project-detail-page .gallery-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #1a1a1a;
+}
+
+.project-detail-page .gallery-subtitle {
+    font-size: 1.1rem;
+    color: #555555;
+    margin-bottom: 40px;
+}
+
+.project-detail-page .gallery-grid {
+    display: grid;
+    /* Responsive Grid Layout: 3 columns on large screens */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.project-detail-page .gallery-item {
+    position: relative; 
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    cursor: pointer; 
+    /* NEW: Ensures each grid item itself has a defined aspect ratio or height */
+    aspect-ratio: 16 / 9; /* Or set a fixed height if you prefer */
+}
+
+.project-detail-page .gallery-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.project-detail-page .gallery-image {
+    width: 100%;
+    height: 100%; /* NEW: Make image fill the aspect-ratio defined parent */
+    object-fit: cover; 
+    display: block;
+    transition: opacity 0.3s;
+}
+
+.project-detail-page .gallery-zoom-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 1.2rem;
+    font-weight: 600;
+    pointer-events: none; 
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.project-detail-page .gallery-item:hover .gallery-zoom-overlay {
+    opacity: 1;
+}
+
+/* ======================================= */
+/* 8. NEW GALLERY MODAL STYLES */
+/* (Scoped to prevent conflicts) */
+/* ======================================= */
+
+/* NOTE: .gallery-modal-overlay needs to be global for fixed positioning, 
+ * but we apply the scoping class to the top container where it's rendered in JSX 
+ * to ensure it only applies when ProjectDetail is visible. 
+ * Since modals are often rendered outside the main flow, we must ensure it's
+ * either correctly mounted or we scope the rest of the elements.
+ * Here, we assume the modal is rendered *inside* the project-detail-page.
+ */
+
+.project-detail-page .gallery-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; 
+    animation: fadeIn 0.3s ease-out;
+}
+
+.project-detail-page .gallery-modal-content {
+    position: relative;
+    max-width: 90vw; 
+    max-height: 90vh; 
+    overflow: hidden;
+    border-radius: 8px;
+    background-color: #000; 
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+
+.project-detail-page .modal-full-image {
+    display: block;
+    width: auto;
+    max-width: 100%; 
+    height: auto;
+    max-height: 100%; 
+    object-fit: contain; 
+    border-radius: 8px;
+}
+
+.project-detail-page .modal-close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2.5rem;
+    cursor: pointer;
+    padding: 10px 15px;
+    line-height: 1;
+    z-index: 1001; 
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    transition: background-color 0.2s;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    width: 50px; 
+    height: 50px;
+}
+
+.project-detail-page .modal-close-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+/* Navigation Buttons for Modal */
+.project-detail-page .modal-nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 1001;
+    border-radius: 50%; 
+    width: 60px; 
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.project-detail-page .modal-nav-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-50%) scale(1.05);
+}
+
+.project-detail-page .modal-prev {
+    left: 20px;
+}
+
+.project-detail-page .modal-next {
+    right: 20px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* --- Mobile Responsiveness --- */
+
+/* Mobile adjustments for Gallery */
+@media (max-width: 992px) {
+    .project-detail-page .gallery-section {
+        padding: 40px 0;
+    }
+
+    .project-detail-page .gallery-container {
+        padding: 0 20px;
+    }
+    
+    .project-detail-page .gallery-title {
+        font-size: 2rem;
+    }
+
+    .project-detail-page .gallery-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .project-detail-page .gallery-item {
+        aspect-ratio: 4 / 3; /* Adjust aspect ratio for smaller screens if needed */
+    }
+}
+
+@media (max-width: 576px) {
+    .project-detail-page .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+    .project-detail-page .gallery-item {
+        aspect-ratio: 16 / 9; /* Or adjust as per preference */
+    }
+}
+
+/* Mobile adjustments for modal buttons */
+@media (max-width: 768px) {
+    .project-detail-page .modal-close-button {
+        top: 10px;
+        right: 10px;
+        font-size: 2rem;
+        width: 40px;
+        height: 40px;
+    }
+
+    .project-detail-page .modal-nav-button {
+        padding: 10px;
+        font-size: 1.5rem;
+        width: 45px;
+        height: 45px;
+    }
+    .project-detail-page .modal-prev {
+        left: 10px;
+    }
+    .project-detail-page .modal-next {
+        right: 10px;
+    }
+}
+
+
+
+
+
+/* ======================================= */
+/* 9. Related Services & Projects (SCALED FROM ServiceDetail.css) */
+/* ======================================= */
+
+/* 🚀 Enhanced Related Services (Applied to Projects too) */
+.project-detail-page .related-services-section {
+  padding: 100px 0;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F5F5F5 100%);
+  position: relative;
+}
+
+/* SCOPE: .section-header */
+.project-detail-page .section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+/* SCOPE: .section-header h2 */
+.project-detail-page .section-header h2 {
+  color: #000000;
+  font-size: 3rem;
+  margin-bottom: 20px;
+  font-weight: 800;
+  position: relative;
+  display: inline-block;
+}
+
+.project-detail-page .section-header h2::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #FFD700, #000000);
+  border-radius: 2px;
+}
+
+/* SCOPE: .section-header p */
+.project-detail-page .section-header p {
+  color: #666;
+  font-size: 1.3rem;
+  margin-top: 30px;
+  font-weight: 300;
+}
+
+.project-detail-page .services-slider {
+  display: flex;
+  gap: 35px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 30px 20px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  cursor: grab;
+}
+
+.project-detail-page .services-slider:active {
+  cursor: grabbing;
+}
+
+.project-detail-page .services-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.project-detail-page .service-slide-card {
+  min-width: 380px;
+  background: #FFFFFF;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 43, 91, 0.1);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+}
+
+.project-detail-page .service-slide-card:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+}
+
+.project-detail-page .slide-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+}
+
+.project-detail-page .slide-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.project-detail-page .service-slide-card:hover .slide-image-wrapper img {
+  transform: scale(1.1);
+}
+
+.project-detail-page .slide-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(255, 215, 0, 0.8));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+.project-detail-page .service-slide-card:hover .slide-overlay {
+  opacity: 1;
+}
+
+.project-detail-page .view-details {
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 1.2rem;
+  transform: translateY(20px);
+  transition: transform 0.4s ease;
+}
+
+.project-detail-page .service-slide-card:hover .view-details {
+  transform: translateY(0);
+}
+
+.project-detail-page .slide-content {
+  padding: 30px;
+}
+
+.project-detail-page .slide-content h3 {
+  color: #000000;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.project-detail-page .slide-content p {
+  color: #666;
+  line-height: 1.7;
+  margin-bottom: 25px;
+  font-size: 1.1rem;
+}
+
+.project-detail-page .slide-cta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #FFD700;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.project-detail-page .service-slide-card:hover .slide-cta {
+  gap: 15px;
+  color: #000000;
+}
+
+/* 📞 Enhanced CTA Section */
+.project-detail-page .service-cta-section {
+  padding: 100px 0;
+  background: linear-gradient(135deg, #000000 0%, #000000 50%, #000000 100%);
+  color: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-detail-page .service-cta-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40%;
+  height: 100%;
+  background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23FFD700' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+  opacity: 0.4;
+}
+
+.project-detail-page .cta-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.project-detail-page .cta-content h2 {
+  font-size: 3.2rem;
+  margin-bottom: 25px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.project-detail-page .cta-content p {
+  font-size: 1.4rem;
+  margin-bottom: 50px;
+  opacity: 0.95;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 300;
+}
+
+.project-detail-page .cta-buttons {
+  display: flex;
+  gap: 25px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 60px;
+}
+
+.project-detail-page .cta-features {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  flex-wrap: wrap;
+}
+
+.project-detail-page .cta-feature {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px 25px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.project-detail-page .cta-feature:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px);
+}
+
+.project-detail-page .cta-feature .feature-icon {
+  font-size: 2rem;
+  margin: 0;
+  background: linear-gradient(135deg, #FFD700, #FFFFFF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Loading and Error States (The original code used .service-detail-page, 
+   I'm correcting it to .project-detail-page for consistency) */
+.project-detail-page .detail-loading {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ... (Skeleton classes corrected to .project-detail-page scope) ... */
+
+.project-detail-page .skeleton-breadcrumb {
+  height: 16px;
+  width: 200px;
+  background: #F5F5F5;
+  border-radius: 4px;
+  margin-bottom: 30px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.project-detail-page .skeleton-header {
+  height: 40px;
+  background: #F5F5F5;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.project-detail-page .skeleton-title {
+  height: 40px;
+  background: #F5F5F5;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.project-detail-page .skeleton-subtitle {
+  height: 20px;
+  width: 70%;
+  background: #F5F5F5;
+  border-radius: 4px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.project-detail-page .skeleton-image {
+  height: 400px;
+  background: #F5F5F5;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.project-detail-page .skeleton-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.project-detail-page .skeleton-line {
+  height: 16px;
+  background: #F5F5F5;
+  border-radius: 4px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.project-detail-page .skeleton-line.short {
+  width: 60%;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.project-detail-page .detail-error {
+  text-align: center;
+  padding: 80px 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.project-detail-page .error-icon {
+  font-size: 4rem;
+  margin-bottom: 30px;
+}
+
+.project-detail-page .detail-error h2 {
+  color: #000000;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.project-detail-page .detail-error p {
+  color: #666;
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+}
+
+.project-detail-page .error-message {
+  font-size: 1rem !important;
+  color: #999 !important;
+  font-family: monospace;
+}
+
+.project-detail-page .back-button {
+  background: linear-gradient(135deg, #000000, #000000);
+  color: #FFFFFF;
+  padding: 18px 35px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+}
+
+.project-detail-page .back-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(2, 2, 2, 0.3);
+}
+
+
+/* Enhanced Responsive Design (Corrected to .project-detail-page scope) */
+@media (max-width: 1024px) {
+  .project-detail-page .hero-content {
+    gap: 60px;
+  }
+  
+  .project-detail-page .service-main-title {
+    font-size: 3.2rem;
+  }
+  
+  .project-detail-page .features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .project-detail-page .service-hero-section {
+    padding: 80px 0 60px;
+  }
+  
+  .project-detail-page .hero-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+  
+  .project-detail-page .service-main-title {
+    font-size: 2.8rem;
+  }
+  
+  .project-detail-page .service-main-title::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .project-detail-page .service-hero-description {
+    font-size: 1.2rem;
+  }
+  
+  .project-detail-page .hero-actions {
+    justify-content: center;
+  }
+  
+  .project-detail-page .main-image-container {
+    height: 400px;
+  }
+  
+  .project-detail-page .tabs-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .project-detail-page .tab-button {
+    justify-content: center;
+  }
+  
+  .project-detail-page .features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .project-detail-page .benefit-item {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+  
+  .project-detail-page .service-slide-card {
+    min-width: 300px;
+  }
+  
+  .project-detail-page .cta-content h2 {
+    font-size: 2.5rem;
+  }
+  
+  .project-detail-page .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .project-detail-page .cta-features {
+    gap: 20px;
+  }
+  
+  .project-detail-page .faq-question {
+    padding: 25px 30px;
+  }
+  
+  .project-detail-page .faq-answer {
+    padding: 0 30px;
+  }
+  
+  .project-detail-page .faq-item.active .faq-answer {
+    padding: 0 30px 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-detail-page .service-main-title {
+    font-size: 2.2rem;
+  }
+  
+  .project-detail-page .service-hero-description {
+    font-size: 1.1rem;
+  }
+  
+  .project-detail-page .cta-button {
+    padding: 16px 28px;
+    font-size: 1rem;
+  }
+  
+  .project-detail-page .tab-panel h3 {
+    font-size: 2rem;
+  }
+  
+  .project-detail-page .section-header h2 {
+    font-size: 2.2rem;
+  }
+  
+  .project-detail-page .feature-card,
+  .project-detail-page .benefit-item {
+    padding: 25px;
+  }
+  
+  .project-detail-page .faq-question {
+    padding: 20px 25px;
+    font-size: 1.1rem;
+  }
+  
+  .project-detail-page .faq-answer {
+    padding: 0 25px;
+    font-size: 1rem;
+  }
+  
+  .project-detail-page .faq-item.active .faq-answer {
+    padding: 0 25px 20px;
+  }
+}
