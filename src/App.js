@@ -6,6 +6,10 @@
 // import AboutUs from './pages/AboutUs';
 // import ProjectDetail from './pages/ProjectDetail';
 // import ContactUs from './pages/ContactUs';
+// import Projects from './pages/Projects';
+// import BusinessServiceDetail from './pages/BusinessServiceDetail';
+
+
 
 
 
@@ -21,6 +25,8 @@
 //         {/* <Route path="/projects" element={<ProjectDetail />} /> */}
 //         <Route path="/projects/:slug" element={<ProjectDetail />} />
 //         <Route path="/ContactUs" element={<ContactUs />} />
+//         <Route path="/Projects" element={<Projects />} />
+//         <Route path="/business-services/:slug" element={<BusinessServiceDetail />} />
 //       </Routes>
 //     </Router>
 //   );
@@ -35,8 +41,7 @@
 
 
 
-
-
+import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import React, { useState, useEffect, useRef } from 'react';
 import Home from './pages/Home';
@@ -46,8 +51,8 @@ import ServiceDetail from './pages/ServiceDetail';
 import AboutUs from './pages/AboutUs';
 import ProjectDetail from './pages/ProjectDetail';
 import ContactUs from './pages/ContactUs';
-import './App.css';
 import Projects from './pages/Projects';
+import BusinessServiceDetail from './pages/BusinessServiceDetail';
 
 
 
@@ -107,18 +112,17 @@ function App() {
         ref={cursorRef} 
         className={`custom-cursor ${isHovering ? 'is-hovering' : ''}`} 
       /> 
-      
       <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/articles" element={<ArticleList />} />
         <Route path="/articles/:slug" element={<ArticleDetail />} />
         <Route path="/services/:slug" element={<ServiceDetail />} />
         <Route path="/AboutUs" element={<AboutUs />} />
+        {/* <Route path="/projects" element={<ProjectDetail />} /> */}
         <Route path="/projects/:slug" element={<ProjectDetail />} />
         <Route path="/ContactUs" element={<ContactUs />} />
         <Route path="/Projects" element={<Projects />} />
-
-      
+        <Route path="/business-services/:slug" element={<BusinessServiceDetail />} />
       </Routes>
     </Router>
   );

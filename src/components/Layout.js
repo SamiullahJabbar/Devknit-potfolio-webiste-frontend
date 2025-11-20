@@ -1,331 +1,794 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { API_BASE_URL } from '../api/baseurl';
 
-// --- BLACK & WHITE WITH YELLOW COLOR SCHEME ---
-const colors = {
-  black: '#000000',
-  white: '#FFFFFF',
-  yellow: '#FFD700',
-  darkGray: '#333333',
-  lightGray: '#f5f5f5',
-  mediumGray: '#666666'
-};
+// Import your logos - update these paths according to your project structure
+import HeaderLogoImage from '../images/2.svg';
+import TranslateWidget from "./TranslateWidget";
 
-// --- PREMIUM STYLES ---
-const getStyles = (isMobile) => ({
-  // === ENHANCED HEADER ===
-  headerContainer: {
-    width: '100%',
-    backgroundColor: colors.white,
-    backdropFilter: 'blur(20px)',
-    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
-    position: 'sticky',
-    top: 0,
-    zIndex: 1000,
-    borderBottom: `1px solid ${colors.lightGray}`
-  },
-  topStrip: {
-    height: '3px',
-    background: `linear-gradient(90deg, ${colors.black}, ${colors.yellow})`,
-    width: '100%'
-  },
-  headerContent: {
-    maxWidth: '1400px',
-    margin: '0 auto',
-    padding: isMobile ? '12px 20px' : '20px 50px',
+// Custom component for the logo image with size control
+const HeaderLogo = ({ src, alt, size = 30 }) => (
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+    <img 
+      src={src} 
+      alt={alt} 
+      style={{ 
+        width: `${size}px`, 
+        height: `${size}px`, 
+        marginRight: '10px',
+        objectFit: 'contain'
+      }} 
+    />
+  </div>
+);
+
+// Footer logo component with size control
+const FooterLogo = ({ src, alt, size = 30 }) => (
+  <img 
+    src={src} 
+    alt={alt} 
+    style={{ 
+      width: `${size}px`, 
+      height: `${size}px`, 
+      marginRight: '10px',
+      objectFit: 'contain'
+    }} 
+  />
+);
+
+const Header = () => {
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isResourcesOpen, setIsResourcesOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  // Refs for dropdown timeouts
+  const servicesTimeoutRef = useRef(null);
+  const resourcesTimeoutRef = useRef(null);
+  
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Logo sizes - easily adjustable here
+  const logoSize = 90;
+  // const footerLogoSize = 150; // Not used in Header
+
+  // Fetch services from API
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        console.log('Fetching services from:', `${API_BASE_URL}services/`);
+        const response = await fetch(`${API_BASE_URL}services/`);
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Services fetched:', data);
+          setServices(data);
+        } else {
+          console.error('Failed to fetch services, status:', response.status);
+        }
+      } catch (error) {
+        console.error('Error fetching services:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
+  // Check screen size for mobile responsiveness
+  useEffect(() => {
+    const checkScreenSize = () => {
+      // Adjusted mobile breakpoint to 992px for a typical large menu/dropdown
+      setIsMobile(window.innerWidth <= 992); 
+    };
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    
+    return () => {
+      window.removeEventListener('resize', checkScreenSize);
+      // Clear timeouts on unmount
+      clearTimeout(servicesTimeoutRef.current);
+      clearTimeout(resourcesTimeoutRef.current);
+    };
+  }, []);
+
+  // Close dropdowns when route changes
+  useEffect(() => {
+    setIsServicesOpen(false);
+    setIsResourcesOpen(false);
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  // Handle navigation to service detail page
+  const handleServiceNavigation = (slug) => {
+    navigate(`/services/${slug}`);
+  };
+
+  // Handle navigation
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+
+  // Dropdown handlers with delay
+  const handleServicesMouseEnter = () => {
+    if (isMobile) return; // Disable hover on mobile
+    clearTimeout(servicesTimeoutRef.current);
+    setIsServicesOpen(true);
+    setIsResourcesOpen(false);
+  };
+
+  const handleServicesMouseLeave = () => {
+    if (isMobile) return; // Disable hover on mobile
+    servicesTimeoutRef.current = setTimeout(() => {
+      setIsServicesOpen(false);
+    }, 300);
+  };
+
+  const handleResourcesMouseEnter = () => {
+    if (isMobile) return; // Disable hover on mobile
+    clearTimeout(resourcesTimeoutRef.current);
+    setIsResourcesOpen(true);
+    setIsServicesOpen(false);
+  };
+
+  const handleResourcesMouseLeave = () => {
+    if (isMobile) return; // Disable hover on mobile
+    resourcesTimeoutRef.current = setTimeout(() => {
+      setIsResourcesOpen(false);
+    }, 300);
+  };
+
+  // Cancel timeouts when entering dropdown content
+  const handleDropdownMouseEnter = (type) => {
+    if (isMobile) return;
+    if (type === 'services') clearTimeout(servicesTimeoutRef.current);
+    if (type === 'resources') clearTimeout(resourcesTimeoutRef.current);
+  };
+
+  // Group services for dropdown display - FIXED VERSION
+  // Show ALL services in mobile view without limits
+  const getServicesByCategory = (startIndex, count) => {
+    // Return all services if mobile or if the slice exceeds total services
+    if (isMobile) return services; 
+    return services.slice(startIndex, startIndex + count);
+  };
+
+  // Get services for different categories
+  // Note: These will only be used for desktop view since isMobile check is now in getServicesByCategory
+  const websiteServices = getServicesByCategory(0, 8);
+  const commerceServices = getServicesByCategory(8, 8);
+  const marketingServices = getServicesByCategory(16, 4);
+  const businessToolsServices = getServicesByCategory(20, 3);
+  const professionalServices = getServicesByCategory(23, 2);
+
+  // --- Header Inline CSS Styles (Updated for Responsiveness) ---
+
+  const headerStyle = {
+    backgroundColor: '#000000',
+    color: 'white',
+    padding: isMobile ? '0 20px' : '0 40px',
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  logoSection: {
-    display: 'flex',
     alignItems: 'center',
-    textDecoration: 'none',
-    gap: isMobile ? '8px' : '12px'
-  },
-  logoIcon: {
-    width: isMobile ? '32px' : '40px',
-    height: isMobile ? '32px' : '40px',
-    background: colors.black,
-    borderRadius: '10px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: colors.white,
-    fontWeight: 'bold',
-    fontSize: isMobile ? '14px' : '18px'
-  },
-  logoText: {
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  logoName: {
-    fontSize: isMobile ? '1.3rem' : '1.8rem',
-    fontWeight: '800',
-    color: colors.black,
-    lineHeight: '1'
-  },
-  logoTagline: {
-    fontSize: isMobile ? '0.7rem' : '0.9rem',
-    color: colors.mediumGray,
-    fontWeight: '500',
-    letterSpacing: '0.3px',
-    display: isMobile ? 'none' : 'block'
-  },                                                                    
-  mainNav: {
-    display: isMobile ? 'none' : 'flex',
-    gap: isMobile ? '20px' : '40px',
-    alignItems: 'center' // Added to align both menus properly
-  },
-  navLink: {
-    textDecoration: 'none',
-    color: colors.black,
-    fontSize: isMobile ? '0.9rem' : '1.05rem',
-    fontWeight: '600',
-    padding: '8px 0',
+    height: '65px',
+    borderBottom: '1px solid #333',
     position: 'relative',
-    transition: 'all 0.3s ease',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    height: '100%'
-  },
-  navLinkHover: {
-    color: colors.black
-  },
-  navLinkUnderline: {
-    position: 'absolute',
-    bottom: '-5px',
-    left: '0',
-    width: '0',
-    height: '2px',
-    background: colors.yellow,
-    transition: 'width 0.3s ease'
-  },
-  ctaButton: {
-    background: colors.yellow,
-    color: colors.black,
-    padding: isMobile ? '10px 16px' : '14px 32px',
-    borderRadius: '12px',
-    fontWeight: '700',
-    fontSize: isMobile ? '0.8rem' : '1rem',
-    border: 'none',
-    cursor: 'pointer',
-    boxShadow: `0 6px 20px rgba(255, 215, 0, 0.3)`,
-    transition: 'all 0.3s ease',
-    position: 'relative',
-    overflow: 'hidden',
-    display: isMobile ? 'none' : 'block'
-  },
-  ctaButtonHover: {
-    transform: 'translateY(-2px)',
-    boxShadow: `0 8px 25px rgba(255, 215, 0, 0.4)`,
-    background: '#FFED4E'
-  },
-  mobileMenuButton: {
-    display: isMobile ? 'flex' : 'none',
-    background: 'transparent',
-    border: 'none',
-    fontSize: '1.5rem',
-    cursor: 'pointer',
-    color: colors.black,
-    padding: '8px',
-    borderRadius: '8px',
-    transition: 'all 0.3s ease',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  mobileMenuButtonHover: {
-    backgroundColor: colors.lightGray
-  },
-  mobileNav: {
-    display: isMobile ? 'flex' : 'none',
-    flexDirection: 'column',
-    backgroundColor: colors.white,
-    padding: '20px',
-    boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
-    borderTop: `1px solid ${colors.lightGray}`
-  },
-  mobileNavLink: {
-    textDecoration: 'none',
-    color: colors.black,
-    fontSize: '1.1rem',
-    fontWeight: '600',
-    padding: '15px 0',
-    borderBottom: `1px solid ${colors.lightGray}`,
-    transition: 'all 0.3s ease',
-    display: 'flex',
-    alignItems: 'center',
-    cursor: 'pointer'
-  },
-  mobileNavLinkHover: {
-    color: colors.black,
-    transform: 'translateX(10px)'
-  },
-  mobileCtaButton: {
-    background: colors.yellow,
-    color: colors.black,
-    padding: '16px 24px',
-    borderRadius: '10px',
-    fontWeight: '700',
-    fontSize: '1rem',
-    border: 'none',
-    cursor: 'pointer',
-    marginTop: '15px',
-    textAlign: 'center',
-    textDecoration: 'none',
-    display: 'block',
-    transition: 'all 0.3s ease'
-  },
-  mobileCtaButtonHover: {
-    transform: 'translateY(-2px)',
-    boxShadow: `0 6px 20px rgba(255, 215, 0, 0.4)`,
-    background: '#FFED4E'
-  },
+    zIndex: 1000,
+  };
 
-  // === ENHANCED FOOTER ===
-  footerContainer: {
-    backgroundColor: colors.black,
-    color: colors.white,
-    position: 'relative',
-    overflow: 'hidden'
-  },
-  footerPattern: {
-    position: 'absolute',
-    top: 0,
+  const logoContainerStyle = { 
+    display: 'flex', 
+    alignItems: 'center', 
+    fontSize: '18px', 
+    fontWeight: 'bold', 
+    cursor: 'pointer', 
+    flexShrink: 0, 
+    zIndex: 1001,
+  };
+  
+  const centerMenuStyle = { 
+    // Show on Desktop/Tablet, Hide on Mobile
+    display: isMobile ? 'none' : 'flex', 
+    alignItems: 'center', 
+  };
+  
+  const utilityContainerStyle = { 
+    // Show on Desktop/Tablet, Hide on Mobile
+    display: isMobile ? 'none' : 'flex', 
+    alignItems: 'center', 
+    flexShrink: 0, 
+  };
+  
+  const menuItemStyle = { 
+    position: 'relative', 
+    margin: '0 15px', // Reduced margin for smaller screens
+    padding: '5px 0', 
+    cursor: 'pointer', 
+    fontWeight: '500', 
+    fontSize: '15px', 
+    letterSpacing: '0.5px', 
+  };
+
+  const buttonStyle = {
+    backgroundColor: 'white', 
+    color: '#000000', 
+    border: 'none', 
+    padding: '10px 15px', // Reduced padding
+    marginLeft: '15px', // Reduced margin
+    fontSize: '13px', // Reduced font size
+    fontWeight: 'bold', 
+    cursor: 'pointer', 
+    borderRadius: '4px', 
+    letterSpacing: '1px', 
+    textTransform: 'uppercase',
+  };
+
+  const mobileMenuButtonStyle = {
+    // Show only on Mobile
+    display: isMobile ? 'block' : 'none',
+    background: 'none',
+    border: 'none',
+    color: 'white',
+    fontSize: '24px',
+    cursor: 'pointer',
+    zIndex: 1001,
+  };
+
+  // ************ Dropdown Styles (Desktop Only) ************
+  
+  const dropdownMenuBaseStyle = {
+    position: 'absolute', 
+    // Keep it centered for large screen, but prevent it from taking up too much width
+    top: '55px', 
+    left: '50%', 
+    transform: 'translateX(-50%)', 
+    backgroundColor: '#000000', 
+    border: '1px solid #333', 
+    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.6)', 
+    zIndex: 100, 
+    // Use fixed max-width for desktop
+    minWidth: '950px',
+    maxWidth: '950px',
+    padding: '25px', 
+    display: 'flex', 
+    flexDirection: 'row',
+    borderRadius: '4px', 
+    opacity: 0, 
+    visibility: 'hidden', 
+    transition: 'opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease', 
+    pointerEvents: 'none',
+    transform: 'translateX(-50%) scale(0.95)',
+  };
+  
+  const showDropdownStyle = { 
+    opacity: 1, 
+    visibility: 'visible', 
+    pointerEvents: 'auto', 
+    transform: 'translateX(-50%) scale(1)',
+  };
+  
+  const dropdownColumnStyle = { 
+    padding: '0 20px', 
+    flex: 1, 
+    borderRight: '1px solid #333', // Desktop only border
+  };
+  
+  const lastColumnStyle = { 
+    ...dropdownColumnStyle, 
+    borderRight: 'none', 
+  };
+  
+  const dropdownColumnTitleStyle = { 
+    fontSize: '14px', 
+    fontWeight: 'bold', 
+    color: '#CCCCCC', 
+    marginBottom: '15px', 
+    textTransform: 'uppercase', 
+  };
+  
+  const dropdownItemStyle = { 
+    fontSize: '13px', 
+    padding: '7px 0', 
+    cursor: 'pointer', 
+    whiteSpace: 'nowrap', 
+    color: '#FFFFFF',
+    transition: 'color 0.2s ease',
+  };
+  
+  const specialBoxContainerStyle = { 
+    paddingLeft: '30px', 
+    borderLeft: '1px solid #333',
+  };
+  
+  const specialBoxStyle = { 
+    backgroundColor: '#111111', 
+    padding: '15px', 
+    borderRadius: '4px', 
+    marginBottom: '10px', 
+    width: '200px', 
+    cursor: 'pointer', 
+    transition: 'background-color 0.2s ease',
+  };
+  
+  const specialBoxTitleStyle = { 
+    fontSize: '14px', 
+    fontWeight: 'bold', 
+    marginBottom: '5px', 
+  };
+  
+  const specialBoxDescriptionStyle = { 
+    fontSize: '12px', 
+    color: '#CCCCCC', 
+    lineHeight: '1.4', 
+  };
+
+  // ************ Mobile Menu Styles ************
+
+  const mobileMenuStyle = {
+    position: 'fixed',
+    top: '65px',
     left: 0,
     right: 0,
     bottom: 0,
-    background: colors.black,
-    opacity: 0.95
-  },
-  footerTop: {
-    maxWidth: '1400px',
-    margin: '0 auto',
-    padding: isMobile ? '40px 20px 30px' : '80px 50px 60px',
-    position: 'relative',
-    zIndex: 2
-  },
-  footerColumns: {
-    display: 'grid',
-    gridTemplateColumns: isMobile ? '1fr' : (isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)'),
-    gap: isMobile ? '30px' : '50px'
-  },
-  footerCol: {
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  colHeading: {
-    fontSize: isMobile ? '1.1rem' : '1.3rem',
-    fontWeight: '700',
-    marginBottom: isMobile ? '15px' : '25px',
-    color: colors.yellow,
-    position: 'relative'
-  },
-  colHeadingUnderline: {
-    position: 'absolute',
-    bottom: '-8px',
-    left: '0',
-    width: '40px',
-    height: '3px',
-    background: colors.yellow,
-    borderRadius: '2px'
-  },
-  footerList: {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: isMobile ? '12px' : '15px'
-  },
-  footerLink: {
-    textDecoration: 'none',
-    color: '#B0B7C3',
-    fontSize: isMobile ? '0.9rem' : '1rem',
-    transition: 'all 0.3s ease',
-    display: 'block',
-    padding: '5px 0'
-  },
-  footerLinkHover: {
-    color: colors.yellow,
-    transform: 'translateX(8px)'
-  },
-  contactInfo: {
-    color: '#B0B7C3',
-    lineHeight: '1.8',
-    fontSize: isMobile ? '0.9rem' : '1rem'
-  },
-  phoneNumber: {
-    color: colors.yellow,
-    fontWeight: '700',
-    fontSize: isMobile ? '1.1rem' : '1.3rem',
-    margin: isMobile ? '10px 0' : '15px 0'
-  },
-  emailLink: {
-    color: colors.yellow,
-    fontWeight: '600',
-    textDecoration: 'none'
-  },
-  footerBottom: {
-    maxWidth: '1400px',
-    margin: '0 auto',
-    padding: isMobile ? '20px 15px' : '40px 50px',
-    borderTop: `1px solid rgba(255, 255, 255, 0.1)`,
-    position: 'relative',
-    zIndex: 2,
-    textAlign: 'center'
-  },
-  socialLinks: {
-    display: 'flex',
-    justifyContent: 'center',
-    gap: isMobile ? '10px' : '15px',
-    marginBottom: isMobile ? '20px' : '30px'
-  },
-  socialIcon: {
-    width: isMobile ? '40px' : '44px',
-    height: isMobile ? '40px' : '44px',
-    borderRadius: isMobile ? '10px' : '12px',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#B0B7C3',
-    textDecoration: 'none',
-    transition: 'all 0.3s ease',
-    border: `1px solid rgba(255, 255, 255, 0.1)`,
-    backdropFilter: 'blur(10px)',
-    fontSize: isMobile ? '1rem' : '1.1rem'
-  },
-  socialIconHover: {
-    backgroundColor: colors.yellow,
-    color: colors.black,
-    transform: 'translateY(-3px)',
-    boxShadow: `0 8px 25px rgba(255, 215, 0, 0.4)`
-  },
-  copyrightText: {
-    color: '#8B949E',
-    fontSize: isMobile ? '0.8rem' : '0.9rem',
-    marginBottom: '8px'
-  },
-  legalText: {
-    color: '#6E7681',
-    fontSize: isMobile ? '0.75rem' : '0.8rem'
-  }
-});
+    backgroundColor: '#000000',
+    zIndex: 999,
+    padding: '20px',
+    overflowY: 'auto',
+    transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100%)',
+    transition: 'transform 0.3s ease',
+  };
 
-// --- ENHANCED LAYOUT COMPONENT ---
-const Layout = ({ children }) => {
-  const [hoverStates, setHoverStates] = useState({});
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [resourcesSubmenuOpen, setResourcesSubmenuOpen] = useState(false);
+  const mobileMenuItemStyle = {
+    padding: '15px 0',
+    borderBottom: '1px solid #333',
+    fontSize: '16px',
+    cursor: 'pointer',
+  };
 
-  // Check screen size
+  const mobileSubmenuStyle = {
+    paddingLeft: '10px',
+    backgroundColor: '#111111',
+    margin: '10px 0',
+    borderRadius: '4px',
+    maxHeight: '400px', // Fixed height for scrolling
+    overflowY: 'auto', // Enable scrolling
+  };
+
+  const mobileSubmenuItemStyle = {
+    padding: '12px 0',
+    borderBottom: '1px solid #333',
+    fontSize: '14px',
+    cursor: 'pointer',
+  };
+  
+  const mobileSubmenuLastItemStyle = {
+    padding: '12px 0',
+    borderBottom: 'none',
+    fontSize: '14px',
+    cursor: 'pointer',
+  };
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen && isMobile) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen, isMobile]);
+
+  // --- Header Dropdown Content with API data (Desktop Only) ---
+
+  const servicesContent = !isMobile && (
+    <div 
+      style={{ ...dropdownMenuBaseStyle, ...(isServicesOpen && showDropdownStyle) }}
+      onMouseEnter={() => handleDropdownMouseEnter('services')}
+      onMouseLeave={handleServicesMouseLeave}
+    >
+      <div style={dropdownColumnStyle}>
+        <div style={dropdownColumnTitleStyle}>WEBSITE</div>
+        {websiteServices.length > 0 ? (
+          websiteServices.map((service) => (
+            <div 
+              key={service.id} 
+              style={dropdownItemStyle}
+              onMouseEnter={(e) => e.target.style.color = '#CCCCCC'}
+              onMouseLeave={(e) => e.target.style.color = '#FFFFFF'}
+              onClick={() => handleServiceNavigation(service.slug)}
+            >
+              {service.title}
+            </div>
+          ))
+        ) : (
+          <div style={dropdownItemStyle}>No website services available</div>
+        )}
+        <div 
+          style={dropdownItemStyle}
+          onMouseEnter={(e) => e.target.style.color = '#CCCCCC'}
+          onMouseLeave={(e) => e.target.style.color = '#FFFFFF'}
+          onClick={() => handleNavigation('/features')}
+        >
+          View All Features
+        </div>
+      </div>
+      <div style={dropdownColumnStyle}>
+        <div style={dropdownColumnTitleStyle}>COMMERCE</div>
+        {commerceServices.length > 0 ? (
+          commerceServices.map((service) => (
+            <div 
+              key={service.id} 
+              style={dropdownItemStyle}
+              onMouseEnter={(e) => e.target.style.color = '#CCCCCC'}
+              onMouseLeave={(e) => e.target.style.color = '#FFFFFF'}
+              onClick={() => handleServiceNavigation(service.slug)}
+            >
+              {service.title}
+            </div>
+          ))
+        ) : (
+          <div style={dropdownItemStyle}>No commerce services available</div>
+        )}
+      </div>
+      <div style={dropdownColumnStyle}>
+        <div style={dropdownColumnTitleStyle}>MARKETING</div>
+        {marketingServices.length > 0 ? (
+          marketingServices.map((service) => (
+            <div 
+              key={service.id} 
+              style={dropdownItemStyle}
+              onMouseEnter={(e) => e.target.style.color = '#CCCCCC'}
+              onMouseLeave={(e) => e.target.style.color = '#FFFFFF'}
+              onClick={() => handleServiceNavigation(service.slug)}
+            >
+              {service.title}
+            </div>
+          ))
+        ) : (
+          <div style={dropdownItemStyle}>No marketing services available</div>
+        )}
+        <div style={{ marginTop: '20px' }}>
+          <div style={dropdownColumnTitleStyle}>BUSINESS TOOLS</div>
+          {businessToolsServices.length > 0 ? (
+            businessToolsServices.map((service) => (
+              <div 
+                key={service.id} 
+                style={dropdownItemStyle}
+                onMouseEnter={(e) => e.target.style.color = '#CCCCCC'}
+                onMouseLeave={(e) => e.target.style.color = '#FFFFFF'}
+                onClick={() => handleServiceNavigation(service.slug)}
+              >
+                {service.title}
+              </div>
+            ))
+          ) : (
+            <div style={dropdownItemStyle}>No business tools available</div>
+          )}
+        </div>
+      </div>
+      <div style={specialBoxContainerStyle}>
+        <div style={dropdownColumnTitleStyle}>FOR PROFESSIONALS</div>
+        {professionalServices.length > 0 ? (
+          professionalServices.map((service) => (
+            <div 
+              key={service.id}
+              style={specialBoxStyle}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#222222'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#111111'}
+              onClick={() => handleServiceNavigation(service.slug)}
+            >
+              <div style={specialBoxTitleStyle}>{service.title}</div>
+              <div style={specialBoxDescriptionStyle}>
+                {service.short_description || 'Powerful solutions for professionals'}
+              </div>
+            </div>
+          ))
+        ) : (
+          <div style={specialBoxStyle}>
+            <div style={specialBoxTitleStyle}>Professional Services</div>
+            <div style={specialBoxDescriptionStyle}>
+              Expert solutions for your business needs
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+  const resourcesContent = (
+  <div
+    style={{
+      ...dropdownMenuBaseStyle,
+      minWidth: isMobile ? '90vw' : '700px',
+      ...(isResourcesOpen && showDropdownStyle),
+    }}
+    onMouseEnter={() => handleDropdownMouseEnter('resources')}
+    onMouseLeave={handleResourcesMouseLeave}
+  >
+    {/* ===== LEFT COLUMN: Help Center, Forum, Webinars ===== */}
+    <div style={dropdownColumnStyle}>
+      {/* Title updated to match the image */}
+      <div style={dropdownColumnTitleStyle}>24/7 SUPPORT</div> 
+
+      {/* 1. Help Center */}
+      <div
+        style={dropdownItemStyle}
+        onMouseEnter={(e) => (e.target.style.color = '#CCCCCC')}
+        onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+        onClick={() => handleNavigation('')}
+      >
+        Help Center
+      </div>
+      {/* Description added */}
+      <p style={specialBoxDescriptionStyle}>In-depth guides and videos about the platform, our services, and how to get started.</p>
+      
+
+      {/* 2. Forum */}
+      <div
+        style={{ ...dropdownItemStyle, marginTop: '20px' }} /* Margin added for spacing */
+        onMouseEnter={(e) => (e.target.style.color = '#CCCCCC')}
+        onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+        onClick={() => handleNavigation('')}
+      >
+        Forum
+      </div>
+      {/* Description added */}
+      <p style={specialBoxDescriptionStyle}>An online community for Squarespace users to discuss best practices and seek advice.</p>
+      
+
+      {/* 3. Webinars */}
+      <div
+        style={{ ...dropdownItemStyle, marginTop: '20px' }} /* Margin added for spacing */
+        onMouseEnter={(e) => (e.target.style.color = '#CCCCCC')}
+        onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+        onClick={() => handleNavigation('/')}
+      >
+        Webinars
+      </div>
+      {/* Description added */}
+      <p style={specialBoxDescriptionStyle}>Free online sessions where you'll learn the basics and refine your Squarespace skills.</p>
+      
+    </div>
+     
+
+    {/* ===== RIGHT COLUMN: Blog, Hire an Expert (Contact Us removed to match image) ===== */}
+    <div style={dropdownColumnStyle}>
+      <div style={dropdownColumnTitleStyle}>&nbsp;</div> {/* Keep empty title for alignment */}
+
+      {/* 1. Blog */}
+      <div style={{ marginBottom: '30px' }}>
+        {/* Style changed to dropdownItemStyle for consistency in rendering as a link/title */}
+        <div
+          style={dropdownItemStyle}
+          onMouseEnter={(e) => (e.target.style.color = '#CCCCCC')}
+          onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+          onClick={() => handleNavigation('/articles')}
+        >
+          Blog
+        </div>
+        <p style={specialBoxDescriptionStyle}>
+          Stories and solutions for the modern entrepreneur.
+        </p>
+      </div>
+
+      <div style={{ marginBottom: '30px' }}>
+        {/* Style changed to dropdownItemStyle for consistency in rendering as a link/title */}
+        <div
+          style={dropdownItemStyle}
+          onMouseEnter={(e) => (e.target.style.color = '#CCCCCC')}
+          onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+          onClick={() => handleNavigation('/ContactUs')}
+        >
+          Contact us
+        </div>
+        <p style={specialBoxDescriptionStyle}>
+          Let's connect and explore opportunities to collaborate on projects, events, or mutual growth strategies.
+        </p>
+      </div>
+
+      {/* 2. Hire an Expert (Contact us removed to match image) */}
+      <div style={{ marginBottom: '20px' }}>
+        <div
+          style={dropdownItemStyle}
+          onMouseEnter={(e) => (e.target.style.color = '#CCCCCC')}
+          onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+          onClick={() => handleNavigation('')}
+        >
+          Hire an Expert
+        </div>
+        <p style={specialBoxDescriptionStyle}>
+          Let us do the work of finding you the perfect Expert to help you stand out online.
+        </p>
+      </div>
+
+      {/* Contact us section removed as it was not in the image */}
+    </div>
+  </div>
+);
+  
+
+  // Mobile menu content - FIXED: Show ALL services with scrolling
+  const mobileMenuContent = isMobile && (
+    <div style={mobileMenuStyle}>
+      <div 
+        style={mobileMenuItemStyle}
+        onClick={() => {
+          setIsServicesOpen(!isServicesOpen);
+          setIsResourcesOpen(false);
+        }}
+      >
+        Services {isServicesOpen ? '−' : '+'}
+      </div>
+      {isServicesOpen && (
+        <div style={mobileSubmenuStyle}>
+          {services.length > 0 ? (
+            services.map((service, index) => (
+              <div 
+                key={service.id}
+                style={index === services.length - 1 ? mobileSubmenuLastItemStyle : mobileSubmenuItemStyle}
+                onClick={() => handleServiceNavigation(service.slug)}
+              >
+                {service.title}
+              </div>
+            ))
+          ) : (
+            <div style={mobileSubmenuLastItemStyle}>No services available</div>
+          )}
+          <div 
+            style={{...mobileSubmenuLastItemStyle, borderTop: '1px solid #333', marginTop: '5px'}}
+            onClick={() => handleNavigation('/services')}
+          >
+            View All Services
+          </div>
+        </div>
+      )}
+      
+      <div 
+        style={mobileMenuItemStyle}
+        onClick={() => {
+          setIsResourcesOpen(!isResourcesOpen);
+          setIsServicesOpen(false);
+        }}
+      >
+        Resources {isResourcesOpen ? '−' : '+'}
+      </div>
+      {isResourcesOpen && (
+        <div style={mobileSubmenuStyle}>
+          {[
+            { text: 'Help Center', path: '/help-center' },
+            { text: 'Forum', path: '/forum' },
+            { text: 'Blog', path: '/blog' },
+            { text: 'Webinars', path: '/webinars' },
+            { text: 'Hire an Expert', path: '/hire-expert' }
+          ].map((item, index, array) => (
+            <div 
+              key={item.text}
+              style={index === array.length - 1 ? mobileSubmenuLastItemStyle : mobileSubmenuItemStyle}
+              onClick={() => handleNavigation(item.path)}
+            >
+              {item.text}
+            </div>
+          ))}
+        </div>
+      )}
+      
+      <div 
+        style={{...mobileMenuItemStyle, borderBottom: 'none', marginTop: '20px'}}
+        onClick={() => handleNavigation('/ContactUs')}
+      >
+       
+        <button style={{...buttonStyle, marginLeft: '0', width: '100%'}}>
+          START PROJECT
+        </button>
+      </div>
+    </div>
+  );
+
+  // --- Header Render ---
+
+  return (
+    <header style={headerStyle}>
+      <div 
+        style={logoContainerStyle} 
+        onClick={() => handleNavigation('/')}
+      >
+        <HeaderLogo src={HeaderLogoImage} alt="DevAurora Logo" size={logoSize} />
+      </div>
+      
+      {/* Desktop Menu */}
+      <div style={centerMenuStyle}>
+        <div
+          style={menuItemStyle}
+          onMouseEnter={handleServicesMouseEnter}
+          onMouseLeave={handleServicesMouseLeave}
+        >
+          Services
+          {servicesContent}
+        </div>
+        <div
+          style={menuItemStyle}
+          onMouseEnter={handleResourcesMouseEnter}
+          onMouseLeave={handleResourcesMouseLeave}
+        >
+          Resources
+          {resourcesContent}
+        </div>
+      </div>
+      
+      {/* Desktop Utility */}
+      <div style={utilityContainerStyle}>
+        <div id="google_translate_element"></div>
+        <button 
+          style={buttonStyle} 
+          onClick={() => handleNavigation('/ContactUs')}
+        >
+          START PROJECT
+        </button>
+      </div>
+      
+      {/* Mobile Menu Button */}
+      <button 
+        style={mobileMenuButtonStyle}
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+      >
+        {isMobileMenuOpen ? '✕' : '☰'}
+      </button>
+      
+      {/* Mobile Menu Content */}
+      {mobileMenuContent}
+    </header>
+  );
+};
+
+// --- 2. Footer Component (Fixed with logo size control) ---
+
+const Footer = () => {
+  const navigate = useNavigate();
+  const [services, setServices] = useState([]);
+  // Adjusted mobile breakpoint to 768px (standard mobile/tablet distinction)
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); 
+  
+  // Fetch services from API
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}services/`);
+        if (response.ok) {
+          const data = await response.json();
+          setServices(data);
+        } else {
+          console.error('Failed to fetch services');
+        }
+      } catch (error) {
+        console.error('Error fetching services:', error);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
+  // Handle navigation
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+
+  // Handle service navigation
+  const handleServiceNavigation = (slug) => {
+    navigate(`/services/${slug}`);
+  };
+
+  // Check screen size for mobile responsiveness
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-
+    
     checkScreenSize();
     window.addEventListener('resize', checkScreenSize);
     
@@ -334,422 +797,356 @@ const Layout = ({ children }) => {
     };
   }, []);
 
-  const handleMouseEnter = (element) => {
-    setHoverStates(prev => ({ ...prev, [element]: true }));
+  // Logo sizes
+  const footerLogoSize = 160;
+
+  // Group services for footer display - FIXED: Show ALL services without limits
+  const distributeServices = () => {
+    const totalServices = services.length;
+    
+    if (totalServices === 0) return { products: [], services: [], security: [], businessTools: [] };
+    
+    // Distribute services evenly across 4 columns
+    const cols = 4;
+    const baseCount = Math.floor(totalServices / cols);
+    let remainder = totalServices % cols;
+    
+    let index = 0;
+    const result = { products: [], services: [], security: [], businessTools: [] };
+
+    // Products
+    let count = baseCount + (remainder-- > 0 ? 1 : 0);
+    result.products = services.slice(index, index + count);
+    index += count;
+
+    // Services
+    count = baseCount + (remainder-- > 0 ? 1 : 0);
+    result.services = services.slice(index, index + count);
+    index += count;
+
+    // Security
+    count = baseCount + (remainder-- > 0 ? 1 : 0);
+    result.security = services.slice(index, index + count);
+    index += count;
+
+    // Business Tools (remaining services)
+    result.businessTools = services.slice(index);
+
+    return result;
   };
 
-  const handleMouseLeave = (element) => {
-    setHoverStates(prev => ({ ...prev, [element]: false }));
-  };
+  const { products, services: servicesData, security, businessTools } = distributeServices();
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
-
-  const toggleResourcesSubmenu = () => {
-    setResourcesSubmenuOpen(!resourcesSubmenuOpen);
-  };
-
-  const styles = getStyles(isMobile);
-
-  // Navigation items - Only Services and Resources
-  const navItems = [
-    { name: 'Services', path: '/Projects' },
-    { 
-      name: 'Resources', 
-      path: '/resources',
-      submenu: [
-        { name: 'Articles', path: '/articles' },
-        { name: 'Projects', path: '/Projects' },
-        // { name: 'Case Studies', path: '/case-studies' }
-      ]
-    }
+  const socialLinks = [
+    { text: 'Instagram', path: 'https://instagram.com', icon: '' },
+    { text: 'YouTube', path: 'https://youtube.com', icon: '' },
+    { text: 'LinkedIn', path: 'https://linkedin.com', icon: '' },
+    { text: 'Facebook', path: 'https://facebook.com', icon: '' },
+    { text: 'X', path: 'https://twitter.com', icon: '' },
   ];
 
-  // === PREMIUM HEADER ===
-  const renderHeader = () => (
-    <header style={styles.headerContainer}>
-      <div style={styles.topStrip}></div>
-      <div style={styles.headerContent}>
-        
-        {/* Premium Logo */}
-        <a href="/" style={styles.logoSection}>
-          <div style={styles.logoIcon}>D</div>
-          <div style={styles.logoText}>
-            <div style={styles.logoName}>DEVKNIT</div>
-            <div style={styles.logoTagline}>Web Development & Digital Solutions</div>
+  const policyLinks = [
+    // { text: 'Terms of Service', path: '/terms' },
+    // { text: 'Privacy Policy', path: '/privacy' },
+    // { text: 'Cookie Policy', path: '/cookies' },
+  ];
+
+  // --- Footer Inline CSS Styles (Updated for Responsiveness) ---
+
+  const footerStyle = {
+    backgroundColor: '#000000',
+    color: 'white',
+    padding: isMobile ? '30px 20px 10px 20px' : '50px 80px 10px 80px',
+    fontSize: '13px',
+  };
+
+  const mainContentStyle = {
+    display: 'flex',
+    flexDirection: isMobile ? 'column' : 'row',
+    justifyContent: 'space-between',
+    borderBottom: '1px solid #333',
+    paddingBottom: '40px',
+  };
+
+  const logoSectionStyle = {
+    width: isMobile ? '100%' : '250px',
+    flexShrink: 0,
+    marginBottom: isMobile ? '30px' : '0',
+  };
+
+  const logoContainerStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    marginBottom: '10px',
+    cursor: 'pointer',
+  };
+
+  const taglineStyle = {
+    fontSize: isMobile ? '18px' : '24px', // Adjusted for mobile
+    fontWeight: 'normal',
+    lineHeight: '1.2',
+    marginTop: '20px',
+  };
+
+  const linksContainerStyle = {
+    display: 'flex',
+    flexGrow: 1,
+    // Use wrap on mobile to stack columns
+    flexDirection: isMobile ? 'row' : 'row', 
+    justifyContent: 'space-between',
+    paddingLeft: isMobile ? '0' : '50px',
+    flexWrap: 'wrap', // Added wrap to allow columns to stack
+  };
+
+  const columnStyle = {
+    // Set width to 50% on mobile for a 2-column layout, auto on desktop
+    width: isMobile ? '50%' : '180px', 
+    lineHeight: '1.8',
+    marginBottom: isMobile ? '25px' : '0',
+    flex: isMobile ? '0 0 50%' : '0 0 auto',
+    // Special handling for the last (Social & Policy) column on mobile to take full width
+    '@media (max-width: 768px)': {
+      ...(isMobile && { 
+        // Force Social & Policy column to full width on mobile
+        '&:last-child': { width: '100%', flex: '0 0 100%' }
+      })
+    }
+  };
+
+  const columnTitleStyle = {
+    fontSize: '14px',
+    fontWeight: 'bold',
+    marginBottom: '15px',
+    color: '#CCCCCC',
+    textTransform: 'uppercase',
+  };
+
+  const linkStyle = {
+    color: 'white',
+    textDecoration: 'none',
+    cursor: 'pointer',
+    display: 'block',
+    padding: '2px 0',
+    transition: 'color 0.2s ease',
+  };
+
+  const copyrightSectionStyle = {
+    display: 'flex',
+    flexDirection: isMobile ? 'column' : 'row',
+    justifyContent: 'space-between',
+    alignItems: isMobile ? 'flex-start' : 'center',
+    paddingTop: '20px',
+    fontSize: '11px',
+    color: '#AAAAAA',
+    gap: isMobile ? '15px' : '0',
+  };
+
+  const bottomLinksStyle = {
+    display: 'flex',
+    gap: '15px',
+    flexWrap: 'wrap',
+    // Order changed to put bottom links above copyright text on mobile
+    order: isMobile ? 1 : 1, 
+  };
+
+  const copyrightTextStyle = {
+    order: isMobile ? 2 : 2,
+  };
+
+  const socialIconStyle = {
+    marginRight: '8px',
+    fontSize: '14px',
+  };
+
+  // Helper function to render service links
+  const renderServiceLinks = (title, serviceArray) => (
+    <div 
+      style={columnStyle}
+    >
+      <div style={columnTitleStyle}>{title}</div>
+      {serviceArray.length > 0 ? (
+        serviceArray.map((service) => (
+          <div key={service.id}>
+            <a 
+              style={linkStyle}
+              onMouseEnter={(e) => e.target.style.color = '#CCCCCC'}
+              onMouseLeave={(e) => e.target.style.color = 'white'}
+              onClick={(e) => {
+                e.preventDefault();
+                handleServiceNavigation(service.slug);
+              }}
+            >
+              {service.title}
+            </a>
           </div>
-        </a>
-
-        {/* Premium Navigation - Only Services and Resources */}
-        <nav style={styles.mainNav}>
-          {navItems.map((item) => (
-            <div key={item.name} style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-              {item.name === 'Resources' ? (
-                // Resources with clickable submenu
-                <div
-                  style={{
-                    ...styles.navLink,
-                    ...(hoverStates[`nav${item.name}`] ? styles.navLinkHover : {})
-                  }}
-                  onMouseEnter={() => handleMouseEnter(`nav${item.name}`)}
-                  onMouseLeave={() => handleMouseLeave(`nav${item.name}`)}
-                  onClick={toggleResourcesSubmenu}
-                >
-                  {item.name}
-                  <span style={{
-                    ...styles.navLinkUnderline,
-                    width: hoverStates[`nav${item.name}`] ? '100%' : '0'
-                  }}></span>
-                </div>
-              ) : (
-                // Regular navigation item
-                <a 
-                  href={item.path}
-                  style={{
-                    ...styles.navLink,
-                    ...(hoverStates[`nav${item.name}`] ? styles.navLinkHover : {})
-                  }}
-                  onMouseEnter={() => handleMouseEnter(`nav${item.name}`)}
-                  onMouseLeave={() => handleMouseLeave(`nav${item.name}`)}
-                >
-                  {item.name}
-                  <span style={{
-                    ...styles.navLinkUnderline,
-                    width: hoverStates[`nav${item.name}`] ? '100%' : '0'
-                  }}></span>
-                </a>
-              )}
-              
-              {/* Submenu for Resources - Show on hover AND when clicked */}
-              {item.submenu && (hoverStates[`nav${item.name}`] || resourcesSubmenuOpen) && (
-                <div style={{
-                  position: 'absolute',
-                  top: '100%',
-                  left: '0',
-                  backgroundColor: colors.white,
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-                  borderRadius: '8px',
-                  padding: '10px 0',
-                  minWidth: '200px',
-                  zIndex: 1000,
-                  border: `1px solid ${colors.lightGray}`
-                }}
-                onMouseEnter={() => handleMouseEnter(`nav${item.name}`)}
-                onMouseLeave={() => {
-                  handleMouseLeave(`nav${item.name}`);
-                  setResourcesSubmenuOpen(false);
-                }}
-                >
-                  {item.submenu.map((subItem) => (
-                    <a
-                      key={subItem.name}
-                      href={subItem.path}
-                      style={{
-                        display: 'block',
-                        padding: '12px 20px',
-                        textDecoration: 'none',
-                        color: colors.black,
-                        fontSize: '0.95rem',
-                        fontWeight: '500',
-                        transition: 'all 0.3s ease'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.target.style.backgroundColor = colors.lightGray;
-                        e.target.style.color = colors.black;
-                      }}
-                      onMouseLeave={(e) => {
-                        e.target.style.backgroundColor = 'transparent';
-                        e.target.style.color = colors.black;
-                      }}
-                      onClick={() => setResourcesSubmenuOpen(false)}
-                    >
-                      {subItem.name}
-                    </a>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </nav>
-
-        {/* Premium CTA Button - Yellow */}
-        <button 
-          style={{
-            ...styles.ctaButton,
-            ...(hoverStates.ctaButton ? styles.ctaButtonHover : {})
-          }}
-          onMouseEnter={() => handleMouseEnter('ctaButton')}
-          onMouseLeave={() => handleMouseLeave('ctaButton')}
-          onClick={() => window.location.href = '/ContactUs'}
-        >
-          Start Project
-        </button>
-
-        {/* Mobile Menu Button */}
-        <button 
-          style={{
-            ...styles.mobileMenuButton,
-            ...(hoverStates.mobileMenuButton ? styles.mobileMenuButtonHover : {})
-          }}
-          onClick={toggleMobileMenu}
-          onMouseEnter={() => handleMouseEnter('mobileMenuButton')}
-          onMouseLeave={() => handleMouseLeave('mobileMenuButton')}
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen ? '✕' : '☰'}
-        </button>
-      </div>
-
-      {/* Mobile Navigation Menu */}
-      {mobileMenuOpen && (
-        <div style={styles.mobileNav}>
-          {navItems.map((item) => (
-            <div key={item.name}>
-              {item.name === 'Resources' ? (
-                // Resources with clickable submenu in mobile
-                <div
-                  style={{
-                    ...styles.mobileNavLink,
-                    ...(hoverStates[`mobileNav${item.name}`] ? styles.mobileNavLinkHover : {})
-                  }}
-                  onMouseEnter={() => handleMouseEnter(`mobileNav${item.name}`)}
-                  onMouseLeave={() => handleMouseLeave(`mobileNav${item.name}`)}
-                  onClick={toggleResourcesSubmenu}
-                >
-                  {item.name} {resourcesSubmenuOpen ? '▲' : '▼'}
-                </div>
-              ) : (
-                // Regular mobile navigation item
-                <a 
-                  href={item.path}
-                  style={{
-                    ...styles.mobileNavLink,
-                    ...(hoverStates[`mobileNav${item.name}`] ? styles.mobileNavLinkHover : {})
-                  }}
-                  onMouseEnter={() => handleMouseEnter(`mobileNav${item.name}`)}
-                  onMouseLeave={() => handleMouseLeave(`mobileNav${item.name}`)}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.name}
-                </a>
-              )}
-              
-              {/* Mobile Submenu for Resources */}
-              {item.submenu && resourcesSubmenuOpen && item.name === 'Resources' && (
-                <div>
-                  {item.submenu.map((subItem) => (
-                    <a
-                      key={subItem.name}
-                      href={subItem.path}
-                      style={{
-                        ...styles.mobileNavLink,
-                        paddingLeft: '20px',
-                        fontSize: '0.95rem',
-                        color: colors.mediumGray
-                      }}
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        setResourcesSubmenuOpen(false);
-                      }}
-                    >
-                      └ {subItem.name}
-                    </a>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-          <a 
-            href="/ContactUs"
-            style={{
-              ...styles.mobileCtaButton,
-              ...(hoverStates.mobileCtaButton ? styles.mobileCtaButtonHover : {})
-            }}
-            onMouseEnter={() => handleMouseEnter('mobileCtaButton')}
-            onMouseLeave={() => handleMouseLeave('mobileCtaButton')}
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Start Project
-          </a>
-        </div>
+        ))
+      ) : (
+        <div style={linkStyle}>No services available</div>
       )}
-    </header>
+    </div>
   );
 
-  // === PREMIUM FOOTER ===
-  const renderFooter = () => (
-    <footer style={styles.footerContainer}>
-      <div style={styles.footerPattern}></div>
-      
-      <div style={styles.footerTop}>
-        <div style={styles.footerColumns}>
-          
-          {/* Services Column */}
-          <div style={styles.footerCol}>
-    <h4 style={styles.colHeading}>
-        Services
-        <span style={styles.colHeadingUnderline}></span>
-    </h4>
-    <ul style={styles.footerList}>
-        {[
-            { name: 'Web Development', path: '/projects/' },
-            { name: 'UI/UX Design', path: '/projects/' },
-            { name: 'SEO Optimization', path: '/projects/' },
-            { name: 'E-commerce Solutions', path: '/projects/' },
-            // { name: 'Digital Marketing', path: '/services/digital-marketing' }
-        ].map((service, index) => (
-            <li key={service.name}>
-                <a 
-                    // 🚀 Naya path use kiya gaya hai
-                    href={service.path}
-                    style={{
-                        // ⚠️ Note: Aapki hoverStates ki keys ab 'service.name' par depend karengi ya aapko unhe badalna hoga
-                        ...styles.footerLink,
-                        ...(hoverStates[service.name] ? styles.footerLinkHover : {})
-                    }}
-                    // 🚀 Hover keys ko service.name ke hisaab se update kiya gaya
-                    onMouseEnter={() => handleMouseEnter(service.name)}
-                    onMouseLeave={() => handleMouseLeave(service.name)}
-                >
-                    {service.name}
-                </a>
-            </li>
-        ))}
-    </ul>
-</div>
+  // Helper function to render regular links
+  const renderLinks = (title, links) => (
+    <div 
+      style={{
+        // Custom style for the last column (Social & Policy)
+        ...columnStyle,
+        width: isMobile ? '100%' : '180px',
+        flex: isMobile ? '0 0 100%' : '0 0 auto',
+      }}
+    >
+      <div style={columnTitleStyle}>{title}</div>
+      {links.map((link) => (
+        <div key={link.text}>
+          <a 
+            href={link.path} 
+            style={linkStyle}
+            onMouseEnter={(e) => e.target.style.color = '#CCCCCC'}
+            onMouseLeave={(e) => e.target.style.color = 'white'}
+            onClick={(e) => {
+              if (link.path.startsWith('/')) {
+                e.preventDefault();
+                handleNavigation(link.path);
+              }
+            }}
+            target={link.path.startsWith('http') ? '_blank' : '_self'}
+            rel={link.path.startsWith('http') ? 'noopener noreferrer' : ''}
+          >
+            {link.icon && <span style={socialIconStyle}>{link.icon}</span>}
+            {link.text}
+          </a>
+        </div>
+      ))}
+    </div>
+  );
 
-          {/* Portfolio Column */}
-          <div style={styles.footerCol}>
-    <h4 style={styles.colHeading}>
-        Portfolio
-        <span style={styles.colHeadingUnderline}></span>
-    </h4>
-    <ul style={styles.footerList}>
-        {[
-            // 🚀 Har item ko object mein badal diya gaya
-            // { name: 'Case Studies', path: '/portfolio/case-studies' },
-            { name: 'Web Applications', path: '/projects' },
-            { name: 'Mobile Apps', path: '/projects' },
-            { name: 'E-commerce Stores', path: '/projects' },
-            { name: 'Brand Projects', path: '/projects' }
-        ].map((item, index) => (
-            <li key={item.name}>
-                <a 
-                    // 🚀 Ab yeh item.path ko use karega
-                    href={item.path}
-                    style={{
-                        // ⚠️ Note: Maine hover key ko item.name use karne ke bajaye purana index wala tareeqa rakha hai, 
-                        // taaki aapki purani hover logic theek rahe agar aap chahein toh.
-                        ...styles.footerLink,
-                        ...(hoverStates[`portfolio${index}`] ? styles.footerLinkHover : {})
-                    }}
-                    onMouseEnter={() => handleMouseEnter(`portfolio${index}`)}
-                    onMouseLeave={() => handleMouseLeave(`portfolio${index}`)}
-                >
-                    {item.name}
-                </a>
-            </li>
-        ))}
-    </ul>
-</div>
+  // --- Footer Render ---
 
-          {/* Resources Column */}
-          <div style={styles.footerCol}>
-            <h4 style={styles.colHeading}>
-              Resources
-              <span style={styles.colHeadingUnderline}></span>
-            </h4>
-            <ul style={styles.footerList}>
-              {[
-                { name: 'Articles', path: '/articles' },
-                { name: 'Projects', path: '/Projects' },
-                // { name: 'Case Studies', path: '/Projects' },
-                { name: 'Development Guides', path: '/projects' },
-                { name: 'SEO Tips', path: '/projects' }
-              ].map((resource, index) => (
-                <li key={resource.name}>
-                  <a 
-                    href={resource.path}
-                    style={{
-                      ...styles.footerLink,
-                      ...(hoverStates[`resource${index}`] ? styles.footerLinkHover : {})
-                    }}
-                    onMouseEnter={() => handleMouseEnter(`resource${index}`)}
-                    onMouseLeave={() => handleMouseLeave(`resource${index}`)}
-                  >
-                    {resource.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
+  return (
+    <footer style={footerStyle}>
+      {/* Main Content Area */}
+      <div style={mainContentStyle}>
+        
+        {/* Left Section (Logo and Tagline) */}
+        <div style={logoSectionStyle}>
+          <div 
+            style={logoContainerStyle}
+            onClick={() => handleNavigation('/')}
+          >
+            <FooterLogo 
+              src={HeaderLogoImage} 
+              alt="Devknit Logo" 
+              size={footerLogoSize}
+            />
           </div>
+          <div style={taglineStyle}>
+            A website makes it real
+          </div>
+        </div>
 
-          {/* Contact Column */}
-          <div style={styles.footerCol}>
-            <h4 style={styles.colHeading}>
-              Contact
-              <span style={styles.colHeadingUnderline}></span>
-            </h4>
-            <div style={styles.contactInfo}>
-              <p>Professional Web Development</p>
-              <p style={styles.phoneNumber}>+1 (555) 123-4567</p>
-              <p>
-                <a 
-                  href="mailto:hello@devknit.com"
-                  style={{
-                    ...styles.footerLink,
-                    ...styles.emailLink,
-                    ...(hoverStates.email ? { color: colors.yellow } : {})
-                  }}
-                  onMouseEnter={() => handleMouseEnter('email')}
-                  onMouseLeave={() => handleMouseLeave('email')}
-                >
-                  hello@devknit.com
-                </a>
-              </p>
+        {/* Right Section (Link Columns) */}
+        <div style={linksContainerStyle}>
+          
+          {/* Column 1 - Products */}
+          {renderServiceLinks('Products', products)}
+
+          {/* Column 2 - Services */}
+          {renderServiceLinks('Services', servicesData)}
+
+          {/* Column 3 - Security */}
+          {renderServiceLinks('Security', security)}
+
+          {/* Column 4 - Business Tools */}
+          {renderServiceLinks('Business Tools', businessTools)}
+
+          {/* Column 5 - Social & Policy (Takes full width on mobile) */}
+          <div style={{
+              ...columnStyle,
+              width: isMobile ? '100%' : '180px',
+              flex: isMobile ? '0 0 100%' : '0 0 auto',
+            }}
+          >
+            {renderLinks('Social', socialLinks)}
+            <div style={{marginTop: '20px'}}>
+              {/* {renderLinks('Policy', policyLinks)} */}
             </div>
           </div>
-
         </div>
       </div>
 
-      <div style={styles.footerBottom}>
-        <div style={styles.socialLinks}>
-          {['LinkedIn', 'GitHub', 'Dribbble', 'Twitter'].map((platform) => (
-            <a
-              key={platform}
-              href={`https://${platform.toLowerCase()}.com/devknit`}
-              aria-label={platform}
-              style={{
-                ...styles.socialIcon,
-                ...(hoverStates[platform.toLowerCase()] ? styles.socialIconHover : {})
-              }}
-              onMouseEnter={() => handleMouseEnter(platform.toLowerCase())}
-              onMouseLeave={() => handleMouseLeave(platform.toLowerCase())}
-            >
-              {platform === 'Twitter' ? '𝕏' : platform.slice(0,2)}
-            </a>
-          ))}
+      {/* Bottom Section (Copyright, Bottom Links) */}
+      <div style={copyrightSectionStyle}>
+        {/* Center: Bottom Links */}
+        <div style={bottomLinksStyle}>
+          <a 
+            href="#" 
+            style={linkStyle}
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavigation('/terms');
+            }}
+          >
+            {/* Terms */}
+          </a>
+          <a 
+            href="#" 
+            style={linkStyle}
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavigation('/privacy');
+            }}
+          >
+            {/* Privacy */}
+          </a>
+          <a 
+            href="#" 
+            style={linkStyle}
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavigation('/security-resources');
+            }}
+          >
+            {/* Security Resources */}
+          </a>
+          <a 
+            href="#" 
+            style={linkStyle}
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavigation('/sitemap');
+            }}
+          >
+            {/* Sitemap */}
+          </a>
         </div>
-        
-        <p style={styles.copyrightText}>
-          © 2025 DEVKNIT - Web Development & Digital Solutions
-        </p>
-        <p style={styles.legalText}>
-          Professional Web Development Services | Custom Digital Solutions
-        </p>
+
+        {/* Right: Copyright */}
+        <div style={copyrightTextStyle}>
+          © 2025 Devknit, Inc.
+        </div>
       </div>
     </footer>
   );
+};
 
-  return (
-    <div>
-      {renderHeader()}
-      <main>{children}</main>
-      {renderFooter()}
-    </div>
-  );
+// --- 3. Layout Component (To combine Header and Footer) ---
+
+const Layout = ({ children }) => {
+    return (
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+            <Header />
+            
+            {/* Main content area */}
+            <main style={{ flexGrow: 1, backgroundColor: '#282c34', color: 'white' }}>
+                {children}
+            </main>
+            
+            <Footer />
+        </div>
+    );
 };
 
 export default Layout;

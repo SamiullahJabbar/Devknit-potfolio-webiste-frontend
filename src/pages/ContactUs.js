@@ -1,68 +1,92 @@
 // src/pages/ContactUs.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
-import '../css/ContactUs.css'; // Make sure this CSS file is also updated!
+import '../css/ContactUs.css'; 
+// Make sure you have this import for your base URL
+import { API_BASE_URL } from '../api/baseurl'; 
 
 const ContactUs = () => {
+    // State for form data
     const [formData, setFormData] = useState({
-        name: '',
+        full_name: '', // Updated to match API payload
         email: '',
         phone: '',
         company: '',
-        subject: '',
-        message: '',
-        budget: '',
-        timeline: ''
+        service: '', // Will hold the service ID
+        project_details: '', // Updated to match API payload (was 'message')
+        estimated_budget: '', // Updated to match API payload (was 'budget')
+        project_timeline: '' // Updated to match API payload (was 'timeline')
     });
 
+    // State for dynamic content from company-info API
+    const [companyInfo, setCompanyInfo] = useState({
+        email: 'loading...',
+        phone: 'loading...',
+        address: 'loading...',
+        location: '',
+        social_links: [],
+        faqs: []
+    });
+
+    // State for services from services API
+    const [services, setServices] = useState([]);
+
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitStatus, setSubmitStatus] = useState(null);
+    const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', or null
+    const [dataLoadingError, setDataLoadingError] = useState(false);
 
-    // Contact information
-    const contactInfo = [
-        {
-            icon: "📧",
-            title: "Email Us",
-            details: "hello@company.com",
-            description: "Send us an email anytime",
-            link: "mailto:hello@company.com"
-        },
-        {
-            icon: "📞",
-            title: "Call Us",
-            details: "+1 (555) 123-4567",
-            description: "Mon to Fri, 9am to 6pm",
-            link: "tel:+15551234567"
-        },
-        {
-            icon: "📍",
-            title: "Visit Us",
-            details: "123 Business Ave, Suite 100",
-            description: "New York, NY 10001",
-            link: "https://maps.google.com"
-        },
-        {
-            icon: "💬",
-            title: "Live Chat",
-            details: "Start Conversation",
-            description: "Available 24/7 for urgent matters",
-            link: "#chat"
-        }
-    ];
+    // --- Data Fetching Logic (useEffect) ---
+    useEffect(() => {
+        // 1. Fetch Company Info & FAQs
+        const fetchCompanyInfo = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}contact/company-info/`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch company info');
+                }
+                const data = await response.json();
+                
+                // Map the fetched data to the component's state structure
+                setCompanyInfo({
+                    email: data.email,
+                    phone: data.phone,
+                    address: data.address,
+                    location: data.location,
+                    social_links: data.social_links || [],
+                    faqs: data.faqs || []
+                });
+            } catch (error) {
+                console.error("Error fetching company info:", error);
+                setDataLoadingError(true);
+            }
+        };
 
-    // Service options
-    const services = [
-        "Web Design & Development",
-        "UI/UX Design",
-        "Mobile App Development",
-        "Digital Marketing",
-        "Brand Strategy",
-        "E-commerce Solutions",
-        "Custom Software",
-        "Other"
-    ];
+        // 2. Fetch Services
+        const fetchServices = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}contact/services/`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch services');
+                }
+                const data = await response.json();
+                setServices(data);
+            } catch (error) {
+                console.error("Error fetching services:", error);
+                setDataLoadingError(true);
+            }
+        };
 
+        fetchCompanyInfo();
+        fetchServices();
+    }, []);
+
+    // --- Static Data (Keep only non-API dependent data) ---
+    
+    // Contact information (Dynamically generated now, but keeping structure for reference)
+    // NOTE: The map in the JSX will use the data from the 'companyInfo' state.
+
+    // Budget and Timeline Options (Still static as per your previous code)
     const budgetRanges = [
         "$5,000 - $10,000",
         "$10,000 - $25,000",
@@ -81,6 +105,8 @@ const ContactUs = () => {
         "Flexible timeline"
     ];
 
+    // --- Event Handlers ---
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevState => ({
@@ -92,56 +118,108 @@ const ContactUs = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        
-        // Simulate API call
+        setSubmitStatus(null); // Clear previous status
+
+        // Prepare payload for /contact/client/ API
+        const payload = {
+            full_name: formData.full_name,
+            email: formData.email,
+            phone: formData.phone || null, // Allow null if not provided
+            company: formData.company || null, // Allow null
+            service: parseInt(formData.service), // Convert selected service ID to integer
+            estimated_budget: formData.estimated_budget || null,
+            project_timeline: formData.project_timeline || null,
+            project_details: formData.project_details,
+        };
+
         try {
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            const response = await fetch(`${API_BASE_URL}contact/client/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                // Read the error message from the response body if available
+                const errorData = await response.json();
+                console.error("Submission Error Details:", errorData);
+                throw new Error(`Server responded with status: ${response.status}`);
+            }
+
+            // Successful submission
             setSubmitStatus('success');
+            
+            // Clear the form
             setFormData({
-                name: '',
+                full_name: '',
                 email: '',
                 phone: '',
                 company: '',
-                subject: '',
-                message: '',
-                budget: '',
-                timeline: ''
+                service: '',
+                project_details: '',
+                estimated_budget: '',
+                project_timeline: ''
             });
+
         } catch (error) {
+            console.error("Error submitting form:", error);
             setSubmitStatus('error');
         } finally {
             setIsSubmitting(false);
         }
     };
 
+    // --- Render JSX ---
+
+    // Define a simplified contact info list based on fetched data for rendering
+    const dynamicContactInfo = [
+        {
+            icon: "📧",
+            title: "Email Us",
+            details: companyInfo.email,
+            description: "Send us an email anytime",
+            link: `mailto:${companyInfo.email}`
+        },
+        {
+            icon: "📞",
+            title: "Call Us",
+            details: companyInfo.phone,
+            description: "Mon to Fri, 9am to 6pm",
+            link: `tel:${companyInfo.phone}`
+        },
+        {
+            icon: "📍",
+            title: "Visit Us",
+            details: companyInfo.address,
+            description: companyInfo.location,
+            link: companyInfo.address && companyInfo.location ? 
+                  `http://googleusercontent.com/maps.google.com/search?q=${encodeURIComponent(companyInfo.address + ', ' + companyInfo.location)}` : 
+                  '#'
+        },
+    ];
+
+
     return (
         <Layout>
             <div className="contact-us-page">
                 
-                {/* Hero Section */}
+                {/* Hero Section (No change needed here) */}
                 <section className="contact-hero">
-                    {/* UPDATED: hero-container -> contact-hero-container */}
                     <div className="contact-hero-container">
-                        {/* UPDATED: hero-content -> contact-hero-content */}
                         <div className="contact-hero-content">
-                            {/* UPDATED: hero-badge -> contact-hero-badge */}
                             <div className="contact-hero-badge">Get In Touch</div>
-                            {/* UPDATED: hero-title -> contact-hero-title */}
                             <h1 className="contact-hero-title">
                                 Let's Start Something 
-                                {/* UPDATED: accent -> contact-accent-text */}
                                 <span className="contact-accent-text"> Amazing Together</span>
                             </h1>
-                            {/* UPDATED: hero-description -> contact-hero-description */}
                             <p className="contact-hero-description">
                                 Ready to transform your ideas into reality? We're here to help. 
                                 Tell us about your project and let's create something extraordinary.
                             </p>
-                            {/* UPDATED: hero-features -> contact-hero-features */}
                             <div className="contact-hero-features">
-                                {/* UPDATED: feature -> contact-feature */}
                                 <div className="contact-feature">
-                                    {/* UPDATED: feature-icon -> contact-feature-icon */}
                                     <div className="contact-hero-features contact-feature-icon">⚡</div>
                                     <span>24-48 Hour Response Time</span>
                                 </div>
@@ -155,32 +233,25 @@ const ContactUs = () => {
                                 </div>
                             </div>
                         </div>
-                        {/* UPDATED: hero-visual -> contact-hero-visual */}
                         <div className="contact-hero-visual">
-                            {/* UPDATED: visual-wrapper -> contact-visual-wrapper */}
                             <div className="contact-visual-wrapper">
-                                {/* UPDATED: hero-image -> contact-hero-image */}
                                 <img 
                                     src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
                                     alt="Contact Us" 
                                     className="contact-hero-image"
                                 />
-                                {/* UPDATED: floating-card card-1 -> contact-floating-card contact-card-1 */}
                                 <div className="contact-floating-card contact-card-1">
-                                    {/* UPDATED: card-icon -> contact-card-icon */}
                                     <div className="contact-card-icon">💬</div>
-                                    {/* UPDATED: card-text -> contact-card-text */}
                                     <div className="contact-card-text">
                                         <strong>Quick Response</strong>
                                         <span>We'll get back within hours</span>
                                     </div>
                                 </div>
-                                {/* UPDATED: floating-card card-2 -> contact-floating-card contact-card-2 */}
                                 <div className="contact-floating-card contact-card-2">
                                     <div className="contact-card-icon">⭐</div>
                                     <div className="contact-card-text">
                                         <strong>Expert Team</strong>
-                                        <span>15+ years experience</span>
+                                        <span>{/* You can add a static or dynamic value here */}</span>
                                     </div>
                                 </div>
                             </div>
@@ -190,90 +261,69 @@ const ContactUs = () => {
 
                 {/* Contact Form & Info Section */}
                 <section className="contact-main-section">
-                    {/* UPDATED: container -> contact-container */}
                     <div className="contact-container">
-                        {/* UPDATED: contact-grid -> contact-main-grid */}
                         <div className="contact-main-grid">
                             
-                            {/* Contact Information */}
-                            {/* UPDATED: contact-info-sidebar -> contact-sidebar */}
+                            {/* Contact Information Sidebar */}
                             <div className="contact-sidebar">
-                                {/* UPDATED: sidebar-header -> contact-sidebar-header */}
                                 <div className="contact-sidebar-header">
                                     <h2>Get in Touch</h2>
                                     <p>Multiple ways to connect with us</p>
                                 </div>
                                 
-                                {/* UPDATED: contact-methods -> contact-method-list */}
+                                {/* Dynamically rendered Contact Methods */}
                                 <div className="contact-method-list">
-                                    {contactInfo.map((item, index) => (
+                                    {dynamicContactInfo.map((item, index) => (
                                         <a 
                                             key={index} 
                                             href={item.link} 
-                                            /* UPDATED: contact-method -> contact-method-item */
                                             className="contact-method-item"
                                             target={item.link.startsWith('http') ? '_blank' : '_self'}
                                             rel={item.link.startsWith('http') ? 'noopener noreferrer' : ''}
                                         >
-                                            {/* UPDATED: method-icon -> contact-method-icon */}
                                             <div className="contact-method-icon">{item.icon}</div>
-                                            {/* UPDATED: method-content -> contact-method-content */}
                                             <div className="contact-method-content">
                                                 <h4>{item.title}</h4>
-                                                {/* UPDATED: method-details -> contact-method-details */}
                                                 <div className="contact-method-details">{item.details}</div>
-                                                {/* UPDATED: method-description -> contact-method-description */}
                                                 <div className="contact-method-description">{item.description}</div>
                                             </div>
-                                            {/* UPDATED: method-arrow -> contact-method-arrow */}
-                                            <div className="contact-method-arrow">→</div>
+                                            <div className="contact-method-arrow"></div>
                                         </a>
                                     ))}
                                 </div>
 
-                                {/* Social Links */}
-                                {/* UPDATED: social-section -> contact-social-section */}
+                                {/* Dynamically rendered Social Links */}
                                 <div className="contact-social-section">
                                     <h3>Follow Us</h3>
-                                    {/* UPDATED: social-links -> contact-social-links */}
                                     <div className="contact-social-links">
-                                        {/* UPDATED: social-link -> contact-social-link */}
-                                        <a href="#" className="contact-social-link">
-                                            {/* UPDATED: social-icon -> contact-social-icon */}
-                                            <span className="contact-social-icon">in</span>
-                                            <span>LinkedIn</span>
-                                        </a>
-                                        <a href="#" className="contact-social-link">
-                                            <span className="contact-social-icon">𝕏</span>
-                                            <span>Twitter</span>
-                                        </a>
-                                        <a href="#" className="contact-social-link">
-                                            <span className="contact-social-icon">fb</span>
-                                            <span>Facebook</span>
-                                        </a>
-                                        <a href="#" className="contact-social-link">
-                                            <span className="contact-social-icon">ig</span>
-                                            <span>Instagram</span>
-                                        </a>
+                                        {companyInfo.social_links.map((social, index) => (
+                                            <a 
+                                                key={index} 
+                                                href={social.url} 
+                                                className="contact-social-link"
+                                                target="_blank" 
+                                                rel="noopener noreferrer"
+                                            >
+                                                <span className="contact-social-icon">
+                                                    {social.platform.substring(0, 2).toLowerCase()}
+                                                </span>
+                                                <span>{social.platform}</span>
+                                            </a>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
 
                             {/* Contact Form */}
-                            {/* UPDATED: contact-form-container -> contact-form-wrapper */}
                             <div className="contact-form-wrapper">
-                                {/* UPDATED: form-header -> contact-form-header */}
                                 <div className="contact-form-header">
                                     <h2>Start Your Project</h2>
                                     <p>Fill out the form below and we'll get back to you within 24 hours</p>
                                 </div>
 
                                 {submitStatus === 'success' && (
-                                    /* UPDATED: success-message -> contact-success-message */
                                     <div className="contact-success-message">
-                                        {/* UPDATED: success-icon -> contact-success-icon */}
                                         <div className="contact-success-icon">✓</div>
-                                        {/* UPDATED: success-content -> contact-success-content */}
                                         <div className="contact-success-content">
                                             <h3>Thank You!</h3>
                                             <p>Your message has been sent successfully. We'll get back to you within 24 hours.</p>
@@ -282,30 +332,24 @@ const ContactUs = () => {
                                 )}
 
                                 {submitStatus === 'error' && (
-                                    /* UPDATED: error-message -> contact-error-message */
                                     <div className="contact-error-message">
-                                        {/* UPDATED: error-icon -> contact-error-icon */}
                                         <div className="contact-error-icon">⚠</div>
-                                        {/* UPDATED: error-content -> contact-error-content */}
                                         <div className="contact-error-content">
                                             <h3>Something went wrong</h3>
-                                            <p>Please try again or contact us directly via email/phone.</p>
+                                            <p>There was an issue sending your message. Please try again or contact us directly via email/phone.</p>
                                         </div>
                                     </div>
                                 )}
 
-                                {/* UPDATED: contact-form -> contact-form-body */}
                                 <form onSubmit={handleSubmit} className="contact-form-body">
-                                    {/* UPDATED: form-row -> contact-form-row */}
                                     <div className="contact-form-row">
-                                        {/* UPDATED: form-group -> contact-form-group */}
                                         <div className="contact-form-group">
-                                            <label htmlFor="name">Full Name *</label>
+                                            <label htmlFor="full_name">Full Name *</label>
                                             <input
                                                 type="text"
-                                                id="name"
-                                                name="name"
-                                                value={formData.name}
+                                                id="full_name"
+                                                name="full_name" // Matched API key
+                                                value={formData.full_name}
                                                 onChange={handleInputChange}
                                                 required
                                                 placeholder="Enter your full name"
@@ -351,18 +395,19 @@ const ContactUs = () => {
                                     </div>
 
                                     <div className="contact-form-group">
-                                        <label htmlFor="subject">Project Type *</label>
+                                        <label htmlFor="service">Project Type *</label>
                                         <select
-                                            id="subject"
-                                            name="subject"
-                                            value={formData.subject}
+                                            id="service"
+                                            name="service" // Matched API key
+                                            value={formData.service}
                                             onChange={handleInputChange}
                                             required
                                         >
                                             <option value="">Select a service</option>
-                                            {services.map((service, index) => (
-                                                <option key={index} value={service}>
-                                                    {service}
+                                            {/* Dynamically rendered services from API */}
+                                            {services.map((service) => (
+                                                <option key={service.id} value={service.id}>
+                                                    {service.title}
                                                 </option>
                                             ))}
                                         </select>
@@ -370,11 +415,11 @@ const ContactUs = () => {
 
                                     <div className="contact-form-row">
                                         <div className="contact-form-group">
-                                            <label htmlFor="budget">Estimated Budget</label>
+                                            <label htmlFor="estimated_budget">Estimated Budget</label>
                                             <select
-                                                id="budget"
-                                                name="budget"
-                                                value={formData.budget}
+                                                id="estimated_budget"
+                                                name="estimated_budget" // Matched API key
+                                                value={formData.estimated_budget}
                                                 onChange={handleInputChange}
                                             >
                                                 <option value="">Select budget range</option>
@@ -386,11 +431,11 @@ const ContactUs = () => {
                                             </select>
                                         </div>
                                         <div className="contact-form-group">
-                                            <label htmlFor="timeline">Project Timeline</label>
+                                            <label htmlFor="project_timeline">Project Timeline</label>
                                             <select
-                                                id="timeline"
-                                                name="timeline"
-                                                value={formData.timeline}
+                                                id="project_timeline"
+                                                name="project_timeline" // Matched API key
+                                                value={formData.project_timeline}
                                                 onChange={handleInputChange}
                                             >
                                                 <option value="">Select timeline</option>
@@ -404,11 +449,11 @@ const ContactUs = () => {
                                     </div>
 
                                     <div className="contact-form-group">
-                                        <label htmlFor="message">Project Details *</label>
+                                        <label htmlFor="project_details">Project Details *</label>
                                         <textarea
-                                            id="message"
-                                            name="message"
-                                            value={formData.message}
+                                            id="project_details"
+                                            name="project_details" // Matched API key
+                                            value={formData.project_details}
                                             onChange={handleInputChange}
                                             required
                                             rows="6"
@@ -418,13 +463,11 @@ const ContactUs = () => {
 
                                     <button 
                                         type="submit" 
-                                        /* UPDATED: submit-button -> contact-submit-button */
                                         className="contact-submit-button"
                                         disabled={isSubmitting}
                                     >
                                         {isSubmitting ? (
                                             <>
-                                                {/* UPDATED: loading-spinner -> contact-loading-spinner */}
                                                 <div className="contact-loading-spinner"></div>
                                                 Sending Message...
                                             </>
@@ -445,56 +488,57 @@ const ContactUs = () => {
 
                 {/* FAQ Section */}
                 <section className="contact-faq-section">
-                    {/* UPDATED: container -> contact-container */}
                     <div className="contact-container">
-                        {/* UPDATED: section-header -> contact-section-header */}
                         <div className="contact-section-header">
-                            {/* UPDATED: section-badge -> contact-section-badge */}
                             <div className="contact-section-badge">FAQ</div>
                             <h2>Frequently Asked Questions</h2>
                             <p>Quick answers to common questions about working with us</p>
                         </div>
                         
-                        {/* UPDATED: faq-grid -> contact-faq-grid */}
+                        {/* Dynamically rendered FAQs from API */}
                         <div className="contact-faq-grid">
-                            {/* UPDATED: faq-item -> contact-faq-item */}
-                            <div className="contact-faq-item">
-                                <h3>What's your typical response time?</h3>
-                                <p>We respond to all inquiries within 24 hours, usually much faster. For urgent matters, call us directly.</p>
-                            </div>
-                            <div className="contact-faq-item">
-                                <h3>Do you offer free consultations?</h3>
-                                <p>Yes! We provide free initial consultations to understand your project and discuss how we can help.</p>
-                            </div>
-                            <div className="contact-faq-item">
-                                <h3>What industries do you work with?</h3>
-                                <p>We've worked with clients across various industries including tech, healthcare, finance, e-commerce, and more.</p>
-                            </div>
-                            <div className="contact-faq-item">
-                                <h3>What's your project process?</h3>
-                                <p>Our process includes discovery, strategy, design, development, testing, and launch with regular client check-ins.</p>
-                            </div>
+                            {companyInfo.faqs.length > 0 ? (
+                                companyInfo.faqs.map((faq, index) => (
+                                    <div key={index} className="contact-faq-item">
+                                        <h3>{faq.question}</h3>
+                                        <p>{faq.answer}</p>
+                                    </div>
+                                ))
+                            ) : (
+                                // Fallback/loading state for FAQs
+                                dataLoadingError ? (
+                                    <div className="contact-faq-item">
+                                        <h3>Error loading FAQs</h3>
+                                        <p>Could not fetch questions. Please check your API connection.</p>
+                                    </div>
+                                ) : (
+                                    // Static or previous FAQs while loading
+                                    <>
+                                        <div className="contact-faq-item">
+                                            <h3>What's your typical response time?</h3>
+                                            <p>We respond to all inquiries within 24 hours, usually much faster. For urgent matters, call us directly.</p>
+                                        </div>
+                                        <div className="contact-faq-item">
+                                            <h3>Do you offer free consultations?</h3>
+                                            <p>Yes! We provide free initial consultations to understand your project and discuss how we can help.</p>
+                                        </div>
+                                    </>
+                                )
+                            )}
                         </div>
                     </div>
                 </section>
 
                 {/* Map Section */}
                 <section className="map-section">
-                    {/* UPDATED: container -> contact-container */}
                     <div className="contact-container">
-                        {/* UPDATED: map-container -> contact-map-container */}
                         <div className="contact-map-container">
-                            {/* UPDATED: map-placeholder -> contact-map-placeholder */}
                             <div className="contact-map-placeholder">
-                                {/* UPDATED: map-content -> contact-map-content */}
                                 <div className="contact-map-content">
                                     <h3>Visit Our Office</h3>
-                                    <p>123 Business Avenue, Suite 100<br/>New York, NY 10001</p>
-                                    {/* UPDATED: map-features -> contact-map-features */}
+                                    <p>{companyInfo.address}<br/>{companyInfo.location}</p>
                                     <div className="contact-map-features">
-                                        {/* UPDATED: map-feature -> contact-map-feature */}
                                         <div className="contact-map-feature">
-                                            {/* UPDATED: feature-icon -> contact-map-feature-icon */}
                                             <div className="contact-map-feature-icon">🕒</div>
                                             <span>Mon - Fri: 9:00 AM - 6:00 PM</span>
                                         </div>
@@ -507,9 +551,13 @@ const ContactUs = () => {
                                             <span>Near Subway Station</span>
                                         </div>
                                     </div>
-                                    {/* UPDATED: map-cta -> contact-map-cta-button */}
-                                    <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="contact-map-cta-button">
-                                        Get Directions →
+                                    <a 
+                                        href={dynamicContactInfo.find(i => i.title === "Visit Us")?.link || '#'} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer" 
+                                        className="contact-map-cta-button"
+                                    >
+                                        Get Directions 
                                     </a>
                                 </div>
                             </div>

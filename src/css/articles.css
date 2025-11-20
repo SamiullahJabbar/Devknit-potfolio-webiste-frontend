@@ -29,6 +29,7 @@
     line-height: 1.2;
 }
 
+
 .articles-section .section-description {
     font-size: 1.1rem;
     line-height: 1.6;
@@ -190,8 +191,8 @@
 }
 
 .slider-nav:hover {
-    background: #ffd700;
-    border-color: #ffd700;
+    background: #2e2d25;
+    border-color: #22211a;
     transform: translateY(-50%) scale(1.1);
 }
 
@@ -232,7 +233,7 @@
 
 .articles-section .view-all-cta:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+    box-shadow: 0 8px 20px rgba(29, 28, 25, 0.3);
 }
 
 /* Auto-scroll Animation */
@@ -468,7 +469,7 @@
 }
 
 .try-again-btn {
-  background: #FFD700;
+  background: #20201b;
   color: #000000;
   border: none;
   padding: 12px 24px;
@@ -614,7 +615,7 @@
 }
 
 .article-card:hover .article-title {
-  color: #FFD700;
+  color: #24221b;
 }
 
 .article-description {
@@ -738,7 +739,7 @@
 
 .newsletter-input:focus {
   outline: none;
-  border-color: #FFD700;
+  border-color: #201f17;
 }
 
 .subscribe-btn {
@@ -754,8 +755,8 @@
 }
 
 .subscribe-btn:hover {
-  background: #FFD700;
-  color: #000000;
+  background: #201f18;
+  color: #e9e2e2;
   transform: translateY(-2px);
 }
 

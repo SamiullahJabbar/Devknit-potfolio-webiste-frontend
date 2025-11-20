@@ -442,7 +442,7 @@ const ServiceDetail = () => {
                 )}
 
                 {/* 🚀 1. Related Services Slider (Explore Our Services) */}
-                {allServices.length > 0 && (
+                {/* {allServices.length > 0 && (
                     <section className="related-services-section">
                         <div className="section-header">
                             <h2>Explore Our Services</h2>
@@ -492,7 +492,7 @@ const ServiceDetail = () => {
                             ))}
                         </div>
                     </section>
-                )}
+                )} */}
                 
              {/* 🚀 2. Related Projects Slider (Featured Case Studies) */}
 {allProjects.length > 0 && (

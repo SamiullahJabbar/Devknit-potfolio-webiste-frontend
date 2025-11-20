@@ -559,9 +559,9 @@ const ProjectDetail = () => {
                                             loading="lazy"
                                             onError={handleImageError}
                                         />
-                                        <div className="gallery-zoom-overlay">
+                                        {/* <div className="gallery-zoom-overlay">
                                             View Full Image
-                                        </div>
+                                        </div> */}
                                     </div>
                                 ))}
                             </div>
@@ -570,7 +570,7 @@ const ProjectDetail = () => {
                 )}
 
                 {/* Related Services Slider */}
-                {filteredServices.length > 0 && (
+                {/* {filteredServices.length > 0 && (
                     <section className="related-services-section">
                         <div className="section-header">
                             <h2>Explore Our Services</h2>
@@ -610,7 +610,7 @@ const ProjectDetail = () => {
                             ))}
                         </div>
                     </section>
-                )}
+                )} */}
 
                 {/* Related Projects Slider */}
                 {allProjects.length > 0 && (

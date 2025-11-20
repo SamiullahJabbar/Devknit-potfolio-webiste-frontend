@@ -1,0 +1,408 @@
+/* ================================================== */
+/* BusinessServiceDetail.css - UNIQUE CLASSES (bsd- prefix) */
+/* ================================================== */
+
+/* ============= HERO SECTION ============= */
+.bsd-hero-section {
+  position: relative;
+  height: 70vh;
+  min-height: 520px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  overflow: hidden;
+}
+
+.bsd-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.58);
+  z-index: 1;
+}
+
+.bsd-hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 20px;
+  max-width: 1100px;
+}
+
+.bsd-hero-content h1 {
+  font-size: 4.2rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-shadow: 0 4px 25px rgba(0, 0, 0, 0.8);
+  letter-spacing: -1px;
+}
+
+.bsd-hero-video-wrapper {
+  margin-top: 35px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.bsd-hero-video {
+  width: 100%;
+  height: 450px;
+  object-fit: contain;
+  object-position: center;
+  background: #000;
+}
+
+/* ============= STICKY NAVIGATION ============= */
+.bsd-points-nav-container.bsd-sticky-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: white;
+  padding: 18px 0;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
+}
+
+.bsd-points-nav-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px 28px;
+  background: #2c241f;
+  border-radius: 60px;
+  max-width: fit-content;
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  overflow-x: auto; /* Allow horizontal scrolling */
+  scrollbar-width: none;
+}
+
+.bsd-points-nav-wrapper::-webkit-scrollbar { display: none; }
+
+.bsd-point-nav-item {
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 14px 28px;
+  font-size: 1.05rem;
+  font-weight: 500;
+  border-radius: 35px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.35s ease;
+}
+
+.bsd-point-nav-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px);
+}
+
+.bsd-point-nav-item.active {
+  background: rgba(255, 255, 255, 0.35);
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+/* ============= POINTS SECTION ============= */
+.bsd-service-points-section {
+  padding: 120px 20px;
+  background: #fdfdfd;
+}
+
+.bsd-point-detail-block {
+  max-width: 1800px;
+  margin: 140px auto;
+  text-align: center;
+}
+
+.bsd-point-description {
+  max-width: 1000px;
+  margin: 0 auto 70px;
+  font-size: 1.22rem;
+  line-height: 1.9;
+  color: #333;
+}
+
+/* ============= IMAGE GRID ============= */
+.bsd-point-visual-content-container {
+  display: flex;
+  justify-content: center;
+}
+
+.bsd-point-visual-wrapper {
+  width: 100%;
+  max-width: 1900px;
+  margin: 0 auto;
+}
+
+.bsd-point-images-grid {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.bsd-image-item {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.bsd-image-item:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.bsd-image-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.bsd-image-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.85));
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* Grid Layouts - Using BEM-like naming for modifiers/helpers */
+.bsd-grid-count-3 .bsd-point-images-grid {
+  display: grid;
+  grid-template-columns: 4fr 3fr;
+  grid-template-rows: 2fr 1fr;
+  height: 820px;
+  gap: 30px;
+}
+.bsd-point-image--large-3 { grid-column: 1/2; grid-row: 1/3; }
+.bsd-point-image--small-3:nth-child(2) { grid-column: 2/3; grid-row: 1/2; }
+.bsd-point-image--small-3:nth-child(3) { grid-column: 2/3; grid-row: 2/3; }
+
+.bsd-grid-count-4 .bsd-point-images-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  height: 700px;
+  gap: 26px;
+}
+
+/* ============= FAQS - 100% WORKING TOGGLE ============= */
+.bsd-service-faqs-section {
+  background: #000;
+  color: white;
+  padding: 160px 20px;
+}
+
+.bsd-faqs-container {
+  max-width: 920px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.bsd-faqs-container h2 {
+  font-size: 3.4rem;
+  font-weight: 600;
+  margin-bottom: 90px;
+  letter-spacing: -1px;
+}
+
+.bsd-faqs-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bsd-faq-item {
+  background: #111;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  transition: all 0.5s ease;
+}
+
+.bsd-faq-item.open {
+  background: #1a1a1a;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+}
+
+.bsd-faq-question {
+  width: 100%;
+  padding: 30px 38px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.48rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.3s ease;
+}
+
+.bsd-faq-question:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.bsd-faq-question span:first-child {
+  flex: 1;
+  padding-right: 25px;
+}
+
+.bsd-faq-icon {
+  font-size: 2.6rem;
+  font-weight: 300;
+  transition: transform 0.5s ease;
+}
+
+.bsd-faq-item.open .bsd-faq-icon {
+  transform: rotate(180deg);
+}
+
+.bsd-faq-answer-wrapper {
+  /* Transition handled by inline style in JS */
+}
+
+.bsd-faq-answer {
+  padding: 0 38px 45px;
+  font-size: 1.18rem;
+  line-height: 1.9;
+  color: #e2e2e2;
+}
+
+/* ============= LOADING & ERROR ============= */
+.bsd-loading-state, .bsd-error-state {
+  text-align: center;
+  padding: 150px 20px;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.bsd-error-state { color: #ff6b6b; }
+
+/* ============= RESPONSIVE (Combined and Enhanced) ============= */
+
+/* Tablet and Large Mobile Screens */
+@media (max-width: 1024px) {
+  /* Hero Section */
+  .bsd-hero-content h1 { font-size: 3.4rem; }
+  .bsd-hero-video  { height: 460px; }
+  
+  /* Points Section */
+  .bsd-service-points-section { padding: 100px 20px; }
+  .bsd-point-detail-block { margin: 120px auto; }
+  .bsd-point-description { font-size: 1.15rem; margin-bottom: 50px; }
+
+  /* Sticky Nav (General Tablet adjustment) */
+  .bsd-points-nav-wrapper { max-width: 95%; }
+
+  /* FAQs */
+  .bsd-faqs-container { max-width: 850px; }
+  .bsd-faq-question { font-size: 1.4rem; padding: 28px 34px; }
+  .bsd-faq-answer { font-size: 1.1rem; padding: 0 34px 40px; }
+}
+
+/* Standard Mobile Screens (768px and below) */
+@media (max-width: 768px) {
+  /* Hero Section */
+  .bsd-hero-section { min-height: 400px; }
+  .bsd-hero-content h1 { font-size: 2.8rem; margin-bottom: 20px; }
+  .bsd-hero-video-wrapper { margin-top: 25px; border-radius: 12px; }
+  .bsd-hero-video { height: 320px; }
+  
+  /* Sticky Nav FIX for Mobile Scrolling */
+  .bsd-points-nav-container.bsd-sticky-nav { 
+    padding: 10px 0; /* Reduced vertical padding */
+  }
+  .bsd-points-nav-wrapper {
+    justify-content: flex-start; /* FIX: Align items left for proper scroll */
+    max-width: 95%; /* FIX: Take almost full width */
+    margin: 0 auto;
+    padding: 8px 10px; /* Reduced padding */
+    border-radius: 40px;
+    gap: 8px;
+  }
+  .bsd-point-nav-item { 
+    padding: 10px 20px; 
+    font-size: 1rem; 
+    flex-shrink: 0; /* FIX: Prevents items from shrinking/text cutting off */
+  }
+
+  /* Points Section */
+  .bsd-service-points-section { padding: 80px 15px; }
+  .bsd-point-detail-block { margin: 80px auto; }
+  .bsd-point-description { font-size: 1.05rem; line-height: 1.7; margin-bottom: 40px; }
+
+  /* Image Grid - Stack all grids */
+  .bsd-grid-count-3 .bsd-point-images-grid,
+  .bsd-grid-count-4 .bsd-point-images-grid {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    gap: 20px;
+  }
+  .bsd-point-image--large-3,
+  .bsd-point-image--small-3:nth-child(2),
+  .bsd-point-image--small-3:nth-child(3),
+  .bsd-image-item {
+    grid-column: auto;
+    grid-row: auto;
+    height: 320px; 
+  }
+
+  /* FAQs */
+  .bsd-service-faqs-section { padding: 100px 15px; }
+  .bsd-faqs-container h2 { font-size: 2.6rem; margin-bottom: 50px; }
+  .bsd-faq-item { border-radius: 15px; }
+  .bsd-faq-question { font-size: 1.25rem; padding: 20px 25px; }
+  .bsd-faq-icon { font-size: 2.2rem; }
+  .bsd-faq-answer { font-size: 1rem; padding: 0 25px 30px; }
+}
+
+/* Small Mobile Screens (480px and below) */
+@media (max-width: 480px) {
+  /* Hero Section */
+  .bsd-hero-section { min-height: 350px; }
+  .bsd-hero-content h1 { font-size: 2rem; }
+  .bsd-hero-video { height: 200px; }
+  
+  /* Sticky Nav */
+  .bsd-points-nav-container.bsd-sticky-nav {
+    padding: 8px 0;
+  }
+  .bsd-points-nav-wrapper {
+    padding: 6px 8px;
+    gap: 6px;
+  }
+  .bsd-point-nav-item { 
+    padding: 8px 14px; 
+    font-size: 0.85rem; 
+  }
+
+  /* Points Section */
+  .bsd-point-detail-block { margin: 60px auto; }
+  
+  /* Image Grid */
+  .bsd-image-item { height: 250px; border-radius: 15px; }
+  .bsd-image-caption { padding: 15px; font-size: 1rem; }
+
+  /* FAQs */
+  .bsd-service-faqs-section { padding: 80px 10px; }
+  .bsd-faqs-container h2 { font-size: 2rem; margin-bottom: 40px; }
+  .bsd-faq-question { font-size: 1.1rem; padding: 18px 20px; }
+  .bsd-faq-icon { font-size: 1.8rem; }
+  .bsd-faq-answer { font-size: 0.95rem; padding: 0 20px 25px; }
+}

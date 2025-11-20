@@ -279,8 +279,8 @@
 /* feature csss
 /* The outer wrapper ensures the section itself has space around it */
 .service-detail-page .seo-features-container-wrapper { 
-    width: 100%;
-    padding: 80px 40px; 
+    width: 96%;
+    padding: 80px 38px; 
     background-color: #ffffff; 
 }
 
@@ -411,7 +411,7 @@
 @media (max-width: 768px) {
     /* Reduce overall section padding */
     .service-detail-page .seo-features-container-wrapper {
-        padding: 40px 10px;
+        padding: 40px 8px;
     }
 
     /* Reduce horizontal padding on the main dark section */
@@ -657,8 +657,8 @@
 
 /* 💎 Enhanced Benefits Section - Same Style as Features */
 .enhanced-benefits-section { 
-    width: 100%;
-    padding: 80px 40px; 
+    width: 96%;
+    padding: 80px 34px; 
     background-color: #ffffff; 
 }
 
@@ -747,7 +747,7 @@
 
 @media (max-width: 768px) {
     .enhanced-benefits-section {
-        padding: 40px 10px;
+        padding: 40px 7px;
     }
 
     .section-title,
@@ -1380,7 +1380,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(15, 15, 15, 0.9), rgba(255, 215, 0, 0.8));
+  background: linear-gradient(135deg, rgba(15, 15, 15, 0.9), rgba(49, 47, 34, 0.8));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1426,7 +1426,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #FFD700;
+  color: #2b291f;
   font-weight: 700;
   font-size: 1.1rem;
   transition: all 0.3s ease;

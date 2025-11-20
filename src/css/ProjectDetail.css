@@ -271,14 +271,14 @@
 
 /* The outer wrapper ensures the section itself has space around it */
 .project-detail-page .features-container-wrapper {
-    width: 100%;
-    padding: 80px 40px; /* Provides padding around the main dark container */
+    width: 98%;
+    padding: 80px 20px; /* Provides padding around the main dark container */
     background-color: #ffffff; /* Keep the page background white/light */
 }
 
 .project-detail-page .features-section {
     /* Main dark, rounded container - Black */
-    width: 100%;
+    width: 96%;
     max-width: 1800px;
     margin: 0 auto;
     
@@ -557,7 +557,7 @@
     
     /* Features Section Mobile */
     .project-detail-page .features-container-wrapper {
-        padding: 40px 20px; 
+        padding: 40px 3px; 
     }
     
     .project-detail-page .features-section {
@@ -944,7 +944,7 @@
   transform: translateX(-50%);
   width: 80px;
   height: 4px;
-  background: linear-gradient(90deg, #FFD700, #000000);
+  background: linear-gradient(90deg, #66634f, #695858);
   border-radius: 2px;
 }
 
@@ -1015,7 +1015,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(255, 215, 0, 0.8));
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(24, 23, 19, 0.8));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1061,7 +1061,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #FFD700;
+  color: #24231d;
   font-weight: 700;
   font-size: 1.1rem;
   transition: all 0.3s ease;

@@ -1,5 +1,5 @@
 /* ========================================= */
-/* Contact Us Page - Modern Professional Design */
+/* Contact Us Page - Modern Professional Monochrome Design */
 /* ========================================= */
 
 .contact-us-page {
@@ -25,7 +25,7 @@
 
 .contact-section-badge {
     display: inline-block;
-    background: linear-gradient(135deg, #000000, #000000); /* BLACK BADGE */
+    background: #000000; /* PURE BLACK BADGE */
     color: white; /* WHITE TEXT */
     padding: 10px 24px;
     border-radius: 25px;
@@ -47,7 +47,7 @@
 
 .contact-section-header p {
     font-size: 1.2rem;
-    color: #666; /* GRAY TEXT */
+    color: #666666; /* DARK GRAY TEXT */
     max-width: 600px;
     margin: 0 auto;
     line-height: 1.6;
@@ -56,7 +56,7 @@
 /* --- Hero Section --- */
 .contact-hero {
     padding: 140px 0 100px;
-    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%); /* WHITE GRADIENT */
+    background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 100%); /* LIGHT GRAY TO WHITE GRADIENT */
     position: relative;
     overflow: hidden;
 }
@@ -70,7 +70,7 @@
     bottom: 0;
     background: 
         radial-gradient(circle at 10% 20%, rgba(0, 0, 0, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 90% 80%, rgba(0, 43, 91, 0.03) 0%, transparent 50%);
+        radial-gradient(circle at 90% 80%, rgba(0, 0, 0, 0.03) 0%, transparent 50%);
 }
 
 .contact-hero-container {
@@ -91,7 +91,7 @@
 
 .contact-hero-badge {
     display: inline-block;
-    background: rgba(255, 215, 0, 0.1); /* YELLOW BACKGROUND */
+    background: #e0e0e0; /* LIGHT GRAY BACKGROUND */
     color: #000000; /* BLACK TEXT */
     padding: 10px 20px;
     border-radius: 20px;
@@ -112,15 +112,17 @@
 }
 
 .contact-hero-title .contact-accent-text {
-    background: linear-gradient(135deg, #000000, #000000); /* BLACK TO YELLOW */
+    /* Pure Black text fill for the accent */
+    color: #000000; 
+    /* Kept for potential text shadow/outline if you decide to add an effect */
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: #000000;
     background-clip: text;
 }
 
 .contact-hero-description {
     font-size: 1.25rem;
-    color: #666; /* GRAY TEXT */
+    color: #666666; /* GRAY TEXT */
     margin-bottom: 40px;
     line-height: 1.7;
 }
@@ -140,7 +142,8 @@
 .contact-hero-features .contact-feature-icon {
     width: 32px;
     height: 32px;
-    background: linear-gradient(135deg, #FFD700, #FFE135); /* YELLOW GRADIENT */
+    background: #000000; /* PURE BLACK BACKGROUND */
+    color: white; /* WHITE TEXT */
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -171,8 +174,8 @@
     height: 400px;
     object-fit: cover;
     border-radius: 20px;
-    box-shadow: 0 25px 60px rgba(0, 43, 91, 0.15);
-    border: 1px solid rgba(2, 2, 2, 0.1);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .contact-floating-card {
@@ -203,7 +206,7 @@
 .contact-card-icon {
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, #000000, #000000); /* BLACK GRADIENT */
+    background: #000000; /* BLACK BACKGROUND */
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -219,14 +222,14 @@
 }
 
 .contact-card-text strong {
-    color: #002B5B; /* DARK BLUE */
+    color: #000000; /* BLACK */
     font-weight: 700;
     font-size: 0.9rem;
     margin-bottom: 2px;
 }
 
 .contact-card-text span {
-    color: #666; /* GRAY TEXT */
+    color: #666666; /* GRAY TEXT */
     font-size: 0.8rem;
 }
 
@@ -250,11 +253,11 @@
 
 /* Contact Info Sidebar */
 .contact-sidebar {
-    background: linear-gradient(135deg, #f8fafc, #ffffff); /* WHITE GRADIENT */
+    background: #f8f8f8; /* VERY LIGHT GRAY BACKGROUND */
     padding: 40px;
     border-radius: 24px;
-    box-shadow: 0 20px 60px rgba(0, 43, 91, 0.1);
-    border: 1px solid rgba(0, 43, 91, 0.08);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     position: sticky;
     top: 100px;
 }
@@ -271,7 +274,7 @@
 }
 
 .contact-sidebar-header p {
-    color: #666; /* GRAY TEXT */
+    color: #666666; /* GRAY TEXT */
     line-height: 1.6;
 }
 
@@ -292,20 +295,21 @@
     text-decoration: none;
     color: inherit;
     transition: all 0.3s ease;
-    border: 1px solid rgba(0, 43, 91, 0.1);
-    box-shadow: 0 4px 15px rgba(0, 43, 91, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .contact-method-item:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    border-color: #FFD700; /* YELLOW BORDER */
+    border-color: #000000; /* BLACK BORDER on hover */
 }
 
 .contact-method-icon {
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, #FFD700, #FFE135); /* YELLOW GRADIENT */
+    background: #000000; /* BLACK BACKGROUND */
+    color: white; /* WHITE ICON */
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -333,7 +337,7 @@
 }
 
 .contact-method-description {
-    color: #666; /* GRAY TEXT */
+    color: #666666; /* GRAY TEXT */
     font-size: 0.85rem;
 }
 
@@ -371,7 +375,7 @@
     text-decoration: none;
     color: #000000; /* BLACK TEXT */
     transition: all 0.3s ease;
-    border: 1px solid rgba(0, 43, 91, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     font-size: 0.9rem;
     font-weight: 500;
 }
@@ -380,7 +384,7 @@
     background: #000000; /* BLACK BACKGROUND */
     color: white; /* WHITE TEXT */
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 43, 91, 0.2);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .contact-social-icon {
@@ -393,8 +397,8 @@
     background: white; /* WHITE BACKGROUND */
     padding: 50px;
     border-radius: 24px;
-    box-shadow: 0 20px 60px rgba(0, 43, 91, 0.1);
-    border: 1px solid rgba(0, 43, 91, 0.08);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .contact-form-header {
@@ -409,7 +413,7 @@
 }
 
 .contact-form-header p {
-    color: #666; /* GRAY TEXT */
+    color: #666666; /* GRAY TEXT */
     line-height: 1.6;
 }
 
@@ -425,13 +429,13 @@
 }
 
 .contact-success-message {
-    background: rgba(0, 0, 0, 0.1); /* LIGHT BLACK */
-    border: 1px solid rgba(34, 197, 94, 0.3);
+    background: rgba(0, 0, 0, 0.05); /* Very light gray/black for success */
+    border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
 .contact-error-message {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    background: rgba(255, 0, 0, 0.05); /* Kept a hint of red for error distinction */
+    border: 1px solid rgba(255, 0, 0, 0.3);
 }
 
 .contact-success-icon,
@@ -452,7 +456,7 @@
 }
 
 .contact-error-icon {
-    background: #ef4444;
+    background: #ff0000; /* Red for error icon */
     color: white;
 }
 
@@ -465,7 +469,7 @@
 
 .contact-success-content p,
 .contact-error-content p {
-    color: #666; /* GRAY TEXT */
+    color: #666666; /* GRAY TEXT */
     margin: 0;
     font-size: 0.95rem;
 }
@@ -499,7 +503,7 @@
 .contact-form-group select,
 .contact-form-group textarea {
     padding: 15px 20px;
-    border: 2px solid #e2e8f0;
+    border: 2px solid #e2e8f0; /* LIGHT GRAY BORDER */
     border-radius: 12px;
     font-size: 1rem;
     transition: all 0.3s ease;
@@ -512,8 +516,8 @@
 .contact-form-group select:focus,
 .contact-form-group textarea:focus {
     outline: none;
-    border-color: #FFD700; /* YELLOW BORDER */
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+    border-color: #000000; /* BLACK BORDER on focus */
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
 }
 
 .contact-form-group textarea {
@@ -522,7 +526,7 @@
 }
 
 .contact-submit-button {
-    background: linear-gradient(135deg, #000000, #000000); /* BLACK GRADIENT */
+    background: #000000; /* PURE BLACK BACKGROUND */
     color: white; /* WHITE TEXT */
     border: none;
     padding: 18px 35px;
@@ -547,6 +551,7 @@
     left: -100%;
     width: 100%;
     height: 100%;
+    /* Subtle white shine effect */
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     transition: left 0.5s;
 }
@@ -583,7 +588,7 @@
 /* --- FAQ Section --- */
 .contact-faq-section {
     padding: 100px 0;
-    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%); /* WHITE GRADIENT */
+    background: #f8f8f8; /* LIGHT GRAY BACKGROUND */
 }
 
 .contact-faq-grid {
@@ -596,14 +601,14 @@
     background: white; /* WHITE BACKGROUND */
     padding: 40px 30px;
     border-radius: 20px;
-    box-shadow: 0 15px 40px rgba(0, 43, 91, 0.1);
-    border: 1px solid rgba(0, 43, 91, 0.08);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
 }
 
 .contact-faq-item:hover {
     transform: translateY(-5px);
-    box-shadow: 0 20px 50px rgba(0, 43, 91, 0.15);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
 }
 
 .contact-faq-item h3 {
@@ -615,7 +620,7 @@
 }
 
 .contact-faq-item p {
-    color: #666; /* GRAY TEXT */
+    color: #666666; /* GRAY TEXT */
     line-height: 1.7;
     margin: 0;
 }
@@ -629,12 +634,12 @@
 .contact-map-container {
     border-radius: 24px;
     overflow: hidden;
-    box-shadow: 0 25px 60px rgba(0, 43, 91, 0.15);
-    border: 1px solid rgba(0, 43, 91, 0.1);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .contact-map-placeholder {
-    background: linear-gradient(135deg, #000000, #000000); /* BLACK GRADIENT */
+    background: #000000; /* BLACK BACKGROUND */
     color: white; /* WHITE TEXT */
     padding: 80px 40px;
     text-align: center;
@@ -649,9 +654,10 @@
     left: 0;
     right: 0;
     bottom: 0;
+    /* Subtle radial gradient using transparency */
     background: 
-        radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
+        radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
 }
 
 .contact-map-content {
@@ -663,9 +669,9 @@
     font-size: 2.5rem;
     font-weight: 800;
     margin-bottom: 20px;
-    background: linear-gradient(135deg, #FFFFFF 0%, #FFD700 100%); /* WHITE TO YELLOW */
+    color: #ffffff; /* WHITE TEXT */
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: #ffffff;
     background-clip: text;
 }
 
@@ -720,10 +726,10 @@
 }
 
 .contact-map-cta-button:hover {
-    background: #FFD700; /* YELLOW BACKGROUND */
-    color: #000000; /* BLACK TEXT */
+    background: white; /* WHITE BACKGROUND on hover */
+    color: #000000; /* BLACK TEXT on hover */
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
 /* --- Responsive Design --- */
