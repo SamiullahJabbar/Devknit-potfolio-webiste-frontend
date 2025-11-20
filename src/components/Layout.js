@@ -4,7 +4,7 @@ import { API_BASE_URL } from '../api/baseurl';
 
 // Import your logos - update these paths according to your project structure
 import HeaderLogoImage from '../images/2.svg';
-import TranslateWidget from "./TranslateWidget";
+// import TranslateWidget from "./TranslateWidget";
 
 // Custom component for the logo image with size control
 const HeaderLogo = ({ src, alt, size = 30 }) => (
