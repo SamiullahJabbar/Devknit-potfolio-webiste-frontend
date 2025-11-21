@@ -353,8 +353,7 @@ const ServicesImageSlider = ({ services, activeServiceSlug, setActiveServiceSlug
     );
 };
 
-
-// --- OurSuccessProjectsSection COMPONENT (UNCHANGED) ---
+// --- OurSuccessProjectsSection COMPONENT (UPDATED FOR MOBILE OVERLAY) ---
 const OurSuccessProjectsSection = ({ projects }) => {
     // ... (UNCHANGED CODE)
     if (!projects || projects.length === 0) {
@@ -398,9 +397,9 @@ const OurSuccessProjectsSection = ({ projects }) => {
                                     <span>Project Preview</span>
                                 </div>
                             )}
-                        </div>
-                        <div className="project-info">
-                            <Link to={`/projects/${project.slug}`} className="project-link-title">
+                            
+                            {/* =========== 💡 NEW: Mobile Overlay Title moved inside the wrapper =========== */}
+                            <Link to={`/projects/${project.slug}`} className="mobile-overlay-title">
                                 <div className="project-mobile-title" style={{ color: '#f8f8f8ff' }}>
                                     <span className="main-title-line">
                                         {project.title.split(' ').slice(0, 3).join(' ')}
@@ -415,14 +414,24 @@ const OurSuccessProjectsSection = ({ projects }) => {
                                     <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
                             </Link>
+                            {/* ========================================================================= */}
                         </div>
+                        
+                        {/* ❌ REMOVED OR KEPT EMPTY: The old .project-info div is now redundant/empty 
+                        
+                        <div className="project-info">
+                             <Link to={`/projects/${project.slug}`} className="project-link-title">
+                                 ...
+                             </Link>
+                        </div>
+                        
+                        */}
                     </div>
                 ))}
             </div>
         </section>
     );
 };
-
 
 // --- NEW COMPONENT: CompletedProjectsGridSection (Verification logic added for clarity) ---
 const CompletedProjectsGridSection = ({ projects }) => {
