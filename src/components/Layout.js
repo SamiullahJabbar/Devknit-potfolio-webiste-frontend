@@ -661,11 +661,12 @@ const Header = () => {
       {isResourcesOpen && (
         <div style={mobileSubmenuStyle}>
           {[
-            { text: 'Help Center', path: '/help-center' },
-            { text: 'Forum', path: '/forum' },
-            { text: 'Blog', path: '/blog' },
-            { text: 'Webinars', path: '/webinars' },
-            { text: 'Hire an Expert', path: '/hire-expert' }
+            { text: 'Help Center', path: '' },
+            { text: 'Forum', path: '' },
+            { text: 'Blog', path: '/articles' },
+            { text: 'Contact us', path: '/ContactUs' },
+            { text: 'Webinars', path: '' },
+            { text: 'Hire an Expert', path: '' }
           ].map((item, index, array) => (
             <div 
               key={item.text}

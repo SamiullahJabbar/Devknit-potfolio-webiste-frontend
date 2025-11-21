@@ -580,15 +580,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
 /* --- Professional Success Projects Section --- */
 
 .success-projects-section {
@@ -662,7 +653,7 @@
 .projects-mobile-grid {
     display: flex;
     justify-content: center;
-    gap: 60px;
+    gap: 80px;
     flex-wrap: wrap; 
     margin-top: 60px;
     position: relative;
@@ -702,6 +693,7 @@
 
 /* Enhanced Mobile Display Wrapper */
 .project-mobile-display-wrapper {
+    /* DEFAULT (DESKTOP) SIZE */
     width: 280px;
     height: 580px;
     background: #FFFFFF;
@@ -898,17 +890,18 @@
 }
 
 /* ======================================================= */
-/* 📱 Mobile View: Horizontal Scrolling (max-width: 768px) */
+/* 📱 Mobile View: Fixed Size Horizontal Scrolling (max-width: 768px)  */
 /* ======================================================= */
 @media (max-width: 768px) {
     .success-projects-section {
-        padding: 70px 0; /* Changed side padding to 0 for full-width scroll container */
+        /* Side padding removed to allow scroll container to span full width */
+        padding: 70px 0; 
     }
 
     .success-projects-section .section-header {
         /* Add back padding to the header content only */
         padding: 0 15px; 
-        margin-bottom: 50px; /* Adjusted margin */
+        margin-bottom: 50px; 
     }
 
     .success-projects-section .section-title {
@@ -920,24 +913,23 @@
         bottom: -8px;
     }
     
-    /* 1. KEY CHANGE: Set up Horizontal Scrolling for the Projects Grid */
+    /* 1. KEY CHANGE: Set up Horizontal Scrolling */
     .projects-mobile-grid {
-        /* Override default settings for mobile */
         display: flex;
-        flex-wrap: nowrap; /* Prevents items from wrapping (Crucial for horizontal scroll) */
+        flex-wrap: nowrap; /* Crucial for horizontal scroll */
         overflow-x: scroll; /* Enables horizontal scrolling */
-        justify-content: flex-start; /* Aligns items to the start */
-        -webkit-overflow-scrolling: touch; /* Enhance scrolling on iOS */
+        justify-content: flex-start; 
+        -webkit-overflow-scrolling: touch; 
         
-        gap: 40px; /* Space between cards */
-        margin-top: 0; /* Adjusted margin */
+        gap: 40px; /* Space between fixed-width cards */
+        margin-top: 0; 
         margin-bottom: 30px; 
         
-        /* Add padding to the start/end of the scrollable area */
+        /* Side padding to ensure first and last card are visible */
+        /* Since card width is 280px, a side padding of 30px-50px works well */
         padding: 0 40px 10px 40px; 
         
-        /* Optional: Hide scrollbar */
-        scrollbar-width: none; /* Firefox */
+        scrollbar-width: none; 
     }
 
     /* Hide scrollbar for Webkit browsers */
@@ -946,12 +938,13 @@
     }
 
 
-    /* 2. KEY CHANGE: Configure Project Item for a Fixed Width in the Flex Row */
+    /* 2. KEY CHANGE: Configure Project Item for Fixed Original Size (280px) */
     .mobile-project-item {
-        flex: 0 0 calc(85vw - 40px); /* Sets width to roughly 85% of viewport minus some padding */
-        max-width: none; /* Override max-width from default styles */
+        /* FIXED WIDTH to match DESKTOP CARD WIDTH */
+        flex: 0 0 280px; /* Fixed width, ignores viewport width */
+        max-width: 280px; /* Ensures max-width is respected */
         margin: 0; /* Remove vertical margin */
-        transition: none; /* Disable hover transitions on mobile for better performance/simplicity */
+        transition: none; /* Disable hover transitions on mobile */
     }
     
     .mobile-project-item:hover {
@@ -962,30 +955,33 @@
         opacity: 0; /* Disable hover background effect on mobile */
     }
 
+    /* 3. KEY CHANGE: Ensure the Wrapper maintains Desktop Fixed Size */
     .project-mobile-display-wrapper {
-        width: 100%; /* Use the full calculated width */
-        height: 540px; 
-        border-radius: 24px;
+        width: 280px; /* FIXED WIDTH */
+        height: 580px; /* FIXED HEIGHT */
+        border-radius: 24px; /* Mobile border radius */
         margin-bottom: 20px; 
     }
     
     .project-mobile-display-wrapper:hover {
+        /* Reset hover shadow for mobile */
         box-shadow: 
             0 15px 40px rgba(0, 43, 91, 0.12),
             0 0 0 1px rgba(0, 43, 91, 0.05),
-            inset 0 1px 0 rgba(255, 255, 255, 0.8); /* Reset box-shadow on hover for mobile */
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
     }
     
+    /* Ensure title button matches the fixed card width */
     .project-link-title {
-        min-width: 100%; /* Ensure the title button scales with the new item width */
-        max-width: 100%; 
+        min-width: 280px; 
+        max-width: 280px;
         padding: 14px 28px;
-        transform: none; /* Disable hover transform on mobile */
+        transform: none; 
     }
 
     .project-link-title:hover {
         transform: none;
-        background: #000000; /* Keep black background on mobile hover */
+        background: #000000; 
         color: #FFFFFF;
     }
     
@@ -1016,10 +1012,10 @@
     }
 }
 
-/* 480px Media Query Update for Horizontal Scroll */
+/* 480px Media Query Update for Fixed Size Horizontal Scroll */
 @media (max-width: 480px) {
     .success-projects-section {
-        padding: 60px 0; /* Changed side padding to 0 */
+        padding: 60px 0; 
     }
     
     .success-projects-section .section-header {
@@ -1037,21 +1033,25 @@
     
     .projects-mobile-grid {
         gap: 30px; /* Adjusted gap */
-        padding: 0 25px 10px 25px; /* Adjusted side padding for visible scroll */
+        /* Reduced side padding to keep 280px card visible on smaller screens */
+        padding: 0 25px 10px 25px; 
     }
     
     .mobile-project-item {
-        flex: 0 0 calc(90vw - 25px); /* Adjusted width for smaller screens (90% width) */
+        /* Keep fixed size 280px */
+        flex: 0 0 280px;
+        max-width: 280px;
     }
     
     .project-mobile-display-wrapper {
-        width: 100%;
-        height: 500px;
+        width: 280px;
+        height: 580px; /* Keeping the original height */
         border-radius: 22px;
     }
     
     .project-link-title {
-        min-width: 100%;
+        min-width: 280px;
+        max-width: 280px;
         padding: 12px 24px;
     }
     
