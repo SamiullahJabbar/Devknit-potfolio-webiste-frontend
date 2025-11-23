@@ -1,10 +1,15 @@
+// File: Header.js
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { API_BASE_URL } from '../api/baseurl';
+import { API_BASE_URL } from '../api/baseurl'; 
 
 // Import your logos - update these paths according to your project structure
-import HeaderLogoImage from '../images/2.svg';
-// import TranslateWidget from "./TranslateWidget";
+import HeaderLogoImage from '../images/1.svg';
+
+// --- CSS IMPORTS ---
+import './Header.css'; // For Header Mobile Styles
+import './Footer.css'; // For Footer Mobile Styles
 
 // Custom component for the logo image with size control
 const HeaderLogo = ({ src, alt, size = 30 }) => (
@@ -52,21 +57,18 @@ const Header = () => {
   const location = useLocation();
 
   // Logo sizes - easily adjustable here
-  const logoSize = 90;
-  // const footerLogoSize = 150; // Not used in Header
+  const logoSize = 120;
 
   // Fetch services from API
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        console.log('Fetching services from:', `${API_BASE_URL}services/`);
         const response = await fetch(`${API_BASE_URL}services/`);
         if (response.ok) {
           const data = await response.json();
-          console.log('Services fetched:', data);
           setServices(data);
         } else {
-          console.error('Failed to fetch services, status:', response.status);
+          console.error('Failed to fetch services');
         }
       } catch (error) {
         console.error('Error fetching services:', error);
@@ -81,7 +83,6 @@ const Header = () => {
   // Check screen size for mobile responsiveness
   useEffect(() => {
     const checkScreenSize = () => {
-      // Adjusted mobile breakpoint to 992px for a typical large menu/dropdown
       setIsMobile(window.innerWidth <= 992); 
     };
     
@@ -90,7 +91,6 @@ const Header = () => {
     
     return () => {
       window.removeEventListener('resize', checkScreenSize);
-      // Clear timeouts on unmount
       clearTimeout(servicesTimeoutRef.current);
       clearTimeout(resourcesTimeoutRef.current);
     };
@@ -106,78 +106,96 @@ const Header = () => {
   // Handle navigation to service detail page
   const handleServiceNavigation = (slug) => {
     navigate(`/services/${slug}`);
+    if(isMobile) setIsMobileMenuOpen(false);
   };
 
-  // Handle navigation
+  // Handle navigation - FIXED: Scroll to top when navigating
   const handleNavigation = (path) => {
     navigate(path);
+    // Scroll to top immediately when navigating
+    window.scrollTo(0, 0);
+    if(isMobile) setIsMobileMenuOpen(false);
   };
 
-  // Dropdown handlers with delay
+  // Dropdown handlers with delay (Desktop only)
   const handleServicesMouseEnter = () => {
-    if (isMobile) return; // Disable hover on mobile
+    if (isMobile) return; 
     clearTimeout(servicesTimeoutRef.current);
     setIsServicesOpen(true);
     setIsResourcesOpen(false);
   };
 
   const handleServicesMouseLeave = () => {
-    if (isMobile) return; // Disable hover on mobile
+    if (isMobile) return; 
     servicesTimeoutRef.current = setTimeout(() => {
       setIsServicesOpen(false);
     }, 300);
   };
 
   const handleResourcesMouseEnter = () => {
-    if (isMobile) return; // Disable hover on mobile
+    if (isMobile) return; 
     clearTimeout(resourcesTimeoutRef.current);
     setIsResourcesOpen(true);
     setIsServicesOpen(false);
   };
 
   const handleResourcesMouseLeave = () => {
-    if (isMobile) return; // Disable hover on mobile
+    if (isMobile) return; 
     resourcesTimeoutRef.current = setTimeout(() => {
       setIsResourcesOpen(false);
     }, 300);
   };
 
-  // Cancel timeouts when entering dropdown content
+  // Cancel timeouts when entering dropdown content (Desktop only)
   const handleDropdownMouseEnter = (type) => {
     if (isMobile) return;
     if (type === 'services') clearTimeout(servicesTimeoutRef.current);
     if (type === 'resources') clearTimeout(resourcesTimeoutRef.current);
   };
 
-  // Group services for dropdown display - FIXED VERSION
-  // Show ALL services in mobile view without limits
-  const getServicesByCategory = (startIndex, count) => {
-    // Return all services if mobile or if the slice exceeds total services
-    if (isMobile) return services; 
-    return services.slice(startIndex, startIndex + count);
-  };
+  // --- SERVICE GROUPING LOGIC (Dynamic Half-Half Division) ---
+  const totalServices = services.length;
+  const halfCount = Math.ceil(totalServices / 2); 
 
-  // Get services for different categories
-  // Note: These will only be used for desktop view since isMobile check is now in getServicesByCategory
-  const websiteServices = getServicesByCategory(0, 8);
-  const commerceServices = getServicesByCategory(8, 8);
-  const marketingServices = getServicesByCategory(16, 4);
-  const businessToolsServices = getServicesByCategory(20, 3);
-  const professionalServices = getServicesByCategory(23, 2);
+  const developmentServices = services.slice(0, halfCount); 
+  const maintenanceServices = services.slice(halfCount, totalServices); 
 
-  // --- Header Inline CSS Styles (Updated for Responsiveness) ---
+  // STATIC DATA for SECURITY and BUSINESS TOOLS 
+  const staticSecurityServices = [
+    { text: 'Web Audit', path: '' },
+    { text: 'SSL & Encryption', path: '' },
+    { text: 'Code Review', path: '' },
+    { text: 'Vulnerability Assessment', path: '' },
+  ];
+
+  const staticBusinessTools = [
+    { text: 'Technical SEO', path: '' },
+    { text: 'Optimization', path: '' },
+    { text: 'Content Strategy', path: '' },
+    { text: 'Technical Support', path: '' },
+  ];
+  // -----------------------------------------------------------------
+
+
+  // --- Header Inline CSS Styles (Desktop/Base) ---
 
   const headerStyle = {
     backgroundColor: '#000000',
     color: 'white',
-    padding: isMobile ? '0 20px' : '0 40px',
+    padding: '0 40px', 
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     height: '65px',
     borderBottom: '1px solid #333',
-    position: 'relative',
+    position: 'fixed',
+    top: '0',
+    left: '0',
+    right: '0',
+    width: '100%',
     zIndex: 1000,
+    transition: 'all 0.3s ease',
+    boxSizing: 'border-box',
   };
 
   const logoContainerStyle = { 
@@ -191,13 +209,11 @@ const Header = () => {
   };
   
   const centerMenuStyle = { 
-    // Show on Desktop/Tablet, Hide on Mobile
     display: isMobile ? 'none' : 'flex', 
     alignItems: 'center', 
   };
   
   const utilityContainerStyle = { 
-    // Show on Desktop/Tablet, Hide on Mobile
     display: isMobile ? 'none' : 'flex', 
     alignItems: 'center', 
     flexShrink: 0, 
@@ -205,7 +221,7 @@ const Header = () => {
   
   const menuItemStyle = { 
     position: 'relative', 
-    margin: '0 15px', // Reduced margin for smaller screens
+    margin: '0 15px', 
     padding: '5px 0', 
     cursor: 'pointer', 
     fontWeight: '500', 
@@ -217,18 +233,17 @@ const Header = () => {
     backgroundColor: 'white', 
     color: '#000000', 
     border: 'none', 
-    padding: '10px 15px', // Reduced padding
-    marginLeft: '15px', // Reduced margin
-    fontSize: '13px', // Reduced font size
+    padding: '10px 15px', 
+    marginLeft: '15px', 
+    fontSize: '13px', 
     fontWeight: 'bold', 
     cursor: 'pointer', 
-    borderRadius: '4px', 
+    borderRadius: '1px', 
     letterSpacing: '1px', 
     textTransform: 'uppercase',
   };
 
   const mobileMenuButtonStyle = {
-    // Show only on Mobile
     display: isMobile ? 'block' : 'none',
     background: 'none',
     border: 'none',
@@ -242,15 +257,12 @@ const Header = () => {
   
   const dropdownMenuBaseStyle = {
     position: 'absolute', 
-    // Keep it centered for large screen, but prevent it from taking up too much width
     top: '55px', 
     left: '50%', 
     transform: 'translateX(-50%)', 
     backgroundColor: '#000000', 
-    border: '1px solid #333', 
     boxShadow: '0 8px 16px rgba(0, 0, 0, 0.6)', 
     zIndex: 100, 
-    // Use fixed max-width for desktop
     minWidth: '950px',
     maxWidth: '950px',
     padding: '25px', 
@@ -274,20 +286,15 @@ const Header = () => {
   const dropdownColumnStyle = { 
     padding: '0 20px', 
     flex: 1, 
-    borderRight: '1px solid #333', // Desktop only border
-  };
-  
-  const lastColumnStyle = { 
-    ...dropdownColumnStyle, 
-    borderRight: 'none', 
   };
   
   const dropdownColumnTitleStyle = { 
     fontSize: '14px', 
     fontWeight: 'bold', 
-    color: '#CCCCCC', 
-    marginBottom: '15px', 
+    color: '#878787', 
+    marginBottom: '20px', 
     textTransform: 'uppercase', 
+    paddingTop: '5px', 
   };
   
   const dropdownItemStyle = { 
@@ -301,15 +308,16 @@ const Header = () => {
   
   const specialBoxContainerStyle = { 
     paddingLeft: '30px', 
-    borderLeft: '1px solid #333',
+    width: '240px', 
+    flexShrink: 0,
   };
   
   const specialBoxStyle = { 
-    backgroundColor: '#111111', 
+    backgroundColor: '#000000', 
     padding: '15px', 
     borderRadius: '4px', 
     marginBottom: '10px', 
-    width: '200px', 
+    width: '100%', 
     cursor: 'pointer', 
     transition: 'background-color 0.2s ease',
   };
@@ -318,60 +326,15 @@ const Header = () => {
     fontSize: '14px', 
     fontWeight: 'bold', 
     marginBottom: '5px', 
+    color: 'white',
   };
   
   const specialBoxDescriptionStyle = { 
-    fontSize: '12px', 
-    color: '#CCCCCC', 
+    fontSize: '13px', 
+    color: '#AAAAAA', 
     lineHeight: '1.4', 
   };
-
-  // ************ Mobile Menu Styles ************
-
-  const mobileMenuStyle = {
-    position: 'fixed',
-    top: '65px',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: '#000000',
-    zIndex: 999,
-    padding: '20px',
-    overflowY: 'auto',
-    transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(100%)',
-    transition: 'transform 0.3s ease',
-  };
-
-  const mobileMenuItemStyle = {
-    padding: '15px 0',
-    borderBottom: '1px solid #333',
-    fontSize: '16px',
-    cursor: 'pointer',
-  };
-
-  const mobileSubmenuStyle = {
-    paddingLeft: '10px',
-    backgroundColor: '#111111',
-    margin: '10px 0',
-    borderRadius: '4px',
-    maxHeight: '400px', // Fixed height for scrolling
-    overflowY: 'auto', // Enable scrolling
-  };
-
-  const mobileSubmenuItemStyle = {
-    padding: '12px 0',
-    borderBottom: '1px solid #333',
-    fontSize: '14px',
-    cursor: 'pointer',
-  };
   
-  const mobileSubmenuLastItemStyle = {
-    padding: '12px 0',
-    borderBottom: 'none',
-    fontSize: '14px',
-    cursor: 'pointer',
-  };
-
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen && isMobile) {
@@ -385,316 +348,434 @@ const Header = () => {
     };
   }, [isMobileMenuOpen, isMobile]);
 
-  // --- Header Dropdown Content with API data (Desktop Only) ---
+  // Helper function to render the link item with proper hover state (Desktop only)
+  const renderDropdownLink = (item, handleNav, isApi = true) => (
+      <div 
+          key={isApi ? item.id : item.text} 
+          style={dropdownItemStyle}
+          onMouseEnter={(e) => e.target.style.color = '#AAAAAA'}
+          onMouseLeave={(e) => e.target.style.color = '#FFFFFF'}
+          onClick={() => handleNav(isApi ? item.slug : item.path)}
+      >
+          {isApi ? item.title : item.text}
+      </div>
+  );
 
+
+  // --- SERVICES DROPDOWN CONTENT (Desktop) ---
   const servicesContent = !isMobile && (
     <div 
-      style={{ ...dropdownMenuBaseStyle, ...(isServicesOpen && showDropdownStyle) }}
+      style={{ 
+        ...dropdownMenuBaseStyle, 
+        minWidth: '950px',
+        maxWidth: '950px',
+        ...(isServicesOpen && showDropdownStyle) 
+      }}
       onMouseEnter={() => handleDropdownMouseEnter('services')}
       onMouseLeave={handleServicesMouseLeave}
     >
-      <div style={dropdownColumnStyle}>
-        <div style={dropdownColumnTitleStyle}>WEBSITE</div>
-        {websiteServices.length > 0 ? (
-          websiteServices.map((service) => (
-            <div 
-              key={service.id} 
-              style={dropdownItemStyle}
-              onMouseEnter={(e) => e.target.style.color = '#CCCCCC'}
-              onMouseLeave={(e) => e.target.style.color = '#FFFFFF'}
-              onClick={() => handleServiceNavigation(service.slug)}
-            >
-              {service.title}
-            </div>
+      
+      {/* ===== COLUMN 1: DEVELOPMENT (API data + View All Features) ===== */}
+      <div style={{ ...dropdownColumnStyle, paddingRight: '20px' }}>
+        <div style={dropdownColumnTitleStyle}>DEVELOPMENT</div>
+        {developmentServices.length > 0 ? (
+          developmentServices.map((service) => (
+            renderDropdownLink(service, handleServiceNavigation, true)
           ))
         ) : (
-          <div style={dropdownItemStyle}>No website services available</div>
+          <div style={dropdownItemStyle}>No development services available</div>
         )}
+        
+        {/* View All Features Link (Route: /projects as requested) */}
         <div 
-          style={dropdownItemStyle}
-          onMouseEnter={(e) => e.target.style.color = '#CCCCCC'}
-          onMouseLeave={(e) => e.target.style.color = '#FFFFFF'}
-          onClick={() => handleNavigation('/features')}
+          style={{
+              ...dropdownItemStyle, 
+              marginTop: '55px', 
+              fontSize: '14px',
+              fontWeight: 'bold',
+              color: '#ffffffff' 
+          }}
+          onMouseEnter={(e) => e.target.style.color = 'white'}
+          onMouseLeave={(e) => e.target.style.color = '#CCCCCC'}
+          onClick={() => handleNavigation('/projects')}
         >
           View All Features
         </div>
       </div>
-      <div style={dropdownColumnStyle}>
-        <div style={dropdownColumnTitleStyle}>COMMERCE</div>
-        {commerceServices.length > 0 ? (
-          commerceServices.map((service) => (
-            <div 
-              key={service.id} 
-              style={dropdownItemStyle}
-              onMouseEnter={(e) => e.target.style.color = '#CCCCCC'}
-              onMouseLeave={(e) => e.target.style.color = '#FFFFFF'}
-              onClick={() => handleServiceNavigation(service.slug)}
-            >
-              {service.title}
-            </div>
+
+      {/* ===== COLUMN 2: MAINTENANCE (API data) ===== */}
+      <div style={{ ...dropdownColumnStyle, paddingLeft: '20px', paddingRight: '20px' }}>
+        <div style={dropdownColumnTitleStyle}>MAINTENANCE</div>
+        {maintenanceServices.length > 0 ? (
+          maintenanceServices.map((service) => (
+            renderDropdownLink(service, handleServiceNavigation, true)
           ))
         ) : (
-          <div style={dropdownItemStyle}>No commerce services available</div>
+          <div style={dropdownItemStyle}>No maintenance services available</div>
         )}
       </div>
-      <div style={dropdownColumnStyle}>
-        <div style={dropdownColumnTitleStyle}>MARKETING</div>
-        {marketingServices.length > 0 ? (
-          marketingServices.map((service) => (
-            <div 
-              key={service.id} 
-              style={dropdownItemStyle}
-              onMouseEnter={(e) => e.target.style.color = '#CCCCCC'}
-              onMouseLeave={(e) => e.target.style.color = '#FFFFFF'}
-              onClick={() => handleServiceNavigation(service.slug)}
-            >
-              {service.title}
-            </div>
-          ))
-        ) : (
-          <div style={dropdownItemStyle}>No marketing services available</div>
-        )}
+      
+      {/* ===== COLUMN 3: SECURITY & BUSINESS TOOLS (Static Data) ===== */}
+      <div style={{ ...dropdownColumnStyle, paddingLeft: '20px', paddingRight: '20px', borderRight: '1px solid #333' }}>
+        {/* SECURITY */}
+        <div style={dropdownColumnTitleStyle}>SECURITY</div>
+        {staticSecurityServices.map((item) => (
+            renderDropdownLink(item, handleNavigation, false)
+        ))}
+        
+        {/* BUSINESS TOOLS */}
         <div style={{ marginTop: '20px' }}>
           <div style={dropdownColumnTitleStyle}>BUSINESS TOOLS</div>
-          {businessToolsServices.length > 0 ? (
-            businessToolsServices.map((service) => (
-              <div 
-                key={service.id} 
-                style={dropdownItemStyle}
-                onMouseEnter={(e) => e.target.style.color = '#CCCCCC'}
-                onMouseLeave={(e) => e.target.style.color = '#FFFFFF'}
-                onClick={() => handleServiceNavigation(service.slug)}
-              >
-                {service.title}
-              </div>
-            ))
-          ) : (
-            <div style={dropdownItemStyle}>No business tools available</div>
-          )}
+          {staticBusinessTools.map((item) => (
+            renderDropdownLink(item, handleNavigation, false)
+          ))}
         </div>
       </div>
-      <div style={specialBoxContainerStyle}>
-        <div style={dropdownColumnTitleStyle}>FOR PROFESSIONALS</div>
-        {professionalServices.length > 0 ? (
-          professionalServices.map((service) => (
-            <div 
-              key={service.id}
-              style={specialBoxStyle}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#222222'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#111111'}
-              onClick={() => handleServiceNavigation(service.slug)}
-            >
-              <div style={specialBoxTitleStyle}>{service.title}</div>
-              <div style={specialBoxDescriptionStyle}>
-                {service.short_description || 'Powerful solutions for professionals'}
-              </div>
-            </div>
-          ))
-        ) : (
-          <div style={specialBoxStyle}>
-            <div style={specialBoxTitleStyle}>Professional Services</div>
-            <div style={specialBoxDescriptionStyle}>
-              Expert solutions for your business needs
-            </div>
+      
+      {/* ===== COLUMN 4: FOR B2B (Special Box - Circle) ===== */}
+      <div style={{ ...specialBoxContainerStyle, paddingLeft: '10px', borderLeft: '1px solid #333' }}>
+        <div style={dropdownColumnTitleStyle}>FOR B2B</div>
+        
+        {/* Circle Special Box (Static Data) */}
+        <div 
+          style={{
+            ...specialBoxStyle,
+            marginTop: '10px', 
+            backgroundColor: '#1c1c1c', 
+            padding: '10px'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'} 
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#1c1c1c'} 
+          onClick={() => handleNavigation('')} 
+        >
+          <div style={specialBoxTitleStyle}>Circle</div>
+          <div style={specialBoxDescriptionStyle}>
+            The partner program for freelancers and agencies
           </div>
-        )}
+        </div>
+        
       </div>
     </div>
   );
+
+  // Helper function to render Resources link with description (Desktop only)
+  const renderResourceLink = (text, path, description) => (
+    <div style={{ marginBottom: '25px' }}>
+      <div
+        style={{ 
+            ...dropdownItemStyle, 
+            padding: '0', 
+            fontSize: '16px', 
+            fontWeight: '600',
+            color: '#FFFFFF' 
+        }}
+        onMouseEnter={(e) => (e.target.style.color = '#AAAAAA')}
+        onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+        onClick={() => handleNavigation(path)}
+      >
+        {text}
+      </div>
+      <p
+        style={{ 
+            ...specialBoxDescriptionStyle, 
+            marginTop: '5px',
+            fontSize: '13px', 
+            color: '#AAAAAA', 
+        }}
+      >
+        {description}
+      </p>
+    </div>
+  );
+
+  // ************ RESOURCES DROPDOWN CONTENT (Desktop) ************
   const resourcesContent = (
-  <div
-    style={{
-      ...dropdownMenuBaseStyle,
-      minWidth: isMobile ? '90vw' : '700px',
-      ...(isResourcesOpen && showDropdownStyle),
-    }}
-    onMouseEnter={() => handleDropdownMouseEnter('resources')}
-    onMouseLeave={handleResourcesMouseLeave}
-  >
-    {/* ===== LEFT COLUMN: Help Center, Forum, Webinars ===== */}
-    <div style={dropdownColumnStyle}>
-      {/* Title updated to match the image */}
-      <div style={dropdownColumnTitleStyle}>24/7 SUPPORT</div> 
-
-      {/* 1. Help Center */}
-      <div
-        style={dropdownItemStyle}
-        onMouseEnter={(e) => (e.target.style.color = '#CCCCCC')}
-        onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-        onClick={() => handleNavigation('')}
-      >
-        Help Center
-      </div>
-      {/* Description added */}
-      <p style={specialBoxDescriptionStyle}>In-depth guides and videos about the platform, our services, and how to get started.</p>
+    <div
+      style={{
+        ...dropdownMenuBaseStyle,
+        minWidth: '780px',
+        maxWidth: '780px',
+        ...(isResourcesOpen && showDropdownStyle),
+      }}
+      onMouseEnter={() => handleDropdownMouseEnter('resources')}
+      onMouseLeave={handleResourcesMouseLeave}
+    >
       
+      {/* ===== COLUMN 1: 24/7 SUPPORT (Help Center, Forum, Webinars) ===== */}
+      <div style={{ ...dropdownColumnStyle, padding: '0 20px' }}>
+        <div style={dropdownColumnTitleStyle}>24/7 SUPPORT</div>
 
-      {/* 2. Forum */}
-      <div
-        style={{ ...dropdownItemStyle, marginTop: '20px' }} /* Margin added for spacing */
-        onMouseEnter={(e) => (e.target.style.color = '#CCCCCC')}
-        onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-        onClick={() => handleNavigation('')}
-      >
-        Forum
-      </div>
-      {/* Description added */}
-      <p style={specialBoxDescriptionStyle}>An online community for Squarespace users to discuss best practices and seek advice.</p>
-      
+        {renderResourceLink(
+          'Help Center',
+          '', 
+          'In-depth guides and videos about the platform, our services, and how to get started.'
+        )}
 
-      {/* 3. Webinars */}
-      <div
-        style={{ ...dropdownItemStyle, marginTop: '20px' }} /* Margin added for spacing */
-        onMouseEnter={(e) => (e.target.style.color = '#CCCCCC')}
-        onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-        onClick={() => handleNavigation('/')}
-      >
-        Webinars
+        {renderResourceLink(
+          'Forum',
+          '', 
+          'An online community for Squarespace users to discuss best practices and seek advice.'
+        )}
+
+        {renderResourceLink(
+          'Webinars',
+          '', 
+          "Free online sessions where you'll learn the basics and refine your Squarespace skills."
+        )}
       </div>
-      {/* Description added */}
-      <p style={specialBoxDescriptionStyle}>Free online sessions where you'll learn the basics and refine your Squarespace skills.</p>
-      
+       
+
+      {/* ===== COLUMN 2: Blog, Hire an Expert ===== */}
+      <div style={{ ...dropdownColumnStyle, padding: '0 20px', borderRight: '1px solid #333' }}>
+        <div style={dropdownColumnTitleStyle}>&nbsp;</div> 
+
+        {renderResourceLink(
+          'Blog',
+          '/articles', 
+          'Stories and solutions for the modern entrepreneur.'
+        )}
+
+        {renderResourceLink(
+          'Hire an Expert',
+          '', 
+          'Let us do the work of finding you the perfect Expert to help you stand out online.'
+        )}
+
+        {renderResourceLink(
+          'Contact us',
+          '/ContactUs', 
+          'Ready to stand out? Connect with us, and we will match you with the perfect Expert.'
+        )}
+      </div>
+
+      {/* ===== COLUMN 3: GET INSPIRED (Special Text Link) ===== */}
+      <div style={{ ...specialBoxContainerStyle, paddingLeft: '30px', borderLeft: '2px solid #333' }}>
+        <div style={dropdownColumnTitleStyle}>GET INSPIRED</div>
+        
+        {/* Made with Devknit Link */}
+        <div 
+            style={{
+                ...specialBoxStyle,
+                marginTop: '30px',
+                padding: '0', 
+                backgroundColor: 'transparent'
+            }}
+            onClick={() => handleNavigation('')} 
+        >
+            <div 
+                style={{
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    color: '#FFFFFF',
+                    transition: 'color 0.2s ease',
+                    cursor: 'pointer',
+                }}
+                onMouseEnter={(e) => (e.target.style.color = '#AAAAAA')}
+                onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
+            >
+                Made with Devknit
+            </div>
+            <div 
+                style={{
+                    fontSize: '13px', 
+                    color: '#AAAAAA', 
+                    lineHeight: '1.4',
+                    marginTop: '5px'
+                }}
+            >
+                A collection of inspirational websites by real Devknit users.
+            </div>
+        </div>
+
+      </div>
     </div>
-     
+  );
 
-    {/* ===== RIGHT COLUMN: Blog, Hire an Expert (Contact Us removed to match image) ===== */}
-    <div style={dropdownColumnStyle}>
-      <div style={dropdownColumnTitleStyle}>&nbsp;</div> {/* Keep empty title for alignment */}
 
-      {/* 1. Blog */}
-      <div style={{ marginBottom: '30px' }}>
-        {/* Style changed to dropdownItemStyle for consistency in rendering as a link/title */}
-        <div
-          style={dropdownItemStyle}
-          onMouseEnter={(e) => (e.target.style.color = '#CCCCCC')}
-          onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-          onClick={() => handleNavigation('/articles')}
-        >
-          Blog
-        </div>
-        <p style={specialBoxDescriptionStyle}>
-          Stories and solutions for the modern entrepreneur.
-        </p>
-      </div>
+  // --- MOBILE MENU CONTENT (Fixed B2B and View All Features) ---
 
-      <div style={{ marginBottom: '30px' }}>
-        {/* Style changed to dropdownItemStyle for consistency in rendering as a link/title */}
-        <div
-          style={dropdownItemStyle}
-          onMouseEnter={(e) => (e.target.style.color = '#CCCCCC')}
-          onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-          onClick={() => handleNavigation('/ContactUs')}
-        >
-          Contact us
-        </div>
-        <p style={specialBoxDescriptionStyle}>
-          Let's connect and explore opportunities to collaborate on projects, events, or mutual growth strategies.
-        </p>
-      </div>
+  // Services Links for Mobile (Combined all links)
+  const mobileServicesContent = [
+    { title: 'DEVELOPMENT', items: developmentServices.map(s => ({ text: s.title, path: `/services/${s.slug}` })) },
+    { title: 'MAINTENANCE', items: maintenanceServices.map(s => ({ text: s.title, path: `/services/${s.slug}` })) },
+    { title: 'SECURITY', items: staticSecurityServices.map(s => ({ text: s.text, path: s.path })) },
+    { title: 'BUSINESS TOOLS', items: staticBusinessTools.map(s => ({ text: s.text, path: s.path })) },
+  ];
 
-      {/* 2. Hire an Expert (Contact us removed to match image) */}
-      <div style={{ marginBottom: '20px' }}>
-        <div
-          style={dropdownItemStyle}
-          onMouseEnter={(e) => (e.target.style.color = '#CCCCCC')}
-          onMouseLeave={(e) => (e.target.style.color = '#FFFFFF')}
-          onClick={() => handleNavigation('')}
-        >
-          Hire an Expert
-        </div>
-        <p style={specialBoxDescriptionStyle}>
-          Let us do the work of finding you the perfect Expert to help you stand out online.
-        </p>
-      </div>
-
-      {/* Contact us section removed as it was not in the image */}
-    </div>
-  </div>
-);
+  // Resources Links for Mobile (Updated with special types for GET INSPIRED)
+  const mobileResourcesLinks = [
+    { type: 'link', text: 'Help Center', path: '' },
+    { type: 'link', text: 'Forum', path: '' },
+    { type: 'link', text: 'Webinars', path: '' },
+    { type: 'link', text: 'Blog', path: '' },
+    { type: 'link', text: 'Hire an Expert', path: '' }, 
+    
+    // START OF GET INSPIRED Section
+    { type: 'title', text: 'GET INSPIRED' }, 
+    { 
+        type: 'box', 
+        title: 'Made with Devknit', 
+        description: 'A collection of inspirational websites by real Devknit users.', 
+        path: '/made-with-devknit' 
+    }, 
+    // END OF GET INSPIRED Section
+    
+    { type: 'link', text: 'Contact us', path: '/ContactUs' }, 
+  ];
   
+  // Custom Mobile Menu Icon (to match the image)
+  const renderMobileMenuIcon = (isOpen) => (
+    <span className={`mobile-menu-item-icon ${isOpen ? 'open' : ''}`}>
+       {isOpen ? '∧' : '∨'}
+    </span>
+  );
 
-  // Mobile menu content - FIXED: Show ALL services with scrolling
   const mobileMenuContent = isMobile && (
-    <div style={mobileMenuStyle}>
+    <div className={`mobile-menu-overlay ${isMobileMenuOpen ? 'open' : ''}`}>
+      
+      {/* --- SERVICES MENU (All Submenus inside this one collapsible section) --- */}
       <div 
-        style={mobileMenuItemStyle}
+        className="mobile-menu-item"
         onClick={() => {
           setIsServicesOpen(!isServicesOpen);
-          setIsResourcesOpen(false);
+          setIsResourcesOpen(false); // Close Resources when opening Services
         }}
       >
-        Services {isServicesOpen ? '−' : '+'}
+        Services 
+        {renderMobileMenuIcon(isServicesOpen)}
       </div>
-      {isServicesOpen && (
-        <div style={mobileSubmenuStyle}>
-          {services.length > 0 ? (
-            services.map((service, index) => (
-              <div 
-                key={service.id}
-                style={index === services.length - 1 ? mobileSubmenuLastItemStyle : mobileSubmenuItemStyle}
-                onClick={() => handleServiceNavigation(service.slug)}
-              >
-                {service.title}
-              </div>
-            ))
-          ) : (
-            <div style={mobileSubmenuLastItemStyle}>No services available</div>
-          )}
-          <div 
-            style={{...mobileSubmenuLastItemStyle, borderTop: '1px solid #333', marginTop: '5px'}}
-            onClick={() => handleNavigation('/services')}
-          >
-            View All Services
-          </div>
-        </div>
-      )}
       
       <div 
-        style={mobileMenuItemStyle}
+        className="mobile-submenu"
+        style={{
+          maxHeight: isServicesOpen ? '1200px' : '0', // Increased MaxHeight for all content
+          padding: isServicesOpen ? '10px 0' : '0',
+          borderBottom: isServicesOpen ? '1px solid #333' : 'none', 
+          marginBottom: isServicesOpen ? '5px' : '0', 
+        }}
+      >
+        {/* --- DEVELOPMENT, MAINTENANCE, SECURITY, BUSINESS TOOLS --- */}
+        {mobileServicesContent.map((group, groupIndex) => (
+          <div key={group.title}>
+              <div className="mobile-submenu-title">{group.title}</div>
+              {group.items.map((item) => (
+                <div 
+                  key={item.text}
+                  className="mobile-submenu-link"
+                  onClick={() => handleNavigation(item.path)}
+                >
+                  {item.text}
+                </div>
+              ))}
+          </div>
+        ))}
+
+        {/* --- View All Features Link --- */}
+        <div 
+            className="mobile-submenu-link view-all-features"
+            onClick={() => handleNavigation('/projects')}
+        >
+            View All Features
+        </div>
+
+        {/* --- FOR B2B / Circle Box --- */}
+        <div className="mobile-b2b-section"> 
+            <div className="mobile-submenu-title">FOR B2B</div>
+            <div
+                className="mobile-circle-box"
+                onClick={() => handleNavigation('/circle-program')}
+            >
+                <div className="mobile-circle-title">Circle</div>
+                <div className="mobile-circle-description">
+                    The partner program for freelancers and agencies
+                </div>
+            </div>
+        </div>
+      </div>
+
+
+   {/* --- RESOURCES MENU (Separate Collapsible Section) --- */}
+      <div 
+        className="mobile-menu-item"
+        style={{ 
+             borderTop: '1px solid #333' // Always show top border for Resources
+        }}
         onClick={() => {
           setIsResourcesOpen(!isResourcesOpen);
-          setIsServicesOpen(false);
+          setIsServicesOpen(false); // Close Services when opening Resources
         }}
       >
-        Resources {isResourcesOpen ? '−' : '+'}
+        Resources 
+        {renderMobileMenuIcon(isResourcesOpen)}
       </div>
-      {isResourcesOpen && (
-        <div style={mobileSubmenuStyle}>
-          {[
-            { text: 'Help Center', path: '' },
-            { text: 'Forum', path: '' },
-            { text: 'Blog', path: '/articles' },
-            { text: 'Contact us', path: '/ContactUs' },
-            { text: 'Webinars', path: '' },
-            { text: 'Hire an Expert', path: '' }
-          ].map((item, index, array) => (
-            <div 
-              key={item.text}
-              style={index === array.length - 1 ? mobileSubmenuLastItemStyle : mobileSubmenuItemStyle}
-              onClick={() => handleNavigation(item.path)}
-            >
-              {item.text}
-            </div>
-          ))}
-        </div>
-      )}
       
       <div 
-        style={{...mobileMenuItemStyle, borderBottom: 'none', marginTop: '20px'}}
-        onClick={() => handleNavigation('/ContactUs')}
+        className="mobile-submenu"
+        style={{
+          maxHeight: isResourcesOpen ? '800px' : '0', // Increased MaxHeight
+          padding: isResourcesOpen ? '10px 0' : '0',
+          borderBottom: isResourcesOpen ? '1px solid #333' : 'none'
+        }}
       >
-       
-        <button style={{...buttonStyle, marginLeft: '0', width: '100%'}}>
+          {mobileResourcesLinks.map((item, index) => {
+            // Using index as key since the list is static
+            if (item.type === 'link') {
+              return (
+                <div 
+                  key={index} 
+                  className="mobile-submenu-link"
+                  onClick={() => handleNavigation(item.path)}
+                >
+                  {item.text}
+                </div>
+              );
+            } else if (item.type === 'title') {
+              // GET INSPIRED Heading
+              return (
+                <div key={index} className="mobile-submenu-title mobile-get-inspired-title">
+                  {item.text}
+                </div>
+              );
+            } else if (item.type === 'box') {
+              // Made with Devknit Box
+              return (
+                <div 
+                    key={index} 
+                    className="mobile-get-inspired-box"
+                    onClick={() => handleNavigation(item.path)}
+                >
+                    <div className="mobile-get-inspired-title-box">{item.title}</div>
+                    <div className="mobile-get-inspired-description">{item.description}</div>
+                </div>
+              );
+            }
+            return null;
+          })}
+      </div>
+
+      
+      {/* --- START PROJECT BUTTON --- */}
+      <div className="mobile-cta-container">
+        <button 
+          className="mobile-cta-button" 
+          onClick={() => handleNavigation('/ContactUs')}
+        >
           START PROJECT
         </button>
       </div>
+
     </div>
   );
+
+
 
   // --- Header Render ---
 
   return (
-    <header style={headerStyle}>
+    <header 
+      style={headerStyle}
+      className={isMobile ? 'header-mobile' : ''} 
+    >
       <div 
         style={logoContainerStyle} 
         onClick={() => handleNavigation('/')}
@@ -736,7 +817,14 @@ const Header = () => {
       {/* Mobile Menu Button */}
       <button 
         style={mobileMenuButtonStyle}
-        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        onClick={() => {
+            setIsMobileMenuOpen(!isMobileMenuOpen);
+            // Reset collapsible states when closing the main menu
+            if(isMobileMenuOpen) {
+                 setIsServicesOpen(false);
+                 setIsResourcesOpen(false);
+            }
+        }}
       >
         {isMobileMenuOpen ? '✕' : '☰'}
       </button>
@@ -747,14 +835,16 @@ const Header = () => {
   );
 };
 
-// --- 2. Footer Component (Fixed with logo size control) ---
+// --- 2. Footer Component ---
 
 const Footer = () => {
   const navigate = useNavigate();
   const [services, setServices] = useState([]);
-  // Adjusted mobile breakpoint to 768px (standard mobile/tablet distinction)
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); 
   
+  // State to manage the open/closed state of mobile footer sections
+  const [openSection, setOpenSection] = useState({});
+
   // Fetch services from API
   useEffect(() => {
     const fetchServices = async () => {
@@ -774,20 +864,28 @@ const Footer = () => {
     fetchServices();
   }, []);
 
-  // Handle navigation
+  // Handle navigation - FIXED: Scroll to top when navigating
   const handleNavigation = (path) => {
     navigate(path);
+    // Scroll to top immediately when navigating
+    window.scrollTo(0, 0);
   };
 
   // Handle service navigation
   const handleServiceNavigation = (slug) => {
     navigate(`/services/${slug}`);
+    // Scroll to top immediately when navigating
+    window.scrollTo(0, 0);
   };
 
   // Check screen size for mobile responsiveness
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth <= 768);
+      // Agar desktop par wapis jayein, toh accordion state reset kar dein
+      if (window.innerWidth > 768) {
+        setOpenSection({});
+      }
     };
     
     checkScreenSize();
@@ -798,350 +896,573 @@ const Footer = () => {
     };
   }, []);
 
-  // Logo sizes
-  const footerLogoSize = 160;
-
-  // Group services for footer display - FIXED: Show ALL services without limits
-  const distributeServices = () => {
-    const totalServices = services.length;
-    
-    if (totalServices === 0) return { products: [], services: [], security: [], businessTools: [] };
-    
-    // Distribute services evenly across 4 columns
-    const cols = 4;
-    const baseCount = Math.floor(totalServices / cols);
-    let remainder = totalServices % cols;
-    
-    let index = 0;
-    const result = { products: [], services: [], security: [], businessTools: [] };
-
-    // Products
-    let count = baseCount + (remainder-- > 0 ? 1 : 0);
-    result.products = services.slice(index, index + count);
-    index += count;
-
-    // Services
-    count = baseCount + (remainder-- > 0 ? 1 : 0);
-    result.services = services.slice(index, index + count);
-    index += count;
-
-    // Security
-    count = baseCount + (remainder-- > 0 ? 1 : 0);
-    result.security = services.slice(index, index + count);
-    index += count;
-
-    // Business Tools (remaining services)
-    result.businessTools = services.slice(index);
-
-    return result;
+  // Accordion Toggle Function
+  const toggleSection = (title) => {
+    setOpenSection(prev => ({
+      ...prev,
+      [title]: !prev[title],
+    }));
   };
 
-  const { products, services: servicesData, security, businessTools } = distributeServices();
+
+  // Logo sizes
+  const footerLogoSize = 220;
+
+  // --- DYNAMIC SERVICE GROUPING LOGIC FOR FOOTER ---
+  const distributeServices = () => {
+    const allServices = services;
+    
+    // 1. PRODUCTS: First 7 services (Assuming the API returns at least 7)
+    const products = allServices.slice(0, 7);
+    
+    // 2. SOLUTIONS: Remaining services
+    const solutions = allServices.slice(7);
+    
+    return { products, solutions };
+  };
+
+  const { products, solutions } = distributeServices();
+
+  // --- STATIC DATA ---
+  
+  const staticSecurity = [
+    { text: 'Web Audit', path: '' },
+    { text: 'SSL & Encryption', path: '' },
+    { text: 'Code Review', path: '' },
+    { text: 'Vulnerability Assessment', path: '' },
+  ];
+  
+  const staticBusinessTools = [
+    { text: 'Technical SEO', path: '' },
+    { text: 'Optimization', path: '' },
+    { text: 'Content Strategy', path: '' },
+    { text: 'Technical Support', path: '' },
+  ];
+
+  const staticPrograms = [
+    { text: 'Circle', path: '' },
+    { text: 'Affiliates', path: '' },
+  ];
+  
+  const staticSupport = [
+    { text: 'Help Center', path: '' },
+    { text: 'Forum', path: '' },
+    { text: 'Webinars', path: '' },
+    { text: 'Hire an Expert', path: '' },
+    { text: 'Developer Blog', path: '' },
+    { text: 'Developer Platform', path: '' },
+    { text: 'System Status', path: '' },
+  ];
+  
+  const staticResources = [
+    { text: 'Extensions', path: '' },
+    { text: 'Squarespace Blog', path: '' },
+    { text: 'Free Tools', path: '' },
+    { text: 'Business Name Generator', path: '' },
+    { text: 'Logo Maker', path: '' },
+  ];
+  
+  const staticCompany = [
+    { text: 'About', path: '' },
+    { text: 'Careers', path: '' },
+    { text: 'Our History', path: '' },
+    { text: 'Our Brand', path: '' },
+    { text: 'Accessibility', path: '' },
+    { text: 'Newsroom', path: '' },
+    { text: 'Press & Media', path: '' },
+    { text: 'Contact Us', path: '' },
+  ];
 
   const socialLinks = [
-    { text: 'Instagram', path: 'https://instagram.com', icon: '' },
-    { text: 'YouTube', path: 'https://youtube.com', icon: '' },
-    { text: 'LinkedIn', path: 'https://linkedin.com', icon: '' },
-    { text: 'Facebook', path: 'https://facebook.com', icon: '' },
-    { text: 'X', path: 'https://twitter.com', icon: '' },
+    { text: 'Instagram', path: 'https://instagram.com/devknit' },
+    { text: 'Youtube', path: 'https://youtube.com/devknit' },
+    { text: 'LinkedIn', path: 'https://linkedin.com/company/devknit' },
+    { text: 'Facebook', path: 'https://facebook.com/devknit' },
+    { text: 'X', path: 'https://twitter.com/devknit' },
   ];
-
-  const policyLinks = [
-    // { text: 'Terms of Service', path: '/terms' },
-    // { text: 'Privacy Policy', path: '/privacy' },
-    // { text: 'Cookie Policy', path: '/cookies' },
-  ];
-
-  // --- Footer Inline CSS Styles (Updated for Responsiveness) ---
+  
+  // --- Footer Inline CSS Styles ---
 
   const footerStyle = {
     backgroundColor: '#000000',
     color: 'white',
-    padding: isMobile ? '30px 20px 10px 20px' : '50px 80px 10px 80px',
+    // NEW: Add borderTop only for Desktop View
+    borderTop: isMobile ? 'none' : '1px solid #333',
+    // NEW: Added gray line at the top for desktop
+    padding: isMobile ? '50px 20px 10px 20px' : '50px 20px 10px 20px',
     fontSize: '13px',
+    position: 'relative',
+    top: '-35px',
   };
-
+    
   const mainContentStyle = {
     display: 'flex',
     flexDirection: isMobile ? 'column' : 'row',
-    justifyContent: 'space-between',
-    borderBottom: '1px solid #333',
-    paddingBottom: '40px',
+    justifyContent: 'flex-start', 
+    alignItems: 'flex-start', 
+    paddingBottom: '30px',
+    width: isMobile ? '100%' : '200%', 
+    // Set to 'none' for desktop to remove the horizontal line
+    borderBottom: isMobile ? 'none' : 'none', 
+    boxSizing: 'border-box',
   };
 
-  const logoSectionStyle = {
-    width: isMobile ? '100%' : '250px',
+  const logoSectionStyle = { 
+    // Desktop styles
+    width: '200px', 
     flexShrink: 0,
-    marginBottom: isMobile ? '30px' : '0',
+    alignSelf: 'flex-start',
+    marginRight: '140px',
+    marginLeft: '20',
+    paddingLeft: '-5%',
+    marginTop: '-80px', 
+    transform: 'translateY(-5px)', 
   };
-
+  
   const logoContainerStyle = {
+    // Desktop styles
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     fontSize: '20px',
     fontWeight: 'bold',
-    marginBottom: '10px',
+    marginBottom: '0px',
     cursor: 'pointer',
+    width: 'fit-content',
+    marginLeft: '20',
   };
 
   const taglineStyle = {
-    fontSize: isMobile ? '18px' : '24px', // Adjusted for mobile
+    // Desktop styles
+    fontSize: '30px', 
     fontWeight: 'normal',
-    lineHeight: '1.2',
-    marginTop: '20px',
+    lineHeight: '1.2', 
+    marginTop: '10px', 
+    color: 'white',
+    textAlign: 'left',
+    whiteSpace: 'nowrap',
+    display: 'block', 
+    width: '100%',
+    marginLeft: '40px', 
+    paddingLeft: '0',
+    marginTop: '-30px', 
+    transform: 'translateY(-5px)', 
   };
 
   const linksContainerStyle = {
+    // Desktop styles
     display: 'flex',
     flexGrow: 1,
-    // Use wrap on mobile to stack columns
-    flexDirection: isMobile ? 'row' : 'row', 
-    justifyContent: 'space-between',
-    paddingLeft: isMobile ? '0' : '50px',
-    flexWrap: 'wrap', // Added wrap to allow columns to stack
+    flexDirection: 'row', 
+    justifyContent: 'flex-start', 
+    gap: '15px', 
+    marginRight: '100px', 
+    marginLeft: '210px', 
+    flexWrap: 'wrap', 
+    justifyContent: 'flex-start', 
+    gap: '180px',
+    // Removed horizontal line above copyright section for desktop
+    borderBottom: 'none', 
+    paddingBottom: '40px',
+    maxWidth: 'calc(100% - 300px)', 
+    width: '100%', 
+    boxSizing: 'border-box', 
   };
-
+  
+  const columnWrapperStyle = {
+      // Desktop styles
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '30px', 
+      width: 'auto',
+  };
+  
   const columnStyle = {
-    // Set width to 50% on mobile for a 2-column layout, auto on desktop
-    width: isMobile ? '50%' : '180px', 
-    lineHeight: '1.8',
-    marginBottom: isMobile ? '25px' : '0',
-    flex: isMobile ? '0 0 50%' : '0 0 auto',
-    // Special handling for the last (Social & Policy) column on mobile to take full width
-    '@media (max-width: 768px)': {
-      ...(isMobile && { 
-        // Force Social & Policy column to full width on mobile
-        '&:last-child': { width: '100%', flex: '0 0 100%' }
-      })
-    }
+    // Desktop styles
+    lineHeight: '1.8', 
+    flex: '0 0 auto',
+    marginRight: '0px' 
   };
-
+  
   const columnTitleStyle = {
-    fontSize: '14px',
+    // Desktop styles
+    fontSize: '14px', 
     fontWeight: 'bold',
-    marginBottom: '15px',
-    color: '#CCCCCC',
+    marginBottom: '20px', 
+    color: 'white', 
     textTransform: 'uppercase',
+    letterSpacing: '0.5px',
   };
 
   const linkStyle = {
-    color: 'white',
+    // Desktop styles
+    color: '#CCCCCC', 
     textDecoration: 'none',
     cursor: 'pointer',
     display: 'block',
-    padding: '2px 0',
+    fontSize: '13px',
+    padding: '6px 0', 
     transition: 'color 0.2s ease',
   };
 
   const copyrightSectionStyle = {
+    // DESKTOP/BASE STYLES (now shared with mobile)
     display: 'flex',
-    flexDirection: isMobile ? 'column' : 'row',
-    justifyContent: 'space-between',
-    alignItems: isMobile ? 'flex-start' : 'center',
-    paddingTop: '20px',
+    flexDirection: 'row',
+    // **********************************************
+    // NEW CHANGE APPLIED: 'flex-end' to push all items to the far right in desktop
+    // **********************************************
+    justifyContent: isMobile ? 'space-between' : 'flex-end', 
+    alignItems: 'center',
+    paddingTop: isMobile ? '0px' : '20px', // Adjusted padding for desktop
     fontSize: '11px',
     color: '#AAAAAA',
-    gap: isMobile ? '15px' : '0',
+    marginTop: isMobile ? '-20px' : '20px', // Adjusted margin for desktop separation
+    transform: 'translateY(-5px)',
+    // Add border above this section for desktop
+    borderTop: isMobile ? 'none' : '2px solid #333',
+    paddingBottom: '-10%px', 
   };
 
   const bottomLinksStyle = {
+    // DESKTOP/BASE STYLES (now shared with mobile)
     display: 'flex',
-    gap: '15px',
+    gap: '40px', 
     flexWrap: 'wrap',
-    // Order changed to put bottom links above copyright text on mobile
-    order: isMobile ? 1 : 1, 
+    // DESKTOP: Order 2. Order needs to be set relative to other flex items
+    order: isMobile ? 1 : 2, 
+    marginLeft: isMobile ? 'auto' : '0', 
+    paddingLeft: isMobile ? '60%' : '0',
+    marginRight: isMobile ? 'auto' : '0',
+    // NEW: Text color for desktop links should be grayish (#AAAAAA)
+    color: '#AAAAAA',
   };
 
   const copyrightTextStyle = {
-    order: isMobile ? 2 : 2,
+    // DESKTOP/BASE STYLES (now shared with mobile)
+    // DESKTOP: Order 3
+    order: isMobile ? 2 : 3,
+    fontSize: '11px', 
+    whiteSpace: 'nowrap',
+    // NEW: Copyright text color should be white for desktop
+    color: isMobile ? '#AAAAAA' : '#FFFFFF', 
+    // Ensure space between links and copyright for desktop
+    marginLeft: '30px', 
   };
 
-  const socialIconStyle = {
-    marginRight: '8px',
-    fontSize: '14px',
-  };
+  // NEW: Language Selector Styles for Desktop Left Side
+  const languageSelectorContainerStyle = {
+    display: 'flex',
+    alignItems: 'left',
+    // DESKTOP: Order 1
+    order: isMobile ? '0' : '1', 
+    // Hide this if in mobile mode for the primary desktop section
+    // When using 'flex-end' on parent, this will be pushed to the right along with others.
+    display: isMobile ? 'none' : 'flex',
+    marginLeft: '100px',
+  }
 
-  // Helper function to render service links
-  const renderServiceLinks = (title, serviceArray) => (
-    <div 
-      style={columnStyle}
-    >
-      <div style={columnTitleStyle}>{title}</div>
-      {serviceArray.length > 0 ? (
-        serviceArray.map((service) => (
-          <div key={service.id}>
+  const languageDropdownStyle = {
+      // Inline styles for the dropdown to match the dark theme and font
+      backgroundColor: 'transparent',
+      border: 'none',
+      color: '#AAAAAA', // Half-white
+      fontSize: '11px',
+      padding: '5px',
+      cursor: 'pointer',
+      appearance: 'none', // Remove default dropdown arrow
+      outline: 'none',
+      marginLeft: '67px',
+      // NOTE: The icon will need to be added using a custom element or CSS class outside of inline styles
+  }
+
+  // Helper function to render links for both desktop and mobile
+  const renderLinks = (title, links, isApi = false) => {
+    const isOpen = openSection[title];
+
+    if (isMobile) {
+      return (
+        // Mobile Accordion Structure (NO CHANGE)
+        <div key={title} className="footer-accordion-item">
+          {/* Accordion Title (Clickable) */}
+          <div 
+            className={`footer-accordion-title ${isOpen ? 'open' : ''}`}
+            onClick={() => toggleSection(title)}
+          >
+            {title}
+            <span className="footer-accordion-icon">{isOpen ? '∧' : '∨'}</span>
+          </div>
+          
+          {/* Accordion Content (Links) */}
+          <div 
+            className="footer-accordion-content"
+            style={{ 
+              maxHeight: isOpen ? '500px' : '0' // Max height for transition
+            }}
+          >
+            {links.map((item) => (
+              <div key={isApi ? item.id : item.text}>
+                <a 
+                  href="#" 
+                  className="footer-accordion-link"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (isApi) {
+                      handleServiceNavigation(item.slug);
+                    } else {
+                      handleNavigation(item.path);
+                    }
+                  }}
+                >
+                  {isApi ? item.title : item.text}
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // Desktop Column Structure (NO CHANGE)
+    return (
+      <div key={title}>
+        <div style={columnTitleStyle}>{title}</div>
+        {links.map((item) => (
+          <div key={isApi ? item.id : item.text}>
             <a 
+              href="#" 
               style={linkStyle}
-              onMouseEnter={(e) => e.target.style.color = '#CCCCCC'}
-              onMouseLeave={(e) => e.target.style.color = 'white'}
+              onMouseEnter={(e) => e.target.style.color = 'white'}
+              onMouseLeave={(e) => e.target.style.color = '#CCCCCC'}
               onClick={(e) => {
                 e.preventDefault();
-                handleServiceNavigation(service.slug);
+                if (isApi) {
+                  handleServiceNavigation(item.slug);
+                } else {
+                  handleNavigation(item.path);
+                }
               }}
             >
-              {service.title}
+              {isApi ? item.title : item.text}
             </a>
           </div>
-        ))
-      ) : (
-        <div style={linkStyle}>No services available</div>
-      )}
-    </div>
-  );
-
-  // Helper function to render regular links
-  const renderLinks = (title, links) => (
-    <div 
-      style={{
-        // Custom style for the last column (Social & Policy)
-        ...columnStyle,
-        width: isMobile ? '100%' : '180px',
-        flex: isMobile ? '0 0 100%' : '0 0 auto',
-      }}
-    >
-      <div style={columnTitleStyle}>{title}</div>
-      {links.map((link) => (
-        <div key={link.text}>
-          <a 
-            href={link.path} 
-            style={linkStyle}
-            onMouseEnter={(e) => e.target.style.color = '#CCCCCC'}
-            onMouseLeave={(e) => e.target.style.color = 'white'}
-            onClick={(e) => {
-              if (link.path.startsWith('/')) {
-                e.preventDefault();
-                handleNavigation(link.path);
-              }
-            }}
-            target={link.path.startsWith('http') ? '_blank' : '_self'}
-            rel={link.path.startsWith('http') ? 'noopener noreferrer' : ''}
-          >
-            {link.icon && <span style={socialIconStyle}>{link.icon}</span>}
-            {link.text}
-          </a>
-        </div>
-      ))}
-    </div>
-  );
+        ))}
+      </div>
+    );
+  };
 
   // --- Footer Render ---
 
   return (
-    <footer style={footerStyle}>
+    <footer style={footerStyle} className={isMobile ? 'footer-mobile' : ''}>
+      
+      {/* NEW: Gray line at the top for desktop only */}
+      {!isMobile && (
+        <div style={{
+          height: '1px',
+          backgroundColor: '#333',
+          width: '100%',
+          marginBottom: '50px'
+        }}></div>
+      )}
+      
       {/* Main Content Area */}
-      <div style={mainContentStyle}>
+      <div style={mainContentStyle} className={isMobile ? 'footer-main-mobile' : ''}>
         
-        {/* Left Section (Logo and Tagline) */}
-        <div style={logoSectionStyle}>
+        {/* Left Section (Logo and Tagline) - Desktop Only */}
+        {!isMobile && (
+          <div style={logoSectionStyle}>
+            <div 
+              style={logoContainerStyle}
+              onClick={() => handleNavigation('/')}
+            >
+              <FooterLogo 
+                src={HeaderLogoImage} 
+                alt="Devknit Logo" 
+                size={footerLogoSize}
+              />
+            </div>
+            <div style={taglineStyle}>
+              A website makes it real
+            </div>
+          </div>
+        )}
+
+        {/* Right Section (Link Columns / Accordions) */}
+        {isMobile ? (
+          // Mobile Accordions
+          <div className="footer-accordion-container">
+            {renderLinks('Products', products, true)}
+            {renderLinks('Solutions', solutions, true)}
+            {/* {renderLinks('From Squarespace', staticFromSquarespace, false)} */}
+            {renderLinks('Security', staticSecurity, false)}
+            {renderLinks('Business Tools', staticBusinessTools, false)}
+            {renderLinks('Programs', staticPrograms, false)}
+            {renderLinks('Support', staticSupport, false)}
+            {renderLinks('Resources', staticResources, false)}
+            {renderLinks('Company', staticCompany, false)}
+            {renderLinks('Follow', socialLinks, false)}
+          </div>
+        ) : (
+          // Desktop Link Columns (NO CHANGE)
+          <div style={linksContainerStyle}>
+             {/* Column 1 - PRODUCTS (API First 7) */}
+             <div style={columnStyle}>
+               {renderLinks('Products', products, true)}
+             </div>
+ 
+             {/* Column 2 - SOLUTIONS, SECURITY, BUSINESS TOOLS (Grouped Column) */}
+             <div style={columnWrapperStyle}>
+                {/* Solutions Section (API Remaining) */}
+                {renderLinks('Solutions', solutions, true)}
+                
+                {/* Security Section */}
+                {renderLinks('Security', staticSecurity, false)}
+                
+                {/* Business Tools Section */}
+                {renderLinks('Business Tools', staticBusinessTools, false)}
+             </div>
+             
+             {/* Column 3 - PROGRAMS, SUPPORT, RESOURCES (Grouped Column) */}
+             <div style={columnWrapperStyle}>
+                {/* Programs Section */}
+                {renderLinks('Programs', staticPrograms, false)}
+ 
+                {/* Support Section */}
+                {renderLinks('Support', staticSupport, false)}
+ 
+                 {renderLinks('Resources', staticResources, false)}
+             </div>
+             
+             {/* Column 4 - COMPANY, FOLLOW (Grouped Column) */}
+             <div style={columnWrapperStyle}>
+                {/* Company Section */}
+                {renderLinks('Company', staticCompany, false)}
+                
+                {/* Follow Section */}
+               {renderLinks('Follow', socialLinks, false)}
+             </div>
+          </div>
+        )}
+      </div>
+
+      {/* Mobile Logo Section (Footer Accordions ke baad dikhega) */}
+      {isMobile && (
+        <div className="footer-logo-mobile-section">
           <div 
-            style={logoContainerStyle}
+            className="footer-logo-container-mobile"
             onClick={() => handleNavigation('/')}
           >
             <FooterLogo 
               src={HeaderLogoImage} 
               alt="Devknit Logo" 
-              size={footerLogoSize}
+              size={footerLogoSize * 1} 
             />
+             {/* <span className="footer-logo-text-mobile">Devknit</span> */}
           </div>
-          <div style={taglineStyle}>
+          <div className="footer-tagline-mobile">
             A website makes it real
           </div>
-        </div>
-
-        {/* Right Section (Link Columns) */}
-        <div style={linksContainerStyle}>
           
-          {/* Column 1 - Products */}
-          {renderServiceLinks('Products', products)}
+          {/* Language Selector (Jaisa image_30be5e.png mein hai) */}
+                  </div>
+      )}
+      
 
-          {/* Column 2 - Services */}
-          {renderServiceLinks('Services', servicesData)}
+      {/* ==================================================================
+        UPDATED: Bottom Section (Copyright, Bottom Links) 
+        Now pushed to the right using 'flex-end' on copyrightSectionStyle.
+        ==================================================================
+      */}
+      <div style={copyrightSectionStyle} className={isMobile ? 'copyright-section-mobile' : 'copyright-section-desktop'}>
+          
+          {/* LANGUAGE SELECTOR (DESKTOP LEFT SIDE) */}
+          {!isMobile && (
+              <div style={languageSelectorContainerStyle}>
+                  {/* Icon Placeholder (Using a simple Unicode character or external icon) */}
+                  {/* <span style={{ fontSize: '14px', color: '#AAAAAA', marginRight: '1000px' }}>🌐</span>  */}
+                  <select style={languageDropdownStyle}>
+                      {/* <option value="en">English</option> */}
+                      {/* <option value="ur">Urdu</option> */}
+                      {/* <option value="es">Spanish</option> */}
+                  </select>
+              </div>
+          )}
 
-          {/* Column 3 - Security */}
-          {renderServiceLinks('Security', security)}
-
-          {/* Column 4 - Business Tools */}
-          {renderServiceLinks('Business Tools', businessTools)}
-
-          {/* Column 5 - Social & Policy (Takes full width on mobile) */}
-          <div style={{
-              ...columnStyle,
-              width: isMobile ? '100%' : '180px',
-              flex: isMobile ? '0 0 100%' : '0 0 auto',
-            }}
-          >
-            {renderLinks('Social', socialLinks)}
-            <div style={{marginTop: '20px'}}>
-              {/* {renderLinks('Policy', policyLinks)} */}
-            </div>
+          {/* Bottom Links (Desktop and Mobile) */}
+          <div style={bottomLinksStyle} className={isMobile ? 'bottom-links-mobile' : 'bottom-links-desktop'}>
+            <a 
+              href="#" 
+              style={{...linkStyle, color: '#AAAAAA'}} // Force half-white/grayish
+              onMouseEnter={(e) => e.target.style.color = 'white'}
+              onMouseLeave={(e) => e.target.style.color = '#AAAAAA'}
+              onClick={(e) => { e.preventDefault(); handleNavigation('/terms'); }}
+            >
+              Terms
+            </a>
+            <a 
+              href="#" 
+              style={{...linkStyle, color: '#AAAAAA'}} // Force half-white/grayish
+              onMouseEnter={(e) => e.target.style.color = 'white'}
+              onMouseLeave={(e) => e.target.style.color = '#AAAAAA'}
+              onClick={(e) => { e.preventDefault(); handleNavigation('/privacy'); }}
+            >
+              Privacy
+            </a>
+            <a 
+              href="#" 
+              style={{...linkStyle, color: '#AAAAAA'}} // Force half-white/grayish
+              onMouseEnter={(e) => e.target.style.color = 'white'}
+              onMouseLeave={(e) => e.target.style.color = '#AAAAAA'}
+              onClick={(e) => { e.preventDefault(); handleNavigation('/security-measures'); }}
+            >
+              Security Measures
+            </a>
+            <a 
+              href="#" 
+              style={{...linkStyle, color: '#AAAAAA'}} // Force half-white/grayish
+              onMouseEnter={(e) => e.target.style.color = 'white'}
+              onMouseLeave={(e) => e.target.style.color = '#AAAAAA'}
+              onClick={(e) => { e.preventDefault(); handleNavigation('/sitemap'); }}
+            >
+              Sitemap
+            </a>
           </div>
-        </div>
+          
+          {/* Devknit Copyright Text (Desktop and Mobile) */}
+          <div style={copyrightTextStyle} className={'copyright-text-desktop'}>
+            © 2025 Devknit, Inc.
+          </div>
+          
+          
       </div>
 
-      {/* Bottom Section (Copyright, Bottom Links) */}
-      <div style={copyrightSectionStyle}>
-        {/* Center: Bottom Links */}
-        <div style={bottomLinksStyle}>
-          <a 
-            href="#" 
-            style={linkStyle}
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavigation('/terms');
-            }}
-          >
-            {/* Terms */}
-          </a>
-          <a 
-            href="#" 
-            style={linkStyle}
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavigation('/privacy');
-            }}
-          >
-            {/* Privacy */}
-          </a>
-          <a 
-            href="#" 
-            style={linkStyle}
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavigation('/security-resources');
-            }}
-          >
-            {/* Security Resources */}
-          </a>
-          <a 
-            href="#" 
-            style={linkStyle}
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavigation('/sitemap');
-            }}
-          >
-            {/* Sitemap */}
-          </a>
-        </div>
+       {/* "From TIME" line - Rendered below copyright section in BOTH views */}
+       <div className={isMobile ? 'extra-copyright-mobile' : 'extra-copyright-desktop'}>
+          <div style={{fontSize: '11px', color: '#AAAAAA', marginTop: isMobile ? '0' : '5px', textAlign: isMobile ? 'left' : 'right', paddingBottom: '20px'}}>
+              From TIME. © 2025 TIME USA LLC. All rights reserved Used under license.
 
-        {/* Right: Copyright */}
-        <div style={copyrightTextStyle}>
-          © 2025 Devknit, Inc.
-        </div>
+          </div>
       </div>
     </footer>
   );
 };
 
-// --- 3. Layout Component (To combine Header and Footer) ---
+// --- 3. Layout Component (MODIFIED FOR WHITE GAP FIX) ---
 
 const Layout = ({ children }) => {
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        // Added backgroundColor: '#000000' to the wrapper div to ensure the entire background is black
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#000000' }}>
             <Header />
             
-            {/* Main content area */}
-            <main style={{ flexGrow: 1, backgroundColor: '#282c34', color: 'white' }}>
+            <main style={{ 
+                flexGrow: 1, 
+                // Changed background color to transparent/black if needed, but it should contain children
+                backgroundColor: 'transparent', // Changed to transparent so body background (now black) shows through
+                color: 'white',
+                marginTop: '65px' 
+            }}>
                 {children}
             </main>
             

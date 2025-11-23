@@ -41,7 +41,7 @@ const HeroSection = () => {
                     className="hero-logo"
                 />
 
-                <h1 className="hero-heading" style={{ color: '#ffffff' }}>
+                <h1 className="hero-heading" style={{ color: '#ffffffff' }}>
                     Creating high-quality websites<br />that deliver real results
                 </h1>
 
@@ -67,7 +67,8 @@ const HeroSection = () => {
 };
 
 
-// --- GrowBusinessSection COMPONENT (UNCHANGED) ---
+
+// --- GrowBusinessSection COMPONENT (UPDATED WITH ROUND WHITE BACKGROUND) ---
 const GrowBusinessSection = ({ services, activeServiceSlug, onServiceSelect }) => {
     if (!services || services.length === 0) {
         return null;
@@ -112,7 +113,7 @@ const GrowBusinessSection = ({ services, activeServiceSlug, onServiceSelect }) =
                     display: 'flex', 
                     justifyContent: 'center', 
                     flexWrap: 'wrap', 
-                    gap: '25px', 
+                    gap: '15px', 
                     marginBottom: '40px',
                     overflowX: 'auto', 
                     paddingBottom: '10px', 
@@ -133,34 +134,21 @@ const GrowBusinessSection = ({ services, activeServiceSlug, onServiceSelect }) =
                         className={`grow-business-nav-item ${service.slug === activeServiceSlug ? 'active' : ''}`}
                         onClick={() => onServiceSelect(service.slug)}
                         style={{
-                            background: 'none',
+                            background: service.slug === activeServiceSlug ? 'rgba(185, 174, 174, 0.43)' : 'transparent',
                             border: 'none',
-                            padding: '10px 15px',
+                            padding: '12px 20px',
                             fontSize: '1rem',
                             fontWeight: service.slug === activeServiceSlug ? 'bold' : 'normal',
-                            color: service.slug === activeServiceSlug ? '#000000' : '#888888',
+                            color: '#000000',
                             cursor: 'pointer',
-                            transition: 'color 0.3s ease',
-                            position: 'relative',
+                            transition: 'all 0.3s ease',
+                            borderRadius: '50px',
+                            boxShadow: service.slug === activeServiceSlug ? '0 2px 10px rgba(0,0,0,0.1)' : 'none',
                             outline: 'none',
                             whiteSpace: 'nowrap', 
                         }}
                     >
                         {service.title}
-                        {/* Active indicator line */}
-                        {service.slug === activeServiceSlug && (
-                            <span 
-                                style={{
-                                    content: '""',
-                                    position: 'absolute',
-                                    bottom: '-5px',
-                                    left: '0',
-                                    width: '100%',
-                                    height: '2px',
-                                    backgroundColor: '#000000', 
-                                }}
-                            ></span>
-                        )}
                     </button>
                 ))}
             </div>
@@ -169,8 +157,7 @@ const GrowBusinessSection = ({ services, activeServiceSlug, onServiceSelect }) =
 };
 
 
-// --- SERVICE IMAGE SLIDER COMPONENT (UNCHANGED) ---
-
+// --- SERVICE IMAGE SLIDER COMPONENT (DOTS ADDED) ---
 const ServicesImageSlider = ({ services, activeServiceSlug, setActiveServiceSlug }) => {
     // --- 1. HOOKS MUST BE CALLED FIRST ---
     const sliderRef = useRef(null);
@@ -312,7 +299,7 @@ const ServicesImageSlider = ({ services, activeServiceSlug, setActiveServiceSlug
                             style={{
                                 opacity: index === activeIndex ? '1' : '0.5',
                                 transition: 'opacity 0.5s ease-in-out',
-                                height: '60vh', 
+                                height: '70vh', 
                                 borderRadius: '12px',
                                 overflow: 'hidden',
                                 position: 'relative',
@@ -348,14 +335,83 @@ const ServicesImageSlider = ({ services, activeServiceSlug, setActiveServiceSlug
                         </Link>
                     ))}
                 </div>
+
+                {/* DOTS INDICATOR ADDED HERE */}
+                <div className="slider-dots" style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '8px',
+                    marginTop: '20px',
+                    paddingBottom: '30px'
+                }}>
+                    {services.map((_, index) => (
+                        <button
+                            key={index}
+                            className={`slider-dot ${index === activeIndex ? 'active' : ''}`}
+                            onClick={() => handleManualSlideClick(index)}
+                            style={{
+                                width: '8px',
+                                height: '8px',
+                                borderRadius: '50%',
+                                border: 'none',
+                                backgroundColor: index === activeIndex ? '#000000' : '#dddddd',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s ease',
+                                padding: '0'
+                            }}
+                        />
+                    ))}
+                </div>
             </div>
         </section>
     );
 };
 
-// --- OurSuccessProjectsSection COMPONENT (UPDATED FOR MOBILE OVERLAY) ---
+
+
+
+
 const OurSuccessProjectsSection = ({ projects }) => {
-    // ... (UNCHANGED CODE)
+    const [activeIndex, setActiveIndex] = React.useState(0);
+    const CARD_PER_VIEW = 4; // Used for desktop and tablet views
+
+    const handleNext = () => {
+        if (!projects) return;
+        // For mobile, cycle through one project at a time
+        if (window.innerWidth <= 768) {
+            setActiveIndex((prevIndex) =>
+                prevIndex + 1 >= projects.length ? 0 : prevIndex + 1
+            );
+        } else {
+            // Original desktop/tablet logic
+            const maxIndex = Math.max(0, projects.length - CARD_PER_VIEW);
+            setActiveIndex((prevIndex) =>
+                prevIndex >= maxIndex ? 0 : prevIndex + 1
+            );
+        }
+    };
+
+    const handlePrev = () => {
+        if (!projects) return;
+        // For mobile, cycle through one project at a time
+        if (window.innerWidth <= 768) {
+            setActiveIndex((prevIndex) =>
+                prevIndex - 1 < 0 ? projects.length - 1 : prevIndex - 1
+            );
+        } else {
+            // Original desktop/tablet logic
+            const maxIndex = Math.max(0, projects.length - CARD_PER_VIEW);
+            setActiveIndex((prevIndex) =>
+                prevIndex === 0 ? maxIndex : prevIndex - 1
+            );
+        }
+    };
+
+    const handleDotClick = (index) => {
+        setActiveIndex(index);
+    };
+
     if (!projects || projects.length === 0) {
         return (
             <section className="success-projects-section" style={{ backgroundColor: '#ffffff', color: '#000000' }}>
@@ -366,72 +422,243 @@ const OurSuccessProjectsSection = ({ projects }) => {
             </section>
         );
     }
+
     const displayProjects = projects;
+
+    // Calculate total pages for dots
+    // Mobile: One dot per project; Desktop: Based on CARD_PER_VIEW
+    const totalPages = window.innerWidth <= 768 ? displayProjects.length : Math.max(1, displayProjects.length - CARD_PER_VIEW + 1);
+
+    // For mobile view, calculate previous and next indices
+    const prevIndex = activeIndex - 1 < 0 ? projects.length - 1 : activeIndex - 1;
+    const nextIndex = activeIndex + 1 >= projects.length ? 0 : activeIndex + 1;
+
+    // Placeholder for Link
+    const Link = ({ to, children, className, style }) => <a href={to} className={className} style={style}>{children}</a>;
+
     return (
         <section className="success-projects-section" style={{ backgroundColor: '#ffffff', color: '#000000' }}>
-            <div className="section-header">
-                {/* <div className="section-badge" style={{ backgroundColor: '#ffd700', color: '#ffffff' }}>Portfolio</div> */}
-                <h2 className="section-title" style={{ color: '#000000' }}>
-                   featured Desgin Projects
-                </h2>
-                <p className="section-description" style={{ color: '#000000' }}>
-                    A selection of recent work built with solid UI and reliable performance.
-                </p>
-            </div>
-            <div className="projects-mobile-grid">
-                {displayProjects.map((project, index) => (
-                    <div key={project.id} className="mobile-project-item" style={{ backgroundColor: '#ffffff' }}>
-                        <div className="project-mobile-display-wrapper">
-                            {project.mobile_view_video ? (
-                                <video
-                                    src={project.mobile_view_video}
-                                    className="project-mobile-video"
-                                    autoPlay
-                                    loop
-                                    muted
-                                    playsInline
-                                    controls={false}
-                                />
-                            ) : (
-                                <div className="no-video-placeholder" style={{ backgroundColor: '#f0f0f0', color: '#000000' }}>
-                                    <span>Project Preview</span>
+            <div className="section-content-wrapper">
+                <div className="section-header">
+                    <h1 className="section-title" style={{ color: '#000000ff' }}>
+                        Featured Design Projects
+                    </h1>
+                  <p className="section-description" style={{ color: '#000000' }}>
+    A selection of recent work built with solid UI and reliable performance.
+</p>
+        </div>
+
+                <div className="projects-slider-container">
+                    <div
+                        className="projects-mobile-grid"
+                        style={window.innerWidth > 768 ? { transform: `translateX(calc(-${activeIndex * 100}vw / 4))` } : {}}
+                    >
+                        {window.innerWidth <= 768 ? (
+                            // Mobile View: Render previous, current, next projects
+                            <>
+                                <div
+                                    className="mobile-project-item mobile-project-item--prev"
+                                    key={displayProjects[prevIndex].id}
+                                    style={{ backgroundColor: '#ffffff' }}
+                                >
+                                    <div className="project-mobile-display-wrapper">
+                                        {displayProjects[prevIndex].mobile_view_video ? (
+                                            <video
+                                                src={displayProjects[prevIndex].mobile_view_video}
+                                                className="project-mobile-video"
+                                                autoPlay
+                                                loop
+                                                muted
+                                                playsInline
+                                                controls={false}
+                                            />
+                                        ) : (
+                                            <div className="no-video-placeholder" style={{ backgroundColor: '#f0f0f0', color: '#000000' }}>
+                                                <span>Project Preview</span>
+                                            </div>
+                                        )}
+                                        <Link to={`/projects/${displayProjects[prevIndex].slug}`} className="mobile-overlay-title top-overlay">
+                                            <div className="project-mobile-title" style={{ color: '#f8f8f8ff' }}>
+                                                <span className="main-title-line">
+                                                    {displayProjects[prevIndex].title.split(' ').slice(0, 3).join(' ')}
+                                                </span>
+                                                {displayProjects[prevIndex].title.split(' ').length > 3 && (
+                                                    <span className="subtitle-line">
+                                                        {displayProjects[prevIndex].title.split(' ').slice(3).join(' ')}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="overlay-cta-arrow">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                </svg>
+                                            </div>
+                                        </Link>
+                                    </div>
                                 </div>
-                            )}
-                            
-                            {/* =========== 💡 NEW: Mobile Overlay Title moved inside the wrapper =========== */}
-                            <Link to={`/projects/${project.slug}`} className="mobile-overlay-title">
-                                <div className="project-mobile-title" style={{ color: '#f8f8f8ff' }}>
-                                    <span className="main-title-line">
-                                        {project.title.split(' ').slice(0, 3).join(' ')}
-                                    </span>
-                                    {project.title.split(' ').length > 3 && (
-                                        <span className="subtitle-line">
-                                            {project.title.split(' ').slice(3).join(' ')}
-                                        </span>
-                                    )}
+
+                                <div
+                                    className="mobile-project-item mobile-project-item--current"
+                                    key={displayProjects[activeIndex].id}
+                                    style={{ backgroundColor: '#ffffff' }}
+                                >
+                                    <div className="project-mobile-display-wrapper">
+                                        {displayProjects[activeIndex].mobile_view_video ? (
+                                            <video
+                                                src={displayProjects[activeIndex].mobile_view_video}
+                                                className="project-mobile-video"
+                                                autoPlay
+                                                loop
+                                                muted
+                                                playsInline
+                                                controls={false}
+                                            />
+                                        ) : (
+                                            <div className="no-video-placeholder" style={{ backgroundColor: '#f0f0f0', color: '#000000' }}>
+                                                <span>Project Preview</span>
+                                            </div>
+                                        )}
+                                        <Link to={`/projects/${displayProjects[activeIndex].slug}`} className="mobile-overlay-title top-overlay">
+                                            <div className="project-mobile-title" style={{ color: '#f8f8f8ff' }}>
+                                                <span className="main-title-line">
+                                                    {displayProjects[activeIndex].title.split(' ').slice(0, 3).join(' ')}
+                                                </span>
+                                                {displayProjects[activeIndex].title.split(' ').length > 3 && (
+                                                    <span className="subtitle-line">
+                                                        {displayProjects[activeIndex].title.split(' ').slice(3).join(' ')}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="overlay-cta-arrow">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                </svg>
+                                            </div>
+                                        </Link>
+                                    </div>
                                 </div>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
-                            </Link>
-                            {/* ========================================================================= */}
-                        </div>
-                        
-                        {/* ❌ REMOVED OR KEPT EMPTY: The old .project-info div is now redundant/empty 
-                        
-                        <div className="project-info">
-                             <Link to={`/projects/${project.slug}`} className="project-link-title">
-                                 ...
-                             </Link>
-                        </div>
-                        
-                        */}
+
+                                <div
+                                    className="mobile-project-item mobile-project-item--next"
+                                    key={displayProjects[nextIndex].id}
+                                    style={{ backgroundColor: '#ffffff' }}
+                                >
+                                    <div className="project-mobile-display-wrapper">
+                                        {displayProjects[nextIndex].mobile_view_video ? (
+                                            <video
+                                                src={displayProjects[nextIndex].mobile_view_video}
+                                                className="project-mobile-video"
+                                                autoPlay
+                                                loop
+                                                muted
+                                                playsInline
+                                                controls={false}
+                                            />
+                                        ) : (
+                                            <div className="no-video-placeholder" style={{ backgroundColor: '#f0f0f0', color: '#000000' }}>
+                                                <span>Project Preview</span>
+                                            </div>
+                                        )}
+                                        <Link to={`/projects/${displayProjects[nextIndex].slug}`} className="mobile-overlay-title top-overlay">
+                                            <div className="project-mobile-title" style={{ color: '#f8f8f8ff' }}>
+                                                <span className="main-title-line">
+                                                    {displayProjects[nextIndex].title.split(' ').slice(0, 3).join(' ')}
+                                                </span>
+                                                {displayProjects[nextIndex].title.split(' ').length > 3 && (
+                                                    <span className="subtitle-line">
+                                                        {displayProjects[nextIndex].title.split(' ').slice(3).join(' ')}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="overlay-cta-arrow">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                </svg>
+                                            </div>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            // Desktop/Tablet View: Original mapping
+                            displayProjects.map((project, index) => (
+                                <div
+                                    key={project.id}
+                                    className="mobile-project-item"
+                                    style={{ backgroundColor: '#ffffff' }}
+                                >
+                                    <div className="project-mobile-display-wrapper">
+                                        {project.mobile_view_video ? (
+                                            <video
+                                                src={project.mobile_view_video}
+                                                className="project-mobile-video"
+                                                autoPlay
+                                                loop
+                                                muted
+                                                playsInline
+                                                controls={false}
+                                            />
+                                        ) : (
+                                            <div className="no-video-placeholder" style={{ backgroundColor: '#f0f0f0', color: '#000000' }}>
+                                                <span>Project Preview</span>
+                                            </div>
+                                        )}
+                                        <Link to={`/projects/${project.slug}`} className="mobile-overlay-title top-overlay">
+                                            <div className="project-mobile-title" style={{ color: '#f8f8f8ff' }}>
+                                                <span className="main-title-line">
+                                                    {project.title.split(' ').slice(0, 3).join(' ')}
+                                                </span>
+                                                {project.title.split(' ').length > 3 && (
+                                                    <span className="subtitle-line">
+                                                        {project.title.split(' ').slice(3).join(' ')}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="overlay-cta-arrow">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                </svg>
+                                            </div>
+                                        </Link>
+                                    </div>
+                                </div>
+                            ))
+                        )}
                     </div>
-                ))}
+                </div>
+
+                <div className="slider-controls-bottom">
+    {/* Previous Arrow/Button */}
+    <button className="slider-arrow prev-arrow" onClick={handlePrev}>
+        {/* SVG icon removed, text symbol added */}
+        &lt; 
+    </button>
+
+    <div className="slider-dots">
+        {Array.from({ length: totalPages }).map((_, index) => (
+            <span
+                key={index}
+                className={`slider-dot ${index === activeIndex ? 'active' : ''}`}
+                onClick={() => handleDotClick(index)}
+            ></span>
+        ))}
+    </div>
+
+    {/* Next Arrow/Button */}
+    <button className="slider-arrow next-arrow" onClick={handleNext}>
+        {/* SVG icon removed, text symbol added */}
+        &gt; 
+    </button>
+
+                </div>
             </div>
         </section>
     );
 };
+
+
+
+
 
 // --- NEW COMPONENT: CompletedProjectsGridSection (Verification logic added for clarity) ---
 const CompletedProjectsGridSection = ({ projects }) => {
@@ -461,13 +688,19 @@ const CompletedProjectsGridSection = ({ projects }) => {
 
     return (
         <section className="completed-projects-section">
+            {/* UPDATED HEADER STRUCTURE */}
             <div className="section-header">
-                {/* <div className="section-badge" style={{ backgroundColor: '#ffd700', color: '#ffffff' }}>Portfolio</div> */}
-                <h2 className="section-title" style={{ color: '#000000' }}>
+                {/* Title on the left */}
+                <h2 className="section-title">
                    Success Projects
                 </h2>
-               
+                {/* Button on the right - Hidden on mobile */}
+                <Link to="/Projects" className="view-all-projects-cta">
+                    VIEW ALL PROJECTS
+                </Link>
             </div>
+            {/* --- End of Updated Header --- */}
+            
             <div className="completed-projects-grid">
                 {displayProjects.map((project) => (
                     <Link
@@ -488,7 +721,7 @@ const CompletedProjectsGridSection = ({ projects }) => {
                     </Link>
                 ))}
             </div>
-            {/* CTA to View More */}
+            {/* CTA to View More (The one below the grid) - Keeping it for now but you may remove it if the top button is enough. */}
              <div className="view-more-container">
                 <Link to="/Projects" className="view-more-cta">
                     VIEW MORE WORK
@@ -505,7 +738,10 @@ const ArticlesSection = ({ articles }) => {
             <section className="articles-section-updated">
                 <div className="section-header">
                     <h2 className="section-title">Latest Articles</h2>
-                    <p className="section-description">No articles available at the moment.</p>
+                    {/* Updated to use new class */}
+                    <div className="section-description">
+                        No articles available at the moment.
+                    </div>
                 </div>
             </section>
         );
@@ -516,12 +752,15 @@ const ArticlesSection = ({ articles }) => {
     return (
         <section className="articles-section-updated">
             <div className="section-header">
+                {/* 1. Blogs (Title) is on the Left */}
                 <h2 className="section-title">Blogs</h2>
-                <center>
-    <p> 
-        Our latest on design, tech, and entrepreneurship.
-    </p>
-</center>
+                
+                {/* 2. Description is in the Center */}
+                <div className="section-description">
+                    Our latest on design, tech, and entrepreneurship.
+                </div>
+                
+                {/* 3. View All Button is on the Right */}
                 <div className="view-all-container">
                     <Link to="/articles" className="view-all-cta">
                         VIEW ALL →
@@ -570,11 +809,12 @@ const ArticlesSection = ({ articles }) => {
         </section>
     );
 };
+
+
 const TrialSection = () => {
     return (
         <section className="trial-section-updated">
             <div className="video-background-wrapper">
-                {/* Video will loop continuously */}
                 <video
                     src={dotvideo}
                     className="dot-video"
@@ -587,8 +827,9 @@ const TrialSection = () => {
             </div>
             
             <div className="trial-content">
+                {/* Mobile ke liye bhi space ensure karo */}
                 <h2 className="trial-heading">
-                    Start your free website trial today
+                    Start your free website trial<br /> today
                 </h2>
                 <p className="trial-subheading">
                     No credit card required. Satisfactions guaranteed.
@@ -600,6 +841,9 @@ const TrialSection = () => {
         </section>
     );
 };
+
+
+
 
 // Home Page Component
 const Home = () => {

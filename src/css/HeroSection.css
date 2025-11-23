@@ -33,34 +33,41 @@
     position: relative;
     z-index: 10; /* Content ko sabse upar rakhna */
     max-width: 1000px;
-    padding: 20px;
+    padding: 0px;
 }
 
 .hero-logo {
-    width: 150px; /* Adjust size as needed */
+    width: 120px; 
     height: 150px;
     margin-bottom: 0px;
-    /* Agar logo white hai, toh styling ki zaroorat nahi */
+    padding: 0px 0px;
+   
 }
 
 .hero-heading {
-    font-size: 3.5rem; /* Large font size */
-    line-height: 1.2;
-    font-weight: 500; /* Matching the clean look */
-    margin-bottom: 40px;
-    color: #ffffff; /* Text color */
+    font-size: 3.4rem; /* Large font size */
+    line-height: 1.1;
+    font-weight: 550; /* Matching the clean look */
+    margin-bottom: 10px;
+    color: #faf9f9; /* Text color */
 }
 
 .hero-actions {
     display: flex;
     gap: 15px;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 0px;
+    padding: 15px 30px;
+    /* background-color: #000000; */
+    color: #ffffff;
+    border: none;
+    border-radius: 1px;
+    
 }
 
 .hero-cta {
-    padding: 12px 25px;
-    border-radius: 4px;
+    padding: 20px 25px;
+    border-radius: 0px;
     text-decoration: none;
     font-weight: 600;
     transition: all 0.3s ease;
@@ -83,6 +90,8 @@
     background-color: transparent;
     color: #ffffff;
     border: 1px solid #ffffff; /* White border */
+    padding: 25px 20px;
+    border-radius: 0px;
 }
 
 .hero-cta.secondary:hover {
@@ -108,20 +117,22 @@
 
 
 
-
-/* --- Services Image Slider CSS (Updated for larger size/height in HeroSection.css) --- */
+/* --- 1. BASE STYLES (Mobile First) --- */
 
 .image-slider-container {
-    padding: 0; /* Ensures the container uses full width */
+    padding: 0;
+    width: 100%;
 }
 
 .image-slider-wrapper {
     display: flex;
     gap: 20px; 
-    overflow-x: scroll; 
+    overflow-x: auto; 
     scroll-snap-type: x mandatory;
-    padding: 0 20px 20px 20px; /* Padding on sides for partial view, bottom for shadow */
-    align-items: center; 
+    /* Default padding for small screens */
+    padding: 0 20px 20px 20px; 
+    align-items: center;
+    -webkit-overflow-scrolling: touch;
     
     /* Hide scrollbar */
     scrollbar-width: none; 
@@ -133,73 +144,88 @@
 }
 
 .slider-item {
-    /* **1. Increased Height:** Image height increased for a larger original size feel */
-    height: 200vh; 
+    height: 250px;
     
-    /* Mobile: Slide now takes 95% width */
-    flex: 0 0 95%;
-    max-width: 95%;
-    min-width: 95%; 
+    /* MOBILE DEFAULT: Ek hi card poora dikhega */
+    flex: 0 0 100%;
+    max-width: 100%;
+    min-width: 100%;
     
-    /* Snap to the start of the item (not center) */
-    scroll-snap-align: start; 
-    
-    /* Transition for opacity */
-    transition: opacity 0.5s ease-in-out;
+    scroll-snap-align: center; 
+    transition: all 0.3s ease-in-out;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .slider-item.active {
-    /* Mobile: Active slide takes up 95% */
-    flex: 0 0 95%; 
-    max-width: 95%;
-    min-width: 95%;
+    /* Active bhi 100% hi rahega for mobile */
+    flex: 0 0 100%;
+    max-width: 100%;
+    min-width: 100%;
+    transform: scale(1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-/* Tablet/Desktop adjustments for better fit */
+/* --- 2. SMALL MOBILE ADJUSTMENTS (480px) --- */
+@media (max-width: 480px) {
+    .image-slider-wrapper {
+        padding: 0 15px 15px 15px;
+        gap: 15px;
+    }
+    
+    .slider-item {
+        height: 220px;
+        /* Mobile par width 100% hi rahegi */
+    }
+}
+
+/* --- 3. TABLET / SMALL DESKTOP (768px+) --- */
 @media (min-width: 768px) {
     .image-slider-wrapper {
-        padding: 0 40px 20px 40px; /* Increase padding on larger screens */
+        padding: 0 30px 25px 30px;
+        gap: 20px;
     }
     
     .slider-item {
-        /* **1. Increased Height:** Image height increased for a larger original size feel */
-        height: 75vh; 
-        
-        /* Tablet: Each slide takes up approx 55% */
-        flex: 0 0 55%; 
-        max-width: 55%;
-        min-width: 55%;
+        height: 300px;
+        /* CALCULATED WIDTH FOR 2 ITEMS (gap 20px): (100% - 20px gap) / 2 items */
+        flex: 0 0 calc(50% - 10px); 
+        max-width: calc(50% - 10px);
+        min-width: calc(50% - 10px);
     }
+    
     .slider-item.active {
-        flex: 0 0 65%; /* Active slide is slightly larger */
-        max-width: 65%;
-        min-width: 65%;
+        /* Active card thoda bada (48% of screen) */
+        flex: 0 0 48%;
+        max-width: 48%;
+        min-width: 48%;
+        height: 320px;
     }
 }
 
-@media (min-width: 1024px) {
+/* --- 4. LARGE DESKTOP (1024px+) --- */
+@media (min-width: 1800px) {
     .image-slider-wrapper {
-         padding: 0 80px 20px 80px; /* Further increase padding on very large screens */
+        padding: 0 450px 60px 50px;
+        gap: 20px; 
     }
     
     .slider-item {
-        /* **1. Increased Height:** Image height increased for a larger original size feel */
-        height: 100vh;
-        
-        /* Desktop: Each slide takes up approx 40% */
-        flex: 0 0 40%;
-        max-width: 40%;
-        min-width: 40%;
+        height: 500px;
+        /* CALCULATED WIDTH FOR 3 ITEMS (gap 25px): (100% - 50px gap) / 3 items */
+        flex: 0 0 calc((150% - 50px) / 3); 
+        max-width: calc((90% - 50px) / 3);
+        min-width: calc((90% - 50px) / 3);
     }
+    
     .slider-item.active {
-        flex: 0 0 50%;
-        max-width: 50%;
-        min-width: 50%;
+        /* Active card thoda bada (e.g., 35% of screen) */
+        flex: 0 0 35%;
+        max-width: 100%;
+        min-width: 100%;
+        height: 300px;
     }
 }
-
-
-
 
 
 
@@ -211,10 +237,68 @@
 .completed-projects-section {
     padding: 20px;
     background-color: #ffffff; 
-    /* Margins removed from section and added to the content inside if needed, to prevent gaps */
-    margin-bottom: 0; /* Ensures no extra space below the section itself */
+    margin-bottom: 0; 
+    /* Increased padding-bottom to separate the button/header from the grid */
     padding-bottom: 0; 
 }
+
+.completed-projects-section .section-header {
+    display: flex; /* Enable Flexbox */
+    justify-content: space-between; /* Space out items (Title left, Button right) */
+    align-items: center; /* Vertically center the title and button */
+    max-width: 1800px; /* Match the grid's max-width for alignment */
+    margin: 0 auto; /* Center the header */
+    padding: 20px 0 40px 0; /* Top/Bottom padding for separation, 40px bottom for space before grid */
+}
+
+/* UPDATED: Title Styles */
+.completed-projects-section .section-title {
+     color: #000000;
+    font-size: 2.1rem;
+    font-weight: 610;
+    margin: 0;
+    line-height: 1.1;
+    max-width: 80%;
+    font-family: "Font 1", sans-serif; 
+    
+    /* Title ko center karne ke liye */
+    text-align: center; 
+    
+    /* Padding add karne ke liye (Example: 20px top/bottom, 0 left/right) */
+    padding: 20px 0; 
+}
+
+
+/* NEW: Styles for the round "VIEW ALL PROJECTS" button */
+.completed-projects-section .view-all-projects-cta {
+    /* Round Shape Styling */
+    border: 2px solid #000000; 
+    background-color: transparent; /* Transparent background */
+    color: #000000; /* Black text */
+    text-decoration: none; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Make it a circle/oval */
+    width: 150px; 
+    height: 50px; 
+    border-radius: 50px; /* Makes it round/oval */
+    
+    font-weight: 500; 
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    transition: background-color 0.3s, color 0.3s;
+    text-align: center;
+    padding: 0 15px; /* Adjust padding for text inside */
+}
+
+.completed-projects-section .view-all-projects-cta:hover {
+    background-color: #000000; /* Invert colors on hover */
+    color: #ffffff;
+}
+
+/* --- Completed Projects Grid Section Styles (Existing styles unchanged) --- */
 
 .completed-projects-grid {
     display: grid;
@@ -305,6 +389,17 @@
 
 /* Media query for smaller screens (e.g., mobile) */
 @media (max-width: 768px) {
+    /* UPDATED: Mobile layout for the header */
+    .completed-projects-section .section-header {
+        flex-direction: column; /* Stack the title and button vertically */
+        align-items: flex-start; /* Align all to the left */
+    }
+
+    /* NEW: Hide the VIEW ALL PROJECTS button on mobile */
+    .completed-projects-section .view-all-projects-cta {
+        display: none; /* Completely hide the button on mobile */
+    }
+    
     .completed-projects-grid {
         grid-template-columns: 1fr; /* Single column on mobile */
         gap: 10px;
@@ -322,6 +417,7 @@
 
 
 
+
 /* ------------------------------------------------ */
 /* 7. UPDATED ARTICLES SECTION STYLES (Black Background) */
 /* ------------------------------------------------ */
@@ -334,33 +430,65 @@
     background-color: #000000;
 }
 
+/* UPDATED HEADER: Using Flexbox for layout */
 .articles-section-updated .section-header {
-    text-align: left;
+    display: flex; /* Enable Flexbox */
+    justify-content: space-between; /* Space out elements */
+    align-items: center; /* Vertically align items */
     max-width: 1200px;
     margin: 0 auto 100px;
     padding: 0 20px;
     position: relative;
+    
+    /* NEW ADDITION: Grey line at the bottom, just like in the image */
+    border-bottom: 1px solid #333333; /* Darker grey for the line */
+    padding-bottom: 30px; /* Add padding below the content to separate it from the line */
+}
+
+/* NEW: Styles for the description to try and center it */
+.articles-section-updated .section-description {
+    text-align: center;
+    color: #8d8585; 
+    margin: 0;
+    flex-grow: 1; 
+    padding: 0 110px; 
+    padding-left: 0px;
+  
+}
+
+/* Title is naturally left in the flex layout */
+.articles-section-updated .section-title {
+    color: #ffffff;
+    margin: 0;
+    flex-shrink: 0;
+    padding-left: 0px;
+    font-size: 2.8rem;
 }
 
 .articles-section-updated .view-all-container {
-    position: absolute;
-    top: 0;
-    right: 40px;
+    flex-shrink: 0;
+    
 }
 
+/* UPDATED: View All Button Styling (White default, Black on hover) */
 .articles-section-updated .view-all-cta {
-    color: #ffffff;
+    color: #000000; /* Black text */
+    background-color: #ffffff; /* White background */
     text-decoration: none;
-    border: 1px solid #444444; 
+    border: 1px solid #000000; /* Black border */
     padding: 8px 15px;
     font-size: 0.8rem;
     display: inline-block;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .articles-section-updated .view-all-cta:hover {
-    background-color: #1a1a1a;
+    background-color: #000000; /* Black background on click/hover */
+    color: #ffffff; /* White text on click/hover */
+    border-color: #ffffff; /* Optional: White border on hover */
 }
+
+/* --- Grid and Card Styles (No Change) --- */
 
 .articles-static-grid-wrapper {
     display: flex;
@@ -379,28 +507,13 @@
     transition: opacity 0.3s;
     background-color: #000000;
     
-    /* === UPDATED: Make all cards equal width === */
-    flex: 1 1 0%; /* Each card takes an equal share of space */
-    /* ========================================= */
+    flex: 1 1 0%;
 }
-
-/* First card - larger (60%) */
-/* === REMOVED: Specific size for first card is removed === */
-/* .article-card-static:first-child {
-    flex: 0 0 60%;
-} */
-
-/* Second and third cards - smaller (20% each) */
-/* === REMOVED: Specific size for second and third card is removed === */
-/* .article-card-static:nth-child(2),
-.article-card-static:nth-child(3) {
-    flex: 0 0 20%;
-} */
 
 .article-image-container {
     overflow: hidden;
     margin-bottom: 30px;
-    flex-shrink: 0; /* Prevent image container from shrinking */
+    flex-shrink: 0;
 }
 
 .article-image-static {
@@ -410,26 +523,11 @@
     display: block;
 }
 
-/* Specific height for the large image */
-/* === UPDATED: Use a single, consistent height for all images === */
 .article-image-static.large-image, 
 .article-image-static.small-image {
-    height: 250px; /* Reduced height to look better in three-column layout */
+    height: 250px;
     min-height: 250px;
 }
-/* ========================================= */
-
-
-/* === REMOVED: Old specific heights are no longer needed === */
-/* .article-image-static.large-image {
-    height: 450px;
-    min-height: 450px;
-} */
-/* .article-image-static.small-image {
-    height: 200px;
-    min-height: 200px;
-} */
-
 
 .article-content-static {
     padding: 0;
@@ -439,7 +537,7 @@
 }
 
 .article-title-static {
-    font-size: 1.2rem; /* Reduced font size for better fit */
+    font-size: 1.2rem;
     font-weight: bold;
     line-height: 1.3;
     margin-bottom: 10px;
@@ -455,6 +553,19 @@
 
 /* Responsive design */
 @media (max-width: 768px) {
+    .articles-section-updated .section-header {
+        flex-direction: column; 
+        align-items: flex-start;
+        gap: 15px;
+        /* Padding bottom for line separation on mobile */
+        padding-bottom: 20px; 
+    }
+    
+    .articles-section-updated .section-description {
+        text-align: left;
+        padding: 0;
+    }
+
     .articles-static-grid-wrapper {
         flex-direction: column;
         gap: 30px;
@@ -475,18 +586,13 @@
 }
 
 
-
-
-
-
-
 /* ------------------------------------------------ */
 /* 8. NEW TRIAL SECTION STYLES (Video Background) */
 /* ------------------------------------------------ */
 
 .trial-section-updated {
     position: relative;
-    height: 120vh; /* Adjust height as needed */
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -510,59 +616,88 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.3; /* Make video subtle in the background */
+    opacity: 1.0;
 }
 
 .trial-content {
     position: relative;
     z-index: 2;
     padding: 20px;
+    max-width: 1000px;
 }
 
+/* DESKTOP STYLES - Remain Same */
 .trial-heading {
-    font-size: 3rem;
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-size: 4.4rem; 
+    font-weight: 500;
+    line-height: 1.2; 
+    color: #ffffff;
+    margin-bottom: 40px;
+    font-family: 'Inter', sans-serif;
+}
+
+.trial-heading br {
+    display: block; /* Desktop pe line break show hoga */
 }
 
 .trial-subheading {
     font-size: 1rem;
-    color: #aaaaaa;
-    margin-bottom: 30px;
+    font-weight: 650;
+    color: #ffffff;
+    margin-bottom: 50px;
 }
 
 .trial-cta {
-    border: 1px solid #ffffff; 
-    padding: 15px 40px; 
+    border: 0px solid #ffffff; 
+    padding: 30px 25px; 
     text-decoration: none; 
-    color: #ffffff; 
-    display: inline-block; 
+    color: #000000;
+    display: inline-block;
     font-weight: 500; 
-    font-size: 1rem;
-    background-color: transparent; 
+    font-size: 1.5rem;
+    background-color: #ffffff;
+    border-radius: 0; 
     transition: background-color 0.3s, color 0.3s;
 }
 
 .trial-cta:hover {
-    background-color: #ffffff;
-    color: #000000;
+    background-color: #000000;
+    color: #ffffff;
+    border-color: #ffffff;
 }
 
-
-/* --- Media Queries (Adjusted for Articles Section) --- */
-
+/* --- Mobile View Adjustments (For Trial Section) --- */
 @media (max-width: 900px) {
-    /* Articles Section on medium screens */
-    .articles-static-grid-wrapper {
-        flex-wrap: wrap; /* Allow wrapping */
+    .trial-section-updated {
+        height: 65vh;
     }
-    .article-card-static {
-        flex: 1 1 100%; /* All cards take full width */
-        margin-bottom: 20px;
+    
+    .trial-heading {
+        font-size: 2.6rem;
+        line-height: 1.1;
+        margin-bottom: 45px;
+        padding: 0 10px;
     }
-    .article-image-static.large-image,
-    .article-image-static.small-image {
-        height: 200px; /* Reduced height on mobile/tablet */
+
+    /* YAHI IMPORTANT LINE HAI - Mobile pe line break hide karo */
+    .trial-heading br {
+        display: none;
+    }
+
+    .trial-subheading {
+        font-size: 0.85rem;
+        margin-bottom: 45px; 
+        padding: 0 10px;
+    }
+
+    .trial-cta {
+        padding: 30px 25px;
+        font-size: 1.1rem;
+    }
+
+    .trial-content {
+        max-width: 90%;
+        padding: 0;
     }
 }
 
@@ -578,445 +713,300 @@
 
 
 
-/* --- Professional Success Projects Section --- */
-
+/* --- Global & Header Styling (UPDATED for Centering) --- */
 .success-projects-section {
-    padding: 100px 20px;
-    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
-    text-align: center;
+    padding: 0px 0;
+    background: #ffffff;
+    text-align: left;
     position: relative;
+    font-family: 'Inter', sans-serif;
+    
+}
+.section-content-wrapper {
+    margin: 0 auto;
+    padding: 0 30px;
+    overflow: hidden;
+}
+.success-projects-section .section-header {
+    margin-bottom: 40px;
+    /* Desktop default: Side-by-side flex for the whole header block */
+    display: flex; 
+    justify-content: space-between;
+    align-items: flex-end;
 }
 
-.success-projects-section::before {
-    content: '';
+/* UPDATED: margin: 0 auto; added to center the block element due to max-width: 80% */
+.success-projects-section .section-title {
+    color: #000000;
+    font-size: 2.1rem;
+    font-weight: 610;
+    margin: 0;
+    line-height: 1.1;
+    max-width: 60%;
+    font-family: "Font 1", sans-serif; 
+    text-align: left; 
+    padding: 10px 0 10px 20px; 
+}
+
+.success-projects-section .section-description {
+    color: #222121;
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin: 0 auto; 
+    line-height: 1.1;
+    max-width:120%; 
+    font-family: "Font 1", sans-serif; 
+    text-align: center; 
+    padding: 25px 0; 
+    display: block;
+}
+
+
+
+/* --- Project Card Sizing (UNCHANGED) --- */
+.project-mobile-display-wrapper {
+    width: 89%;
+    height: 800px;
+    padding-bottom: 0;
+    background: #1e1e1e;
+    border-radius: 30px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease;
+}
+.project-mobile-video, .no-video-placeholder {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
-}
-
-.success-projects-section .section-header {
-    margin-bottom: 70px;
-    position: relative;
-}
-
-.success-projects-section .section-badge {
-    color: #000000;
-    background: rgba(24, 23, 19, 0.1);
-    border: 1px solid rgba(34, 33, 28, 0.3);
-    padding: 8px 20px;
-    border-radius: 25px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    display: inline-block;
-    margin-bottom: 20px;
-    backdrop-filter: blur(10px);
-}
-
-.success-projects-section .section-title {
-    color: #000000;
-    font-size: 3.2rem;
-    font-weight: 800;
-    margin-bottom: 20px;
-    line-height: 1.1;
-    position: relative;
-}
-
-.success-projects-section .section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(90deg, #000000, #181714);
-    border-radius: 2px;
-}
-
-.success-projects-section .accent {
-    background: linear-gradient(135deg, #000000, #161511);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-
-
-/* Professional Mobile Projects Grid - DEFAULT (All Screens) */
-.projects-mobile-grid {
-    display: flex;
-    justify-content: center;
-    gap: 80px;
-    flex-wrap: wrap; 
-    margin-top: 60px;
-    position: relative;
-}
-
-.mobile-project-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* max-width removed to allow flex to control size on wide screens */
-    width: 320px; /* Setting a preferred max width for flex wrapping */
-    margin: 10px 0;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    position: relative;
-}
-
-.mobile-project-item:hover {
-    transform: translateY(-8px);
-}
-
-.mobile-project-item::before {
-    content: '';
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    right: -10px;
-    bottom: -10px;
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.03));
-    border-radius: 35px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: -1;
-}
-
-.mobile-project-item:hover::before {
-    opacity: 1;
-}
-
-/* Enhanced Mobile Display Wrapper */
-.project-mobile-display-wrapper {
-    /* DEFAULT (DESKTOP) SIZE - Same for all screens now */
-    width: 280px;
-    height: 580px;
-    background: #FFFFFF;
-    border-radius: 28px;
-    box-shadow: 
-        0 15px 40px rgba(0, 43, 91, 0.12),
-        0 0 0 1px rgba(0, 43, 91, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
-    overflow: hidden;
-    position: relative;
-    /* margin-bottom removed as the title is inside now */
-    margin-bottom: 0; 
-    transition: all 0.3s ease;
-}
-
-.project-mobile-display-wrapper::before {
-    content: '';
-    position: absolute;
-    top: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120px;
-    height: 4px;
-    background: #e2e8f0;
-    border-radius: 2px;
-    z-index: 2;
-}
-
-.mobile-project-item:hover .project-mobile-display-wrapper {
-    box-shadow: 
-        0 25px 60px rgba(12, 12, 12, 0.18),
-        0 0 0 1px rgba(0, 43, 91, 0.08),
-        inset 0 1px 0 rgba(5, 5, 5, 0.9);
-}
-
-/* Video Styling (Minimal - Keeping as is) */
-.project-mobile-video {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
-    border-radius: 25px;
+    border-radius: 20px;
 }
 
-/* ❌ KEY CHANGE: HIDE OLD TITLE BOX COMPLETELY */
-/* Since title is now inside the wrapper, this element should be hidden if it exists outside. */
-.project-info {
-    display: none;
+/* --- Slider Layout (UNCHANGED) --- */
+.projects-slider-container {
+    position: relative;
+    padding: 0;
 }
-.project-link-title {
-    display: none !important; 
+.projects-mobile-grid {
+    display: flex;
+    gap: 0px;
+    width: 100%;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.mobile-project-item {
+    flex: 0 0 calc((110% - 3 * 0px) / 4);
+    max-width: calc((100% - 3 * 0px) / 4);
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
 }
 
-
-/* ✅ NEW/UPDATED: OVERLAY STYLING (Works on ALL screens) */
-.mobile-overlay-title {
+/* --- Restricted Top Overlay Styling (UNCHANGED) --- */
+.mobile-overlay-title.top-overlay {
     position: absolute;
-    bottom: 0;
+    top: 0;
+    bottom: auto;
     left: 0;
     right: 0;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.8);
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.9);
     color: #FFFFFF;
     text-align: left;
-    opacity: 0; /* Hidden by default */
-    transition: opacity 0.3s ease;
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: opacity 0.4s ease, transform 0.4s ease;
     z-index: 10;
-    border-bottom-left-radius: 28px; /* Matching wrapper radius */
-    border-bottom-right-radius: 28px;
-    text-decoration: none;
-    display: flex; /* Flexbox for title and arrow */
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: center; /* Is se content (title aur arrow) vertically center ho jayega */
+    height: 100px;
+    box-sizing: border-box;
+    text-decoration: none !important;
 }
-
-/* Show overlay on hover for ALL screens (desktop and touch devices) */
-.mobile-project-item:hover .project-mobile-display-wrapper .mobile-overlay-title {
+.mobile-project-item:hover .project-mobile-display-wrapper .mobile-overlay-title.top-overlay {
     opacity: 1;
+    transform: translateY(0);
 }
-
-
-/* Title Text Styling (from the original .project-mobile-title) */
 .project-mobile-title {
     font-size: 1.3rem;
     font-weight: 700;
     margin: 0;
-    line-height: 1.3;
-    text-align: left;
+    color: #ffffff;
+    max-width: 100%;
+    text-decoration: none !important; 
+}
+.overlay-cta-arrow {
+    position: static;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #0f0909;
+    border-radius: 50%;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* Align text to the left */
-    gap: 4px;
-}
-
-.main-title-line {
-    font-size: 1.2rem;
-    font-weight: 700;
-}
-
-.subtitle-line {
-    font-size: 0.9rem;
-    font-weight: 600;
-    opacity: 0.9;
-}
-
-/* Arrow Icon inside overlay */
-.mobile-overlay-title svg {
-    stroke: currentColor;
-    transition: all 0.3s ease;
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
-    margin-left: 15px;
-}
-
-.mobile-overlay-title:hover svg {
-    transform: translateX(4px);
-}
-
-/* Professional Section Footer */
-.section-footer {
-    margin-top: 70px;
-    text-align: center;
-}
-
-.view-all-cta {
-    display: inline-flex;
+    justify-content: center;
     align-items: center;
-    gap: 12px;
-    background: linear-gradient(135deg, #000000, #000000);
-    color: #FFFFFF;
-    text-decoration: none;
-    padding: 16px 40px;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    box-shadow: 0 8px 25px rgba(6, 8, 10, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    position: relative;
-    overflow: hidden;
+    transition: background 0.3s;
+    margin-right: 0;
+}
+.mobile-overlay-title:hover .overlay-cta-arrow {
+    background: #141313;
+}
+.mobile-overlay-title:hover .overlay-cta-arrow svg {
+    stroke: #000000;
 }
 
-.view-all-cta::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s ease;
+/* --- Controls (UNCHANGED) --- */
+.slider-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 20px;
+    gap: 8px;
+}
+.slider-dot {
+    width: 6px;
+    height: 6px;
+    background: #cccccc;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.4s ease-in-out;
+}
+.slider-dot.active {
+    width: 25px;
+    height: 6px;
+    background: #000000;
+    border-radius: 5px;
+}
+.slider-controls-bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+    gap: 20px;
+}
+.slider-arrow {
+    background: #ffffff;
+    color: #000000;
+    border: 1px solid #e0e0e0;
+    padding: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 20;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.slider-arrow:hover {
+    background: #f0f0f0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-.view-all-cta:hover::before {
-    left: 100%;
-}
-
-.view-all-cta:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 35px rgba(0, 4, 8, 0.35);
-    background: linear-gradient(135deg, #000000, #000000);
-}
-
-/* Responsive Design */
-@media (max-width: 1200px) {
+/* --- Responsive Updates (UNCHANGED) --- */
+@media (max-width: 1400px) {
+    /* 3 cards per view */
+    .mobile-project-item {
+        flex: 0 0 calc((100% - 2 * 20px) / 3);
+        max-width: calc((100% - 2 * 20px) / 3);
+    }
     .projects-mobile-grid {
-        gap: 50px;
+        gap: 20px;
     }
 }
 
-/* ======================================================= */
-/* 📱 Mobile View Overrides (Horizontal Scrolling) */
-/* ======================================================= */
-@media (max-width: 768px) {
-    .success-projects-section {
-        padding: 70px 0; 
+@media (max-width: 1024px) {
+    .section-content-wrapper {
+        padding: 0 30px;
     }
+    .mobile-project-item {
+        flex: 0 0 calc((100% - 1 * 20px) / 2);
+        max-width: calc((100% - 1 * 20px) / 2);
+    }
+    .projects-mobile-grid {
+        gap: 10px;
+    }
+}
 
+/* --- Mobile View Adjustments (UPDATED for Stacked and Centered Header) --- */
+@media (max-width: 1000px) {
+    .section-content-wrapper {
+        padding: 0 15px;
+    }
+    
+    /* UPDATED: Flexbox removed to force Title/Description to stack (upar-neeche) */
     .success-projects-section .section-header {
-        padding: 0 15px; 
-        margin-bottom: 50px; 
+        display: block; 
+        margin-bottom: 60px; /* Reduced margin */
     }
 
+    /* UPDATED: Title Mobile Adjustments (Stacked and Centered) */
     .success-projects-section .section-title {
-        font-size: 2.4rem;
+        font-size: 2.1rem; /* Mobile ke liye chota font size */
+        max-width: 95%; /* Zyaada screen space use karne ke liye */
+        padding: 10px 0; /* Padding kam kiya */
+        margin: 0 auto; /* Ensures centering */
+    }
+
+    /* UPDATED: Description Mobile Adjustments (Stacked and Centered) */
+    .success-projects-section .section-description {
+        font-size: 1.2rem; /* Mobile ke liye chota font size */
+        line-height: 1.4; /* Better readability */
+        max-width: 90%; /* Zyaada screen space use karne ke liye */
+        padding: 15px 0; /* Padding adjust kiya */
+        margin: 0 auto; /* Ensures centering */
     }
     
-    .success-projects-section .section-title::after {
-        width: 50px;
-        bottom: -8px;
-    }
-    
+    /* --- Project Card & Slider Layout (UNCHANGED) --- */
     .projects-mobile-grid {
         display: flex;
-        flex-wrap: nowrap; 
-        overflow-x: scroll; 
-        justify-content: flex-start; 
-        -webkit-overflow-scrolling: touch; 
-        
-        gap: 40px; 
-        margin-top: 0; 
-        margin-bottom: 30px; 
-        
-        padding: 0 40px 10px 40px; 
-        
-        scrollbar-width: none; 
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        transition: none; /* Remove sliding for mobile */
     }
-
-    .projects-mobile-grid::-webkit-scrollbar {
-        display: none;
-    }
-
-
     .mobile-project-item {
-        flex: 0 0 280px; 
-        max-width: 280px; 
-        margin: 0; 
-        transition: none; 
+        margin: 28;
+        padding: 3;
     }
-    
-    .mobile-project-item:hover {
-        /* Keep subtle lift on mobile touch/hover */
-        transform: translateY(-5px); 
+    .mobile-project-item--current {
+        flex: 0 0 90%; /* Main item takes 60% width */
+        max-width: 90%;
+        z-index: 2;
     }
-    
-    .mobile-project-item::before, .mobile-project-item:hover::before {
-        opacity: 0; 
+    .mobile-project-item--prev,
+    .mobile-project-item--next {
+        flex: 0 0 1%; /* Side items take 20% each */
+        max-width: 15%;
+        opacity: 0.5; /* Slightly faded */
+        transform: scale(0.7); /* Slightly smaller */
+        z-index: 2;
     }
-
-    .project-mobile-display-wrapper {
-        width: 280px; 
-        height: 580px; 
-        border-radius: 24px; /* Slightly smaller radius for mobile */
-        margin-bottom: 0; 
+    .mobile-project-item--prev .project-mobile-display-wrapper,
+    .mobile-project-item--next .project-mobile-display-wrapper {
+        height: 700px; /* Smaller height for side items */
     }
-    
-    .project-mobile-display-wrapper:hover {
-        box-shadow: 
-            0 15px 40px rgba(0, 43, 91, 0.12),
-            0 0 0 1px rgba(0, 43, 91, 0.05),
-            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    .mobile-project-item--current .project-mobile-display-wrapper {
+        height: 600px; /* Full height for main item */
     }
-    
-    /* Ensure mobile overlay title uses mobile border radius */
-    .mobile-overlay-title {
-        pointer-events: auto; /* Always auto for mobile touch interaction */
-        border-bottom-left-radius: 24px;
-        border-bottom-right-radius: 24px;
+    .slider-arrow {
+        display: flex; /* Show arrows on mobile */
+        width: 40px;
+        height: 40px;
+        padding: 10px;
     }
-    
-    .section-footer {
-        margin-top: 50px;
-        padding: 0 15px; 
+    .slider-controls-bottom {
+        gap: 10px;
+        margin-top: 20px;
     }
-
-    .mobile-project-item {
-        animation: none;
+    .slider-dots {
+        margin: 0 10px;
     }
-    .mobile-project-item:nth-child(2), .mobile-project-item:nth-child(3) {
-        animation-delay: 0s;
-    }
-}
-
-/* 480px Media Query Update */
-@media (max-width: 480px) {
-    .success-projects-section {
-        padding: 60px 0; 
-    }
-    
-    .success-projects-section .section-header {
-        padding: 0 15px;
-    }
-    
-    .success-projects-section .section-title {
-        font-size: 2rem;
-    }
-    
-    .projects-mobile-grid {
-        gap: 30px; 
-        padding: 0 25px 10px 25px; 
-    }
-    
-    .mobile-project-item {
-        flex: 0 0 280px;
-        max-width: 280px;
-    }
-    
-    .project-mobile-display-wrapper {
-        width: 280px;
-        height: 580px; 
-        border-radius: 22px;
-    }
-    
-    .view-all-cta {
-        padding: 14px 32px;
-        font-size: 1rem;
-    }
-
-    .section-footer {
-        padding: 0 15px;
-    }
-}
-
-/* Loading State Animation (UNCHANGED) */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.mobile-project-item {
-    animation: fadeInUp 0.6s ease-out;
-}
-
-.mobile-project-item:nth-child(2) {
-    animation-delay: 0.1s;
-}
-
-.mobile-project-item:nth-child(3) {
-    animation-delay: 0.2s;
 }

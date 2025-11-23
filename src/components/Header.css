@@ -1,0 +1,171 @@
+/* ========================================================================= */
+/* --- Header.css: MOBILE RESPONSIVENESS STYLES ONLY (max-width: 992px) --- */
+/* ========================================================================= */
+
+@media (max-width: 992px) {
+    
+    /* ... (Existing Header and Mobile Menu Base Styles wahi hain) ... */
+    
+    /* --- Mobile Menu Overlay --- */
+    .mobile-menu-overlay {
+        position: fixed;
+        top: 65px; 
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #000000;
+        z-index: 999;
+        padding: 0 20px 80px 20px; 
+        overflow-y: auto; 
+        transition: transform 0.3s ease-in-out;
+        transform: translateX(100%); 
+        display: block;
+        box-sizing: border-box;
+    }
+
+    .mobile-menu-overlay.open {
+        transform: translateX(0); 
+    }
+    
+    /* --- Main Menu Items (Services, Resources) --- */
+    .mobile-menu-item {
+        font-size: 24px; 
+        font-weight: 500;
+        padding: 15px 0; 
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+        border-bottom: 1px solid #333;
+    }
+    
+    /* Icon style */
+    .mobile-menu-item-icon {
+        font-size: 20px; 
+        transition: transform 0.3s ease;
+        line-height: 1;
+        transform: rotate(0deg);
+    }
+
+    .mobile-menu-item-icon.open {
+        transform: rotate(180deg);
+    }
+    
+    /* --- Submenu Container (Collapsible Content) --- */
+    .mobile-submenu {
+        overflow: hidden;
+        transition: max-height 0.5s ease-in-out, padding 0.3s ease-in-out;
+        padding: 0;
+    }
+
+    /* --- Submenu Group Title (DEVELOPMENT, SECURITY, GET INSPIRED, etc.) --- */
+    .mobile-submenu-title {
+        font-size: 13px;
+        font-weight: bold;
+        color: #878787;
+        text-transform: uppercase;
+        margin-top: 15px; 
+        margin-bottom: 5px;
+        letter-spacing: 0.5px;
+    }
+    
+    /* --- Individual Links within Submenu --- */
+    .mobile-submenu-link {
+        font-size: 18px; 
+        padding: 8px 0;
+        color: white;
+        cursor: pointer;
+        transition: color 0.2s ease;
+    }
+    
+    .mobile-submenu-link:hover {
+        color: #CCCCCC;
+    }
+
+    /* --- Special Links/Boxes --- */
+    
+    /* View All Features */
+    .mobile-submenu-link.view-all-features {
+        font-weight: 600;
+        padding: 15px 0;
+        border-top: 1px solid #333;
+        margin-top: 10px;
+    }
+
+    /* B2B Section Container */
+    .mobile-b2b-section {
+        margin-top: 20px;
+        margin-bottom: 15px;
+    }
+
+    /* Circle Box */
+    .mobile-circle-box {
+        background-color: #1c1c1c; 
+        padding: 15px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    .mobile-circle-title {
+        color: white; 
+        font-size: 20px; 
+        font-weight: 500; 
+        margin-bottom: 5px; 
+    }
+    
+    .mobile-circle-description {
+        color: #AAAAAA; 
+        font-size: 14px; 
+    }
+
+    /* --- NEW: GET INSPIRED Section Styles --- */
+    
+    /* GET INSPIRED Heading (Already uses .mobile-submenu-title class) */
+    .mobile-get-inspired-title {
+        /* Additional margin if needed, but the base class covers it */
+    }
+
+    /* Made with Devknit Box (Similar to Circle Box) */
+    .mobile-get-inspired-box {
+        background-color: #1c1c1c; 
+        padding: 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 10px; /* Spacing below the GET INSPIRED title */
+        margin-bottom: 15px; 
+    }
+
+    .mobile-get-inspired-title-box {
+        color: white; 
+        font-size: 20px; /* Larger font size as per image */
+        font-weight: 500; 
+        margin-bottom: 5px; 
+    }
+    
+    .mobile-get-inspired-description {
+        color: #AAAAAA; 
+        font-size: 14px; 
+    }
+    /* --- END: GET INSPIRED Section Styles --- */
+    
+    
+    /* --- CTA Button --- */
+    .mobile-cta-container {
+        padding-top: 20px;
+    }
+
+    .mobile-cta-button {
+        width: 100%;
+        background-color: white; 
+        color: #000000; 
+        border: none; 
+        padding: 15px; 
+        font-size: 16px; 
+        font-weight: bold; 
+        cursor: pointer; 
+        border-radius: 1px; 
+        letter-spacing: 1px; 
+        text-transform: uppercase;
+    }
+}

@@ -1,0 +1,197 @@
+/* File: Footer.css */
+
+/* =============================================================== */
+/* --- FOOTER MOBILE ACCORDION STYLES (max-width: 768px) --- */
+/* =============================================================== */
+
+@media (max-width: 768px) {
+    
+    /* --- Footer Base Container --- */
+    .footer-mobile {
+        padding: 0 20px 10px 20px !important; 
+        top: 0 !important; 
+    }
+
+    /* --- Main Content Area (Accordion Links) --- */
+    .footer-main-mobile {
+        padding-bottom: 20px !important; 
+        /* border-bottom: 1px solid #333 !important;  */
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .footer-accordion-container {
+        width: 100%;
+        margin-left: 0 !important;
+    }
+
+    /* Accordion Item */
+    .footer-accordion-item {
+        border-bottom: 1px solid #333;
+    }
+    
+    /* Accordion Title (Clickable Heading) */
+    .footer-accordion-title {
+        font-size: 16px; 
+        font-weight: 600;
+        color: white;
+        padding: 18px 0;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Accordion Arrow */
+    .footer-accordion-icon {
+        font-size: 16px;
+        color: #CCCCCC;
+        transition: transform 0.2s ease;
+    }
+
+    .footer-accordion-title.open .footer-accordion-icon {
+        transform: rotate(180deg);
+    }
+
+    /* Accordion Content (Links) */
+    .footer-accordion-content {
+        overflow: hidden; 
+        transition: max-height 0.3s ease-in-out;
+        padding-bottom: 0; 
+    }
+
+    /* Individual Links */
+    .footer-accordion-link {
+        color: #CCCCCC; 
+        text-decoration: none;
+        cursor: pointer;
+        display: block;
+        font-size: 15px; 
+        padding: 10px 0; 
+        transition: color 0.2s ease;
+    }
+    
+    .footer-accordion-link:hover {
+        color: white;
+    }
+    
+    /* --- Mobile Logo Section --- */
+    .footer-logo-mobile-section {
+        padding: 30px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center; 
+        /* border-bottom: 1px solid #333; */
+        margin-bottom: 20px;
+    }
+
+    .footer-logo-container-mobile {
+        display: flex;
+        flex-direction: column; 
+        align-items: center;
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-bottom: 15px;
+    }
+    
+    .footer-logo-container-mobile img {
+        width: 100px;
+        height: 100px; 
+        margin-right: 0 !important;
+        margin-bottom: 10px; 
+    }
+
+    .footer-logo-text-mobile {
+        margin-left: 0 !important;
+        font-size: 30px;
+        line-height: 1;
+    }
+
+    .footer-tagline-mobile {
+        font-size: 20px;
+        font-weight: normal;
+        color: white;
+        margin-top: -90px; 
+        margin-bottom: 100px;
+        text-align: center;
+    }
+
+    /* Language Dropdown Container Fix */
+    .footer-language-selector-container {
+        margin-top: 20px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .footer-language-selector-container .language-dropdown {
+        /* Dropdown ki width aur styles set kiye hain taaki woh screen se bahar na jaye */
+        background-color: #1c1c1c;
+        color: white;
+        border: 1px solid #333;
+        padding: 10px 30px 10px 15px;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 4.908 2.345 4 3.204 4h9.592a1 1 0 0 1 .757 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        width: 150px; 
+    }
+
+
+    /* --- Copyright Section Order Fix --- */
+    .copyright-section-mobile {
+        /* Reverse order hata kar specific order set kiya */
+        flex-direction: column !important; 
+        align-items: center !important; 
+        margin-top: 0 !important;
+    }
+    
+    /* 1. TIME Copyright Text */
+    .extra-copyright-mobile {
+        order: 1;
+        font-size: 11px;
+        color: #AAAAAA;
+        text-align: center;
+        line-height: 1.5;
+        margin-top: 10px;
+        margin-bottom: 15px; 
+    }
+    
+    /* 2. Devknit Copyright Text */
+   .copyright-text-mobile {
+    order: 2;
+    font-size: 16px !important; 
+    margin-top: 5px;
+    margin-bottom: 20px; 
+    text-align: center;
+    color: #ffffff !important;
+}
+    
+    /* 3. Bottom Links */
+    .bottom-links-mobile {
+        order: 3;
+        gap: 20px !important; /* Links ke beech mein space */
+        margin-left: 0 !important;
+        padding-left: 0 !important;
+        margin-bottom: 20px;
+        justify-content: center;
+        /* Links ko thoda upar karne ke liye font size adjust kiya */
+        /* line-height: 1.2;  */
+        padding-top: 5px;
+        /* border-top: 1px solid #333; */
+        width: 100%;
+    }
+    
+    .bottom-links-mobile a {
+        font-size: 13px !important; 
+        padding: 0 !important;
+    }
+}

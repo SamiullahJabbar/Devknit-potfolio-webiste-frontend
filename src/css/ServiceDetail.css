@@ -1,274 +1,321 @@
 /* src/css/ServiceDetail.css */
 
+/* --- GENERAL STYLES (Keep existing styles for the rest of the page) --- */
 .service-detail-page {
-    background-color: #ffffff;
-    color: #000000;
-    min-height: 100vh;
+    /* Basic padding/margin for the container */
+    overflow-x: hidden; /* Prevent horizontal scroll on small screens */
 }
 
-/* 🎯 Hero Section */
-.service-hero-section {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    padding: 80px 0 60px;
-    border-bottom: 1px solid #e9ecef;
-}
-
-.service-hero-container {
-    max-width: 1200px;
+.service-hero-container,
+.gallery-container,
+.seo-features-section { /* Added .seo-features-section for consistency */
+    max-width: 1400px; /* Increased max-width for modern large screens */
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 24px; /* Slightly increased padding */
 }
 
-.breadcrumb-nav {
+/* ------------------------------------------------ */
+/* 🎯 1. HERO SECTION */
+/* ------------------------------------------------ */
+.new-service-hero-section {
+    position: relative;
+    height: auto; 
+    min-height: 95vh; /* Increased min-height for more impact */
+    background-size: cover;
+    background-position: center;
+    color: white; 
     display: flex;
-    align-items: center;
-    margin-bottom: 30px;
-    font-size: 14px;
+    align-items: flex-end; /* Align content to the bottom */
+    justify-content: center; 
+    padding: 60px 0; /* Adjusted padding */
 }
 
-.breadcrumb-link {
-    color: #666;
-    text-decoration: none;
-    transition: color 0.3s ease;
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Full Black Overlay (Bottom heavy - slightly smoother gradient) */
+    background: linear-gradient(to top, 
+        rgba(0, 0, 0, 1) 0%,      
+        rgba(0, 0, 0, 0.9) 40%, /* Smoother transition */
+        rgba(0, 0, 0, 0.6) 80%,
+        rgba(0, 0, 0, 0.3) 100%   /* Lighter at the very top */
+    );
+    z-index: 1;
 }
 
-.breadcrumb-link:hover {
-    color: #000;
+.new-service-hero-section .center-content-container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    text-align: center; 
+    padding-bottom: 50px; /* Padding from the bottom of the hero section */
 }
 
-.breadcrumb-separator {
-    margin: 0 8px;
-    color: #999;
+.new-service-hero-section .hero-content {
+    max-width: 1200px; /* Increased max-width */
+    margin: 0 auto;
+    /* Removed padding-top here as alignment is now bottom */
 }
 
-.breadcrumb-current {
-    color: #000;
-    font-weight: 600;
+.new-service-hero-section .service-main-title {
+    font-size: 5.5rem; /* Increased size for impact */
+    font-weight: 800; /* Bolder font weight */
+    margin-bottom: 25px;
+    line-height: 1.05;
+    text-transform: uppercase; /* Added uppercase for modern look */
+    letter-spacing: 2px;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); /* Subtle shadow for contrast */
 }
 
-.hero-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 20px;
-}
-
-.hero-text {
-    flex: 1;
+.new-service-hero-section .detail-title-text {
+    font-size: 1.8rem; /* Increased size */
+    font-weight: 500; /* Slightly reduced weight for secondary title */
     max-width: 900px;
+    margin: 0 auto 50px auto; 
+    opacity: 0.98;
+    letter-spacing: 0.5px;
 }
 
-.service-main-title {
-    font-size: 3.5rem;
+.hero-full-description-wrapper {
+    text-align: left; /* Changed alignment to left for better readability in a block */
+    max-width: 1000px; /* Controlled width */
+    margin: 40px auto 0 auto; /* Added top margin */
+    padding: 40px; 
+    background: rgba(255, 255, 255, 0.08); /* Slightly more opaque background */
+    border-radius: 16px; /* Increased border-radius */
+    backdrop-filter: blur(5px); /* Added subtle blur for modern frosted glass effect */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Stronger shadow */
+}
+
+.hero-full-description-wrapper .hero-full-description-content {
+    color: #f0f0f0; /* Slightly off-white for softer look */
+    font-size: 1.2rem; /* Reduced slightly for body text */
+    line-height: 1.8; /* Better line-height for readability */
+    font-weight: 300; /* Lighter font weight for body text */
+}
+
+.hero-full-description-wrapper .hero-full-description-content p {
+    margin-bottom: 20px; /* Reduced paragraph spacing slightly */
+}
+
+.hero-full-description-wrapper .hero-full-description-content h3 {
+    font-size: 2rem; /* Increased size */
     font-weight: 700;
-    margin-bottom: 20px;
-    color: #000;
-    line-height: 1.1;
-}
-
-.service-hero-description {
-    font-size: 1.3rem;
-    color: #666;
-    margin-bottom: 30px;
-    line-height: 1.6;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* 🖼️ Feature Image & Description Section */
-.feature-section {
-    padding: 80px 0;
-    background-color: #fff;
-}
-
-.feature-container {
-    max-width: 1800px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-.feature-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: center;
-}
-
-.feature-text {
-    padding-right: 40px;
-}
-
-.description-content {
-    line-height: 1.8;
-    color: #333;
-    font-size: 1.1rem;
-}
-
-.description-content h1,
-.description-content h2,
-.description-content h3,
-.description-content h4,
-.description-content h5,
-.description-content h6 {
-    color: #000;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
-}
-
-.description-content h1 {
-    font-size: 1.8rem;
-}
-
-.description-content h2 {
-    font-size: 1.6rem;
-}
-
-.description-content h3 {
-    font-size: 1.4rem;
-}
-
-.description-content p {
-    margin-bottom: 1.5em;
-}
-
-.description-content strong {
-    color: #000;
-    font-weight: 600;
-}
-
-.description-content ul,
-.description-content ol {
-    margin: 1em 0;
-    padding-left: 1.5em;
-}
-
-.description-content li {
-    margin-bottom: 0.5em;
-    line-height: 1.6;
-}
-
-.feature-image {
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-}
-
-.feature-main-image {
-    width: 100%;
-    height: auto;
-    display: block;
-    transition: transform 0.3s ease;
-}
-
-.feature-main-image:hover {
-    transform: scale(1.02);
-}
-
-.image-placeholder {
-    width: 100%;
-    height: 400px;
-    background-color: #f8f9fa;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-radius: 16px;
-    border: 2px dashed #dee2e6;
-}
-
-.placeholder-icon {
-    font-size: 3rem;
-    margin-bottom: 10px;
-    opacity: 0.5;
-}
-
-/* 🎨 Gallery Images Section */
-.gallery-section {
-    padding: 80px 0;
-    background-color: #f8f9fa;
-}
-
-.gallery-container {
-    max-width: 1850px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-.gallery-item {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: px;
-    align-items: center;
-    margin-bottom: 80px;
-}
-
-.gallery-item:last-child {
-    margin-bottom: 0;
-}
-
-.gallery-item.left-image .gallery-image-side {
-    order: 1;
-}
-
-.gallery-item.left-image .gallery-caption-side {
-    order: 2;
-}
-
-.gallery-item.right-image .gallery-image-side {
-    order: 2;
-}
-
-.gallery-item.right-image .gallery-caption-side {
-    order: 1;
-}
-
-.gallery-image-side {
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-}
-
-.gallery-image {
-    width: 100%;
-    height: auto;
-    display: block;
-    transition: transform 0.3s ease;
-}
-
-.gallery-image:hover {
-    transform: scale(1.03);
-}
-
-.gallery-caption-side {
-    padding: 40px;
-}
-
-.caption-content {
-    background: #fff;
-    padding: 120px;
-    border-radius: 16px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-    border-left: 4px solid #e5e5e5;
-}
-
-.image-count {
+    margin-top: 40px; /* Increased top margin */
+    margin-bottom: 15px;
+    color: #000000; 
+    border-bottom: 2px solid #070707; /* Added a subtle underline */
     display: inline-block;
-    background: #f0f0f0;
-    color: #000;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin-bottom: 20px;
+    padding-bottom: 5px;
 }
 
-.caption-text {
-    font-size: 1.2rem;
-    line-height: 1.7;
-    color: #333;
-    margin: 5;
+/* ------------------------------------------------ */
+/* ⭐ WHITE SPACE/GAP SECTION (Feature Points Wrapper) */
+/* ------------------------------------------------ */
+.seo-features-container-wrapper.white-section-spacing {
+    background-color: #f7f7f7; /* Changed to an off-white for less harsh contrast */
+    padding-top: 100px; /* Increased padding */
+    padding-bottom: 100px; 
+}
+
+/* No change needed for .seo-features-section - inherited max-width from general styles */
+
+
+/* ------------------------------------------------ */
+/* 🎨 GALLERY IMAGES: Dark Brown Background & Hover Effect - UPDATED CSS */
+/* ------------------------------------------------ */
+.new-gallery-section.dark-brown-bg {
+    background-color: #2e1a17; /* Dark Brown Background */
+    padding: 80px 0;
+}
+
+.new-gallery-section .gallery-container.tight-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 2000px;
+}
+
+.new-gallery-section .gallery-item {
+    position: relative; /* Important for caption positioning */
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.new-gallery-section .gallery-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    height: 500px; /* Fixed height for image */
+}
+
+.new-gallery-section .gallery-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease-in-out;
+}
+
+.new-gallery-section .gallery-item:hover .gallery-image {
+    transform: scale(1.05);
+}
+
+/* --- CAPTION HOVER STYLES --- */
+.new-gallery-section .gallery-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    /* Initially hide the caption and set transition */
+    transform: translateY(100%); /* Start position: off the bottom */
+    opacity: 0;
+    transition: transform 0.4s ease-out, opacity 0.4s ease-out; /* Transition for hover effect */
+    
+    /* Caption styling */
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.75); /* Semi-transparent dark background */
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: left;
+    pointer-events: none; /* Allows clicks to pass through to the image/wrapper if needed */
+}
+
+/* Show caption on hover over the gallery-item */
+.new-gallery-section .gallery-item:hover .gallery-caption {
+    transform: translateY(0); /* End position: fully visible at the bottom */
+    opacity: 1;
+}
+/* ------------------------------------------------ */
+
+
+
+
+
+
+
+/* ⭐ GALLERY CAPTION STYLING */
+.gallery-caption {
+    position: absolute;
+    bottom: 0; /* Changed position to the bottom */
+    left: 0;
+    width: 100%;
+    /* Background for the caption - Gradient for a modern flair */
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.5) 70%, rgba(0, 0, 0, 0) 100%);
+    color: white;
+    padding: 20px; /* Increased padding */
+    /* Initial position: Hidden below the wrapper */
+    transform: translateY(100%); 
+    transition: transform 0.4s ease-out; /* Slightly longer transition */
+    z-index: 10;
+    text-align: center;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.7); /* Top shadow for separation */
+    min-height: 30%; /* Ensure caption takes up space */
+    display: flex;
+    align-items: flex-end; /* Align text to the bottom of the caption area */
+    justify-content: center;
+}
+
+.gallery-caption p {
+    margin: 0;
+    font-size: 1.25rem; /* Increased font size */
+    font-weight: 700;
+    line-height: 1.4;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* ⭐ HOVER EFFECT: Slide caption up from the bottom */
+.new-gallery-section .gallery-item:hover .gallery-caption {
+    transform: translateY(0);
+}
+
+/* ------------------------------------------------ */
+/* --- Responsive Adjustments (Enhanced) --- */
+/* ------------------------------------------------ */
+@media (max-width: 1024px) {
+    .new-service-hero-section .service-main-title {
+        font-size: 4rem;
+    }
+    .new-service-hero-section .detail-title-text {
+        font-size: 1.5rem;
+    }
+    .new-gallery-section .gallery-container.tight-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Adjusted minmax for tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    .service-hero-container,
+    .gallery-container,
+    .seo-features-section {
+        padding: 0 15px; /* Tighter padding on smaller screens */
+    }
+
+    /* HERO SECTION */
+    .new-service-hero-section {
+        min-height: 70vh; /* Reduced min-height on mobile */
+        padding: 40px 0;
+    }
+
+    .new-service-hero-section .center-content-container {
+        padding-bottom: 20px;
+    }
+
+    .new-service-hero-section .service-main-title {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+    .new-service-hero-section .detail-title-text {
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+    }
+    
+    .hero-full-description-wrapper {
+        padding: 20px;
+        margin-top: 20px;
+        border-radius: 10px;
+    }
+
+    .hero-full-description-wrapper .hero-full-description-content {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+    .hero-full-description-wrapper .hero-full-description-content h3 {
+        font-size: 1.6rem;
+    }
+    
+    /* FEATURE SECTION */
+    .seo-features-container-wrapper.white-section-spacing {
+        padding-top: 60px; 
+        padding-bottom: 60px; 
+    }
+
+    /* GALLERY SECTION */
+    .new-gallery-section.dark-brown-bg {
+        padding: 60px 0;
+    }
+    .new-gallery-section .gallery-container.tight-grid {
+        grid-template-columns: 1fr; /* Single column on mobile */
+        gap: 20px; 
+    }
+    
+    .new-gallery-section .gallery-image-wrapper {
+        height: 280px; /* Adjusted image height for mobile */
+    }
+    
+    .gallery-caption {
+        padding: 15px;
+        min-height: 25%;
+    }
+    
+    .gallery-caption p {
+        font-size: 1.1rem;
+    }
 }
 
 
@@ -276,8 +323,9 @@
 
 
 
-/* feature csss
-/* The outer wrapper ensures the section itself has space around it */
+
+/* THE REST OF YOUR EXISTING CSS REMAINS THE SAME */
+/* feature css */
 .service-detail-page .seo-features-container-wrapper { 
     width: 96%;
     padding: 80px 38px; 
@@ -285,12 +333,10 @@
 }
 
 .service-detail-page .seo-features-section { 
-    /* Main dark, rounded container - Black */
     width: 100%;
     max-width: 1800px;
     margin: 0 auto;
-    
-    background-color: #000000ea; /* DARK BLACK BACKGROUND */
+    background-color: #000000ea;
     color: #ffffff;
     padding: 60px 0; 
     border-radius: 20px; 
@@ -298,7 +344,6 @@
 }
 
 .service-detail-page .seo-features-header-content { 
-    /* Content is centered */
     max-width: 900px;
     margin: 0 auto 40px auto;
     padding: 0 60px; 
@@ -307,7 +352,7 @@
 
 .service-detail-page .seo-features-title { 
     font-size: 3rem;
-    font-weight: 700; /* Set to 700 for better bold look */
+    font-weight: 700;
     margin-bottom: 20px;
     color: #ffffff;
 }
@@ -325,47 +370,39 @@
 }
 
 .service-detail-page .seo-features-carousel-wrapper { 
-    /* KEY FOR HORIZONTAL SCROLLING */
     display: flex;
     overflow-x: auto; 
     scroll-snap-type: x mandatory; 
     -webkit-overflow-scrolling: touch;
-    
     padding: 0 60px; 
     margin: 0;
     gap: 20px;
 }
 
-/* Hide scrollbar for aesthetics */
 .service-detail-page .seo-features-carousel-wrapper::-webkit-scrollbar { 
     display: none;
 }
 .service-detail-page .seo-features-carousel-wrapper { 
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .service-detail-page .seo-feature-card { 
-    /* Simple Grey card with White text - NO HOVER */
     flex: 0 0 320px; 
     scroll-snap-align: start;
-    background-color: #333333; /* DARK GREY BACKGROUND */
+    background-color: #333333;
     border-radius: 8px;
     padding: 50px;
-    
-    /* 💥 FIXED: Proper flex direction for vertical stacking */
     min-height: 190px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    
     border: none;
     outline: none;
     box-shadow: none;
     transition: none; 
 }
 
-/* Ensure no changes on hover */
 .service-detail-page .seo-feature-card:hover { 
     background-color: #333333; 
     border: none;
@@ -375,18 +412,16 @@
 }
 
 .service-detail-page .seo-feature-content {
-    /* ✅ NAYA CLASS ADD KIYA CONTENT KO BETTER CONTROL KE LIYE */
     display: flex;
     flex-direction: column;
     height: 100%;
-    gap: 15px; /* Title aur description ke beech space */
+    gap: 15px;
 }
 
 .service-detail-page .seo-feature-card-title { 
-    /* Title styling - ab yeh properly top par hoga */
     font-size: 1.5rem;
     font-weight: 700; 
-    margin: 0; /* Margin remove kiya, gap use karenge */
+    margin: 0;
     color: #ffffff; 
     display: block;
     white-space: normal;
@@ -394,34 +429,26 @@
 }
 
 .service-detail-page .seo-feature-card-description { 
-    /* Description styling - ab yeh title ke neeche hoga */
     font-size: 1rem;
     line-height: 1.6;
     color: #ffffff; 
-    margin: 0; /* Margin remove kiya */
+    margin: 0;
     overflow: visible;
     display: block;
-    flex-grow: 1; /* ✅ Description ko remaining space bharne de */
+    flex-grow: 1;
 }
 
-/* ======================================= */
-/* 📱 MOBILE RESPONSIVENESS */
-/* ======================================= */
-
 @media (max-width: 768px) {
-    /* Reduce overall section padding */
     .service-detail-page .seo-features-container-wrapper {
         padding: 40px 8px;
     }
 
-    /* Reduce horizontal padding on the main dark section */
     .service-detail-page .seo-features-header-content,
     .service-detail-page .seo-features-carousel-wrapper {
         padding-left: 15px;
         padding-right: 15px;
     }
 
-    /* Make cards slightly narrower to fit more on screen */
     .service-detail-page .seo-feature-card {
          flex: 0 0 85vw;
          padding: 25px;
@@ -436,7 +463,6 @@
         font-size: 0.95rem;
     }
 }
-
 
 
 
