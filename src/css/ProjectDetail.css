@@ -172,7 +172,7 @@
 .project-detail-page .about-project-section, .project-detail-page .more-about-section {
     width: 100%;
     background-color: #ffffff; 
-    padding: 100px 0; 
+    padding: 80px 0; 
 }
 
 /* Light gray background for the mirrored section for contrast */
@@ -187,10 +187,10 @@
     
     justify-content: flex-end; 
     
-    max-width: 1500px; /* Increased max width */
+    max-width: 1400px; /* Increased max width */
     margin: 0 auto;
     padding: 0 40px;
-    gap: 120px; /* Increased gap */
+    gap: 80px; /* Increased gap */
 }
 
 /* MIRRORED LAYOUT: Text Left, Image Right */
