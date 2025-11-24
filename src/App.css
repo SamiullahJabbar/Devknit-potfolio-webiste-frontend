@@ -1,55 +1,38 @@
-/* Custom White Trailing Circle */
-.custom-cursor {
-  position: fixed;
-  width: 24px; /* Normal size: 24px */
-  height: 24px;
-  background: #020101; /* Pure white */
-  border-radius: 50%;
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
   pointer-events: none;
-  z-index: 9999;
-  /* Default scale (1.0) and centering */
-  transform: translate(-50%, -50%) scale(1); 
-  
-  transition: 
-    left 0.15s ease-out, 
-    top 0.15s ease-out, 
-    transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), /* Smoother scale transition */
-    width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    opacity 0.3s ease;
-  will-change: transform, left, top, width, height;
-  
-  box-shadow: 
-    0 0 0 1px rgba(0, 0, 0, 0.2), /* Black border shadow */
-    0 0 15px rgba(0, 0, 0, 0.5); /* Black glow shadow */
-    
-  opacity: 0.8; 
 }
 
-/* New: Styles for when the cursor is hovering over an interactive element */
-/* Size will be 70px */
-.custom-cursor.is-hovering {
-  width: 70px; 
-  height: 70px;
-  background: #080808; /* Thoda off-white/light gray jab hover ho */
-  box-shadow: 
-    0 0 0 2px rgba(0, 0, 0, 0.4), /* Darker black border shadow */
-    0 0 20px rgba(0, 0, 0, 0.7); /* Darker black glow shadow */
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
 }
 
-/* Allow the default cursor to show over the trailing circle */
-html, body, * {
-  cursor: default; 
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
 }
 
-/* Optional: Change the default cursor to a pointer when over interactive elements */
-button, a, img {
-    cursor: pointer !important;
+.App-link {
+  color: #61dafb;
 }
 
-/* Mobile devices - default cursor remains visible */
-@media (max-width: 768px) {
-  .custom-cursor {
-    display: none; 
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
