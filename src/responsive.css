@@ -1,0 +1,125 @@
+/* =======================================
+   resp-responsive.css
+   Mobile-first + Desktop support
+   Prefixed classes to avoid conflicts
+   ======================================= */
+
+/* ---------- Default: Mobile ---------- */
+.resp-body {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+.resp-container {
+  width: 95%;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.resp-header, .resp-footer {
+  text-align: center;
+}
+
+.resp-card {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: block;
+}
+
+/* ---------- Tablets / Small Laptops ---------- */
+@media (min-width: 768px) {
+  .resp-body { font-size: 15px; }
+
+  .resp-container {
+    width: 90%;
+  }
+
+  .resp-card {
+    width: 48%;
+    display: inline-block;
+    margin-right: 2%;
+  }
+
+  .resp-button { font-size: 1.1rem; padding: 0.6rem 1.2rem; }
+  .resp-input, .resp-select, .resp-textarea { padding: 0.6rem; }
+}
+
+/* ---------- Laptops / Desktops ---------- */
+@media (min-width: 992px) {
+  .resp-body { font-size: 16px; }
+
+  .resp-container {
+    width: 85%;
+  }
+
+  .resp-card {
+    width: 30%;
+    display: inline-block;
+    margin-right: 3%;
+  }
+
+  /* Flex/Grid support */
+  .resp-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .resp-column {
+    flex: 1 1 30%;
+    margin-bottom: 1rem;
+  }
+
+  .resp-button { font-size: 1.2rem; padding: 0.7rem 1.4rem; }
+  .resp-input, .resp-select, .resp-textarea { padding: 0.8rem; }
+}
+
+/* ---------- Large Desktops / Wide Screens ---------- */
+@media (min-width: 1200px) {
+  .resp-body { font-size: 18px; }
+
+  .resp-container {
+    width: 1200px;
+  }
+
+  .resp-card {
+    width: 30%;
+    margin-right: 3%;
+  }
+}
+
+/* ---------- Utility Classes ---------- */
+.resp-text-center { text-align: center; }
+.resp-mt-1 { margin-top: 0.5rem; }
+.resp-mt-2 { margin-top: 1rem; }
+.resp-mb-1 { margin-bottom: 0.5rem; }
+.resp-mb-2 { margin-bottom: 1rem; }
+.resp-p-1 { padding: 0.5rem; }
+.resp-p-2 { padding: 1rem; }
+
+/* ---------- Images / Media ---------- */
+.resp-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ---------- Buttons ---------- */
+.resp-button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* ---------- Forms ---------- */
+.resp-input, .resp-select, .resp-textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
