@@ -1,3 +1,5 @@
+@import './responsive.css';
+
 /* Projects Page Styles - Unique Class Names */
 .projects-page {
   background: #ffffff;

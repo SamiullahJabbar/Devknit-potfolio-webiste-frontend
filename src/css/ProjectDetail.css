@@ -1,5 +1,7 @@
+@import './responsive.css';
+
 /* ======================================= */
-/* 1. NEW HERO SECTION STYLES (Existing) */
+/* 1. NEW HERO SECTION STYLES */
 /* ======================================= */
 
 .project-detail-page .new-project-hero-section {
@@ -45,7 +47,7 @@
 .project-detail-page .hero-content-new {
     position: relative;
     z-index: 3;
-    width: 100%;
+    width: 90%; /* RESPONSIVE FIX: Using percentage */
     max-width: 1200px; 
     margin: 0 auto;
     padding: 0 40px;
@@ -123,7 +125,6 @@
 
 .project-detail-page .tech-stack-section {
     width: 100%;
-    /* White background to contrast the dark hero */
     background-color: #ffffff; 
     padding: 40px 0; 
     border-bottom: 1px solid #f0f0f0;
@@ -131,11 +132,11 @@
 
 .project-detail-page .tech-stack-container {
     display: flex;
-    justify-content: center; /* Center the icons */
+    justify-content: center; 
     align-items: flex-start;
     flex-wrap: wrap;
-    gap: 60px; /* Space between items */
-    max-width: 1200px;
+    gap: 60px; 
+    max-width: 90%; /* RESPONSIVE FIX: Adjusted to percentage */
     margin: 0 auto;
     padding: 0 40px;
 }
@@ -145,16 +146,14 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    /* Fixed width for uniform spacing */
     width: 150px; 
 }
 
 .project-detail-page .stack-icon {
-    height: 60px; /* Size of the icon image */
+    height: 60px; 
     width: auto;
     object-fit: contain;
     margin-bottom: 10px;
-    /* Optional: Convert color icons to monochrome gray if needed */
     filter: grayscale(100%) brightness(0.6); 
     opacity: 0.7;
 }
@@ -166,7 +165,7 @@
 }
 
 /* ======================================= */
-/* 3. ABOUT/MORE ABOUT SECTION STYLES (Fixed Mirroring) */
+/* 3. ABOUT/MORE ABOUT SECTION STYLES */
 /* ======================================= */
 
 .project-detail-page .about-project-section, .project-detail-page .more-about-section {
@@ -175,40 +174,38 @@
     padding: 80px 0; 
 }
 
-/* Light gray background for the mirrored section for contrast */
 .project-detail-page .more-about-section {
     background-color: #f7f9fb; 
 }
 
 .project-detail-page .about-content-wrapper {
     display: flex;
-    flex-direction: row; /* Default: Image (JSX 1) Left, Text (JSX 2) Right */
+    flex-direction: row; 
     align-items: center; 
-    
     justify-content: flex-end; 
     
-    max-width: 1400px; /* Increased max width */
+    max-width: 90%; /* RESPONSIVE FIX: Adjusted to percentage */
     margin: 0 auto;
     padding: 0 40px;
-    gap: 80px; /* Increased gap */
+    gap: 50px; /* RESPONSIVE FIX: Reduced gap for smaller screens */
 }
 
 /* MIRRORED LAYOUT: Text Left, Image Right */
 .project-detail-page .about-content-wrapper.mirrored {
-    /* Reverses the order of children (Image [JSX 1] becomes right, Text [JSX 2] becomes left) */
     flex-direction: row-reverse; 
     justify-content: flex-start; 
 }
 
 
 .project-detail-page .about-image-side {
-    /* Image width: 65% */
-    flex: 0 0 65%; 
-    min-width: 55%;
+    /* Image width adjustments for responsiveness */
+    flex: 1; /* RESPONSIVE FIX: Allow flex to calculate width */
+    min-width: 50%; /* RESPONSIVE FIX: Set minimum width instead of fixed */
+    max-width: 60%; /* RESPONSIVE FIX: Set max width */
     
     position: relative; 
-    width: 65%; 
-    padding-bottom: 50%; /* Height: 50% of its width */
+    width: auto; /* RESPONSIVE FIX: Removed fixed width 65% */
+    padding-bottom: 40%; /* RESPONSIVE FIX: Reduced aspect ratio from 50% to 40% */
     
     margin: 0;
     padding-top: 0; 
@@ -235,9 +232,10 @@
 }
 
 .project-detail-page .about-text-side {
-    /* Text width: 40% */
-    flex: 0 0 40%; 
-    min-width: 250px; 
+    /* Text width adjustments for responsiveness */
+    flex: 1; /* RESPONSIVE FIX: Allow flex to calculate width */
+    min-width: 350px; /* RESPONSIVE FIX: Set minimum width to avoid squishing */
+    max-width: 45%; /* RESPONSIVE FIX: Set max width */
     color: #333; 
 }
 
@@ -261,39 +259,36 @@
 }
 
 /* ======================================= */
-/* 4. RELATED SERVICES SECTION STYLES (Existing) */
-/* (Assuming these were already scoped correctly in your previous update) */
+/* 4. RELATED SERVICES SECTION STYLES */
+/* (Skipped as it is detailed in Section 9 below) */
 /* ======================================= */
 
 /* ======================================= */
-/* 5. NEW FEATURES SECTION STYLES (Final Update: Cards Simple Grey, NO HOVER EFFECT) */
+/* 5. NEW FEATURES SECTION STYLES */
 /* ======================================= */
 
-/* The outer wrapper ensures the section itself has space around it */
 .project-detail-page .features-container-wrapper {
     width: 98%;
-    padding: 80px 20px; /* Provides padding around the main dark container */
-    background-color: #ffffff; /* Keep the page background white/light */
+    padding: 80px 1%; /* RESPONSIVE FIX: Used percentage for side padding */
+    background-color: #ffffff; 
 }
 
 .project-detail-page .features-section {
-    /* Main dark, rounded container - Black */
-    width: 96%;
+    width: 100%; /* RESPONSIVE FIX: Changed 96% to 100% to fill wrapper */
     max-width: 1800px;
     margin: 0 auto;
     
-    background-color: #000000ea; /* DARK BLACK BACKGROUND for the main container */
+    background-color: #000000ea; 
     color: #ffffff;
-    padding: 60px 0; /* Vertical padding inside the dark container */
-    border-radius: 20px; /* Rounded corners */
+    padding: 60px 0; 
+    border-radius: 20px; 
     overflow: hidden; 
 }
 
 .project-detail-page .features-header-content {
-    /* Content is centered */
     max-width: 900px;
     margin: 0 auto 40px auto;
-    padding: 0 60px; /* Horizontal padding inside the dark container */
+    padding: 0 4%; /* RESPONSIVE FIX: Used percentage for side padding */
     text-align: center;
 }
 
@@ -317,13 +312,12 @@
 }
 
 .project-detail-page .features-carousel-wrapper {
-    /* KEY FOR HORIZONTAL SCROLLING */
     display: flex;
     overflow-x: auto; 
     scroll-snap-type: x mandatory; 
     -webkit-overflow-scrolling: touch;
     
-    padding: 0 60px; 
+    padding: 0 4%; /* RESPONSIVE FIX: Used percentage for side padding */
     margin: 0;
     gap: 20px;
 }
@@ -338,30 +332,23 @@
 }
 
 .project-detail-page .feature-card {
-    /* Simple Grey card with White text - NO HOVER */
     flex: 0 0 320px; 
     scroll-snap-align: start;
-    background-color: #333333; /* DARK GREY BACKGROUND for the feature cards */
+    background-color: #333333; 
     border-radius: 8px;
     padding: 30px;
     height: 250px; 
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    
-    /* Remove any border, outline, or box-shadow that might create white styling */
     border: none;
     outline: none;
     box-shadow: none;
-    
-    /* Hover effect and transition removed for simplicity */
     transition: none; 
 }
 
-/* Ensure no changes on hover */
 .project-detail-page .feature-card:hover {
-    background-color: #333333; /* Keep background fixed on hover */
-    /* Remove any hover effects that might create white styling */
+    background-color: #333333; 
     border: none;
     outline: none;
     box-shadow: none;
@@ -369,18 +356,16 @@
 }
 
 .project-detail-page .feature-card-title {
-    /* Bold Title */
     font-size: 1.5rem;
     font-weight: 700; 
     margin-bottom: 15px;
-    color: #ffffff; /* WHITE text */
-    /* text-shadow: none; removed for simple text */
+    color: #ffffff; 
 }
 
 .project-detail-page .feature-card-description {
     font-size: 1rem;
     line-height: 1.5;
-    color: #ffffff; /* WHITE TEXT */
+    color: #ffffff; 
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 6; 
@@ -391,7 +376,7 @@
 .project-detail-page .carousel-nav {
     display: flex;
     position: absolute;
-    right: 60px; 
+    right: 4%; /* RESPONSIVE FIX: Used percentage for side position */
     bottom: -10px; 
     transform: translateY(100%);
     gap: 10px;
@@ -416,36 +401,32 @@
 
 /* ======================================= */
 /* 6. NEW RESULT SECTION STYLES */
-/* (Text Left, Media Right - Similar to About Section) */
 /* ======================================= */
 
 .project-detail-page .result-section {
     padding: 80px 0;
     width: 100%;
-    background-color: #ffffff; /* Typically a light background */
+    background-color: #ffffff; 
 }
 
 .project-detail-page .result-content-wrapper {
-    /* Reuses the styling of the two-column layout */
-    max-width: 1800px;
+    max-width: 90%; /* RESPONSIVE FIX: Adjusted to percentage */
     margin: 0 auto;
     padding: 0 40px;
     display: flex;
-    gap: 60px;
-    align-items: flex-start; /* Align content to the top */
+    gap: 50px; /* RESPONSIVE FIX: Reduced gap for better fit */
+    align-items: flex-start; 
 }
 
-/* Use generic column classes or define specific ones if needed */
 .project-detail-page .result-text-side {
     flex: 1;
-    max-width: 50%;
+    max-width: 45%; /* RESPONSIVE FIX: Set max width for text */
 }
 
 .project-detail-page .result-media-side {
     flex: 1;
-    max-width: 50%;
-    /* Container for the video/image */
-    background-color: #f0f0f0; /* Light background behind media */
+    max-width: 55%; /* RESPONSIVE FIX: Set max width for media */
+    background-color: #f0f0f0; 
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -464,7 +445,6 @@
     color: #555555;
 }
 
-/* Style for the media element (image or video) */
 .project-detail-page .result-media {
     width: 100%;
     height: auto;
@@ -473,187 +453,18 @@
 }
 
 
-/* --- Mobile Responsiveness --- */
-@media (max-width: 992px) {
-    .project-detail-page .new-project-hero-section {
-        min-height: 60vh;
-        padding: 60px 0;
-    }
-
-    .project-detail-page .hero-content-new {
-        padding: 0 20px;
-    }
-
-    .project-detail-page .project-main-title-new {
-        font-size: 2.5rem;
-    }
-
-    .project-detail-page .project-hero-description-new {
-        font-size: 1rem;
-        margin-bottom: 30px;
-    }
-    
-    .project-detail-page .project-meta-container {
-        flex-direction: column; 
-        gap: 20px;
-    }
-
-    .project-detail-page .tech-stack-section {
-        padding: 30px 0;
-    }
-
-    .project-detail-page .tech-stack-container {
-        justify-content: space-around;
-        gap: 20px 10px;
-        padding: 0 20px;
-    }
-    
-    .project-detail-page .stack-item {
-        width: 80px;
-    }
-
-    .project-detail-page .stack-icon {
-        height: 35px;
-    }
-
-    .project-detail-page .about-content-wrapper {
-        /* Stack image and text vertically on tablets/mobiles */
-        flex-direction: column; 
-        gap: 40px;
-        padding: 0 30px;
-    }
-    
-    /* On mobile, both layouts stack naturally (Image then Text, based on JSX order) */
-    .project-detail-page .about-content-wrapper.mirrored {
-        flex-direction: column; 
-    }
-
-    .project-detail-page .about-project-section, .project-detail-page .more-about-section {
-        padding: 60px 0; 
-    }
-
-    .project-detail-page .about-image-side {
-        flex: 1 1 100%; 
-        min-width: 100%;
-        width: 100%;
-        padding-bottom: 60%; 
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-    }
-
-    .project-detail-page .about-text-side {
-        flex: 1 1 100%;
-        min-width: 100%; 
-    }
-
-    .project-detail-page .about-title {
-        font-size: 2rem;
-        text-align: center; 
-    }
-
-    .project-detail-page .about-description p {
-        font-size: 1.10rem;
-        text-align: left;
-    }
-    
-    /* Features Section Mobile */
-    .project-detail-page .features-container-wrapper {
-        padding: 40px 3px; 
-    }
-    
-    .project-detail-page .features-section {
-        padding: 40px 0;
-        border-radius: 12px;
-    }
-    
-    .project-detail-page .features-header-content {
-        padding: 0 20px;
-        margin-bottom: 30px;
-    }
-
-    .project-detail-page .features-title {
-        font-size: 2rem;
-    }
-
-    .project-detail-page .features-carousel-wrapper {
-        padding: 0 20px;
-        gap: 15px;
-    }
-
-    .project-detail-page .feature-card {
-        flex: 0 0 80vw; 
-        height: 220px; 
-        padding: 25px;
-    }
-    
-    .project-detail-page .carousel-nav {
-        display: none; 
-    }
-    
-    /* Result Section Mobile */
-    .project-detail-page .result-section {
-        padding: 40px 0;
-    }
-    
-    .project-detail-page .result-content-wrapper {
-        flex-direction: column;
-        gap: 30px;
-        padding: 0 20px;
-    }
-
-    .project-detail-page .result-text-side,
-    .project-detail-page .result-media-side {
-        max-width: 100%; /* Full width on small screens */
-    }
-    
-    .project-detail-page .result-title {
-        font-size: 2rem;
-    }
-}
-
-/* Additional responsive adjustments for very small screens */
-@media (max-width: 480px) {
-    .project-detail-page .about-content-wrapper {
-        padding: 0 20px;
-        gap: 30px;
-    }
-    
-    .project-detail-page .about-project-section, .project-detail-page .more-about-section {
-        padding: 40px 0;
-    }
-
-    .project-detail-page .about-image-side {
-        padding-bottom: 70%; 
-        border-radius: 8px;
-    }
-
-    .project-detail-page .about-title {
-        font-size: 1.8rem;
-    }
-
-    .project-detail-page .about-description p {
-        font-size: 1rem;
-        line-height: 1.6;
-    }
-}
-
-
-
-
-
-
 /* ======================================= */
 /* 7. NEW GALLERY SECTION STYLES */
-/* (Scoped to prevent conflicts) */
 /* ======================================= */
 
 .project-detail-page .gallery-section {
     padding: 80px 0;
     width: 100%;
-    background-color: #f7f7f7; /* Slightly distinct background */
+    background-color: #f7f7f7; 
 }
 
 .project-detail-page .gallery-container {
-    max-width: 1600px;
+    max-width: 90%; /* RESPONSIVE FIX: Adjusted to percentage */
     margin: 0 auto;
     padding: 0 40px;
     text-align: center;
@@ -674,7 +485,6 @@
 
 .project-detail-page .gallery-grid {
     display: grid;
-    /* Responsive Grid Layout: 3 columns on large screens */
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
     list-style: none;
@@ -690,8 +500,7 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     cursor: pointer; 
-    /* NEW: Ensures each grid item itself has a defined aspect ratio or height */
-    aspect-ratio: 16 / 9; /* Or set a fixed height if you prefer */
+    aspect-ratio: 16 / 9; 
 }
 
 .project-detail-page .gallery-item:hover {
@@ -701,7 +510,7 @@
 
 .project-detail-page .gallery-image {
     width: 100%;
-    height: 100%; /* NEW: Make image fill the aspect-ratio defined parent */
+    height: 100%; 
     object-fit: cover; 
     display: block;
     transition: opacity 0.3s;
@@ -732,16 +541,7 @@
 
 /* ======================================= */
 /* 8. NEW GALLERY MODAL STYLES */
-/* (Scoped to prevent conflicts) */
 /* ======================================= */
-
-/* NOTE: .gallery-modal-overlay needs to be global for fixed positioning, 
- * but we apply the scoping class to the top container where it's rendered in JSX 
- * to ensure it only applies when ProjectDetail is visible. 
- * Since modals are often rendered outside the main flow, we must ensure it's
- * either correctly mounted or we scope the rest of the elements.
- * Here, we assume the modal is rendered *inside* the project-detail-page.
- */
 
 .project-detail-page .gallery-modal-overlay {
     position: fixed;
@@ -846,74 +646,11 @@
     to { opacity: 1; }
 }
 
-/* --- Mobile Responsiveness --- */
-
-/* Mobile adjustments for Gallery */
-@media (max-width: 992px) {
-    .project-detail-page .gallery-section {
-        padding: 40px 0;
-    }
-
-    .project-detail-page .gallery-container {
-        padding: 0 20px;
-    }
-    
-    .project-detail-page .gallery-title {
-        font-size: 2rem;
-    }
-
-    .project-detail-page .gallery-grid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-    }
-
-    .project-detail-page .gallery-item {
-        aspect-ratio: 4 / 3; /* Adjust aspect ratio for smaller screens if needed */
-    }
-}
-
-@media (max-width: 576px) {
-    .project-detail-page .gallery-grid {
-        grid-template-columns: 1fr;
-    }
-    .project-detail-page .gallery-item {
-        aspect-ratio: 16 / 9; /* Or adjust as per preference */
-    }
-}
-
-/* Mobile adjustments for modal buttons */
-@media (max-width: 768px) {
-    .project-detail-page .modal-close-button {
-        top: 10px;
-        right: 10px;
-        font-size: 2rem;
-        width: 40px;
-        height: 40px;
-    }
-
-    .project-detail-page .modal-nav-button {
-        padding: 10px;
-        font-size: 1.5rem;
-        width: 45px;
-        height: 45px;
-    }
-    .project-detail-page .modal-prev {
-        left: 10px;
-    }
-    .project-detail-page .modal-next {
-        right: 10px;
-    }
-}
-
-
-
-
 
 /* ======================================= */
-/* 9. Related Services & Projects (SCALED FROM ServiceDetail.css) */
+/* 9. Related Services & Projects & CTA */
 /* ======================================= */
 
-/* 🚀 Enhanced Related Services (Applied to Projects too) */
 .project-detail-page .related-services-section {
   padding: 100px 0;
   background: linear-gradient(180deg, #FFFFFF 0%, #F5F5F5 100%);
@@ -961,7 +698,7 @@
   gap: 35px;
   overflow-x: auto;
   scroll-behavior: smooth;
-  padding: 30px 20px;
+  padding: 30px 4%; /* RESPONSIVE FIX: Used percentage for side padding */
   scrollbar-width: none;
   -ms-overflow-style: none;
   cursor: grab;
@@ -976,7 +713,8 @@
 }
 
 .project-detail-page .service-slide-card {
-  min-width: 380px;
+  min-width: 320px; /* RESPONSIVE FIX: Adjusted min-width */
+  max-width: 380px; /* RESPONSIVE FIX: Added max-width */
   background: #FFFFFF;
   border-radius: 20px;
   overflow: hidden;
@@ -1093,7 +831,7 @@
 }
 
 .project-detail-page .cta-container {
-  max-width: 1200px;
+  max-width: 90%; /* RESPONSIVE FIX: Adjusted from 1200px to percentage */
   margin: 0 auto;
   padding: 0 20px;
   text-align: center;
@@ -1164,15 +902,12 @@
   background-clip: text;
 }
 
-/* Loading and Error States (The original code used .service-detail-page, 
-   I'm correcting it to .project-detail-page for consistency) */
+/* Loading and Error States */
 .project-detail-page .detail-loading {
   padding: 40px 20px;
-  max-width: 1200px;
+  max-width: 90%; /* RESPONSIVE FIX: Adjusted from 1200px to percentage */
   margin: 0 auto;
 }
-
-/* ... (Skeleton classes corrected to .project-detail-page scope) ... */
 
 .project-detail-page .skeleton-breadcrumb {
   height: 16px;
@@ -1293,140 +1028,222 @@
 }
 
 
-/* Enhanced Responsive Design (Corrected to .project-detail-page scope) */
+/* ======================================= */
+/* 🚀 ENHANCED RESPONSIVENESS BREAKPOINTS */
+/* ======================================= */
+
+/* Custom breakpoint for better scaling on larger laptops (1400px - 1025px) */
+@media (max-width: 1400px) {
+    .project-detail-page .about-image-side {
+        padding-bottom: 45%; /* Slightly more height to prevent squeezing */
+    }
+    .project-detail-page .about-text-side {
+        min-width: 300px;
+    }
+    .project-detail-page .project-main-title-new {
+        font-size: 3.5rem;
+    }
+    .project-detail-page .cta-content h2 {
+        font-size: 2.8rem;
+    }
+    .project-detail-page .cta-content p {
+        font-size: 1.2rem;
+    }
+}
+
+/* Tablet / Small Laptop Styles */
 @media (max-width: 1024px) {
-  .project-detail-page .hero-content {
-    gap: 60px;
+  .project-detail-page .new-project-hero-section {
+    min-height: 60vh;
+    padding: 60px 0;
   }
-  
-  .project-detail-page .service-main-title {
-    font-size: 3.2rem;
+  .project-detail-page .project-main-title-new {
+    font-size: 3.0rem;
   }
-  
-  .project-detail-page .features-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  .project-detail-page .project-hero-description-new {
+    font-size: 1rem;
+  }
+
+  .project-detail-page .related-services-section {
+    padding: 80px 0;
   }
 }
 
+/* Mobile / Tablet Styles (Max-width 992px) */
+@media (max-width: 992px) {
+    .project-detail-page .hero-content-new {
+        padding: 0 20px;
+    }
+    .project-detail-page .project-main-title-new {
+        font-size: 2.5rem;
+    }
+    .project-detail-page .project-hero-description-new {
+        font-size: 1rem;
+        margin-bottom: 30px;
+    }
+    
+    .project-detail-page .project-meta-container {
+        flex-direction: column; 
+        gap: 20px;
+    }
+
+    .project-detail-page .tech-stack-section {
+        padding: 30px 0;
+    }
+
+    .project-detail-page .tech-stack-container {
+        justify-content: space-around;
+        gap: 20px 10px;
+        padding: 0 20px;
+    }
+    
+    .project-detail-page .stack-item {
+        width: 80px;
+    }
+
+    .project-detail-page .stack-icon {
+        height: 35px;
+    }
+
+    /* Two-column layout stack vertically */
+    .project-detail-page .about-content-wrapper,
+    .project-detail-page .about-content-wrapper.mirrored,
+    .project-detail-page .result-content-wrapper {
+        flex-direction: column; 
+        gap: 40px;
+        padding: 0 30px;
+    }
+    
+    .project-detail-page .about-project-section, .project-detail-page .more-about-section {
+        padding: 60px 0; 
+    }
+
+    .project-detail-page .about-image-side {
+        flex: 1 1 100%; 
+        min-width: 100%;
+        max-width: 100%; /* RESPONSIVE FIX */
+        width: 100%;
+        padding-bottom: 60%; 
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+    .project-detail-page .about-text-side {
+        flex: 1 1 100%;
+        min-width: 100%; 
+        max-width: 100%; /* RESPONSIVE FIX */
+    }
+
+    .project-detail-page .about-title {
+        font-size: 2rem;
+        text-align: center; 
+    }
+    
+    /* Features Section Mobile */
+    .project-detail-page .features-container-wrapper {
+        padding: 40px 3px; 
+    }
+    .project-detail-page .features-title {
+        font-size: 2rem;
+    }
+    .project-detail-page .features-carousel-wrapper {
+        padding: 0 20px;
+        gap: 15px;
+    }
+    .project-detail-page .feature-card {
+        flex: 0 0 80vw; 
+        height: 220px; 
+        padding: 25px;
+    }
+    .project-detail-page .carousel-nav {
+        display: none; 
+    }
+    
+    /* Result Section Mobile */
+    .project-detail-page .result-text-side,
+    .project-detail-page .result-media-side {
+        max-width: 100%; /* Full width on small screens */
+    }
+    .project-detail-page .result-title {
+        font-size: 2rem;
+    }
+    
+    /* Gallery Section Mobile */
+    .project-detail-page .gallery-section {
+        padding: 40px 0;
+    }
+    .project-detail-page .gallery-container {
+        padding: 0 20px;
+    }
+    .project-detail-page .gallery-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+}
+
+/* Medium Mobile / Tablet (Max-width 768px) */
 @media (max-width: 768px) {
-  .project-detail-page .service-hero-section {
-    padding: 80px 0 60px;
-  }
-  
-  .project-detail-page .hero-content {
-    grid-template-columns: 1fr;
-    gap: 40px;
-    text-align: center;
-  }
-  
-  .project-detail-page .service-main-title {
-    font-size: 2.8rem;
-  }
-  
-  .project-detail-page .service-main-title::after {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  .project-detail-page .service-hero-description {
-    font-size: 1.2rem;
-  }
-  
-  .project-detail-page .hero-actions {
-    justify-content: center;
-  }
-  
-  .project-detail-page .main-image-container {
-    height: 400px;
-  }
-  
-  .project-detail-page .tabs-header {
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .project-detail-page .tab-button {
-    justify-content: center;
-  }
-  
-  .project-detail-page .features-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .project-detail-page .benefit-item {
-    flex-direction: column;
-    gap: 20px;
-    text-align: center;
-  }
-  
   .project-detail-page .service-slide-card {
-    min-width: 300px;
+    min-width: 70vw; /* RESPONSIVE FIX: Allowed card to take more space */
+    max-width: 90vw;
   }
-  
+  .project-detail-page .section-header h2 {
+    font-size: 2.5rem;
+  }
   .project-detail-page .cta-content h2 {
     font-size: 2.5rem;
   }
-  
   .project-detail-page .cta-buttons {
     flex-direction: column;
     align-items: center;
   }
-  
-  .project-detail-page .cta-features {
-    gap: 20px;
+
+  /* Modal Buttons Mobile */
+  .project-detail-page .modal-close-button {
+    top: 10px;
+    right: 10px;
+    font-size: 2rem;
+    width: 40px;
+    height: 40px;
   }
-  
-  .project-detail-page .faq-question {
-    padding: 25px 30px;
+  .project-detail-page .modal-nav-button {
+    padding: 10px;
+    font-size: 1.5rem;
+    width: 45px;
+    height: 45px;
   }
-  
-  .project-detail-page .faq-answer {
-    padding: 0 30px;
+  .project-detail-page .modal-prev {
+    left: 10px;
   }
-  
-  .project-detail-page .faq-item.active .faq-answer {
-    padding: 0 30px 25px;
+  .project-detail-page .modal-next {
+    right: 10px;
   }
 }
 
+/* Small Mobile Styles (Max-width 480px) */
 @media (max-width: 480px) {
-  .project-detail-page .service-main-title {
-    font-size: 2.2rem;
-  }
-  
-  .project-detail-page .service-hero-description {
-    font-size: 1.1rem;
-  }
-  
-  .project-detail-page .cta-button {
-    padding: 16px 28px;
-    font-size: 1rem;
-  }
-  
-  .project-detail-page .tab-panel h3 {
-    font-size: 2rem;
-  }
-  
-  .project-detail-page .section-header h2 {
-    font-size: 2.2rem;
-  }
-  
-  .project-detail-page .feature-card,
-  .project-detail-page .benefit-item {
-    padding: 25px;
-  }
-  
-  .project-detail-page .faq-question {
-    padding: 20px 25px;
-    font-size: 1.1rem;
-  }
-  
-  .project-detail-page .faq-answer {
-    padding: 0 25px;
-    font-size: 1rem;
-  }
-  
-  .project-detail-page .faq-item.active .faq-answer {
-    padding: 0 25px 20px;
-  }
+    .project-detail-page .about-content-wrapper {
+        padding: 0 20px;
+        gap: 30px;
+    }
+    .project-detail-page .about-project-section, .project-detail-page .more-about-section {
+        padding: 40px 0;
+    }
+    .project-detail-page .about-image-side {
+        padding-bottom: 70%; 
+        border-radius: 8px;
+    }
+    .project-detail-page .about-title {
+        font-size: 1.8rem;
+    }
+    .project-detail-page .about-description p {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .project-detail-page .section-header h2 {
+        font-size: 2.2rem;
+    }
+    
+    .project-detail-page .gallery-grid {
+        grid-template-columns: 1fr;
+    }
 }

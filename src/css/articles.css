@@ -1,3 +1,5 @@
+@import './responsive.css';
+
 /* 📰 Articles Section Styles - SLIDER VERSION */
 .articles-section {
     padding: 100px 0;

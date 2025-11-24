@@ -1,0 +1,202 @@
+@import './responsive.css';
+/* RESPONSIVE.CSS - COMPLETE FILE FOR ALL DEVICES */
+
+/* ========== LAPTOP & DESKTOP (1024px+) ========== */
+@media (max-width: 1200px) {
+    .container, .app-container, .main-container {
+        max-width: 1140px;
+        margin: 0 auto;
+    }
+    
+    .header, .navbar {
+        padding: 15px 20px;
+    }
+}
+
+/* ========== SMALL LAPTOP (992px - 1199px) ========== */
+@media (max-width: 1199px) {
+    .container, .app-container, .main-container {
+        max-width: 960px;
+        padding: 0 15px;
+    }
+    
+    .header, .navbar {
+        padding: 12px 15px;
+    }
+    
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.75rem; }
+}
+
+/* ========== TABLET LANDSCAPE (768px - 991px) ========== */
+@media (max-width: 991px) {
+    .container, .app-container, .main-container {
+        max-width: 720px;
+        padding: 0 12px;
+    }
+    
+    .header, .navbar {
+        padding: 10px 12px;
+        flex-direction: column;
+    }
+    
+    .menu, .nav-links {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    h1 { font-size: 1.8rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.3rem; }
+    
+    .button, .btn {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
+/* ========== TABLET PORTRAIT (576px - 767px) ========== */
+@media (max-width: 767px) {
+    .container, .app-container, .main-container {
+        max-width: 540px;
+        padding: 0 10px;
+    }
+    
+    .header, .navbar {
+        padding: 8px 10px;
+    }
+    
+    .logo { font-size: 1.2rem; }
+    
+    h1 { font-size: 1.6rem; }
+    h2 { font-size: 1.4rem; }
+    h3 { font-size: 1.2rem; }
+    p { font-size: 0.9rem; }
+    
+    .grid, .row, .flex-container {
+        flex-direction: column;
+    }
+    
+    .col, .grid-item {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
+/* ========== LARGE MOBILE (425px - 575px) ========== */
+@media (max-width: 575px) {
+    .container, .app-container, .main-container {
+        max-width: 100%;
+        padding: 0 8px;
+    }
+    
+    .header, .navbar {
+        padding: 6px 8px;
+    }
+    
+    .logo { font-size: 1.1rem; }
+    
+    h1 { font-size: 1.4rem; }
+    h2 { font-size: 1.2rem; }
+    h3 { font-size: 1.1rem; }
+    p { font-size: 0.85rem; }
+    
+    .button, .btn {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+    }
+}
+
+/* ========== MEDIUM MOBILE (375px - 424px) ========== */
+@media (max-width: 424px) {
+    .container, .app-container, .main-container {
+        padding: 0 5px;
+    }
+    
+    .header, .navbar {
+        padding: 5px;
+    }
+    
+    .logo { font-size: 1rem; }
+    
+    h1 { font-size: 1.3rem; }
+    h2 { font-size: 1.1rem; }
+    h3 { font-size: 1rem; }
+    p { font-size: 0.8rem; }
+    
+    .button, .btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+}
+
+/* ========== SMALL MOBILE (320px - 374px) ========== */
+@media (max-width: 374px) {
+    .container, .app-container, .main-container {
+        padding: 0 3px;
+    }
+    
+    .header, .navbar {
+        padding: 3px;
+    }
+    
+    .logo { font-size: 0.9rem; }
+    
+    h1 { font-size: 1.2rem; }
+    h2 { font-size: 1rem; }
+    h3 { font-size: 0.9rem; }
+    p { font-size: 0.75rem; }
+    
+    .button, .btn {
+        padding: 5px 10px;
+        font-size: 0.7rem;
+    }
+}
+
+/* ========== EXTRA SMALL MOBILE (under 320px) ========== */
+@media (max-width: 319px) {
+    .container, .app-container, .main-container {
+        padding: 0 2px;
+    }
+    
+    .header, .navbar {
+        padding: 2px;
+        font-size: 0.7rem;
+    }
+    
+    .logo { font-size: 0.8rem; }
+    
+    h1 { font-size: 1.1rem; }
+    h2 { font-size: 0.9rem; }
+    h3 { font-size: 0.8rem; }
+    p { font-size: 0.7rem; }
+}
+
+/* ========== LANDSCAPE MODE ========== */
+@media (max-height: 500px) and (orientation: landscape) {
+    .header, .navbar {
+        padding: 5px;
+        position: fixed;
+        top: 0;
+        width: 100%;
+    }
+    
+    .container {
+        margin-top: 60px;
+    }
+}
+
+/* ========== DARK MODE SUPPORT ========== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #1a1a1a;
+        --text-color: #ffffff;
+    }
+}
+
+/* ========== HIGH CONTRAST MODE ========== */
+@media (prefers-contrast: high) {
+    .button, .btn {
+        border: 2px solid #000000;
+    }
+}
