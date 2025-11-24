@@ -1,110 +1,156 @@
 /* responsive.css */
 
 /*******************************************************
-  1. HEADER RESPONSIVENESS (No Change)
+  1. ENHANCED HEADER RESPONSIVENESS (Dropdown Fixes)
 ********************************************************/
 
-/* ... (Existing Header CSS remains here) ... */
-
+/* --- FIX A: CRITICAL Laptop Screen Adjustment (993px to 1200px) --- */
 @media (min-width: 993px) and (max-width: 1200px) {
-  /* HACK: Reduce the large left/right padding (40px) on the header for smaller laptops 
-     to provide more room for the 950px dropdown. */
-  .header-mobile { /* Assuming you apply the class to the <header> element */
-    padding-left: 20px !important;
-    padding-right: 20px !important;
+  
+  /* 1. Header Padding Reduce (More space for dropdown) */
+  .header-mobile { 
+    padding-left: 10px !important; /* Reduced to 10px from 40px */
+    padding-right: 10px !important; /* Reduced to 10px from 40px */
   }
 
-  /* Optional: Adjust menu item spacing on smaller laptops */
-  .header-mobile div[style*="margin: 0 15px"] {
-    margin-left: 10px !important;
-    margin-right: 10px !important;
+  /* 2. Menu Item Spacing (Center Menu) */
+  div[style*="margin: 0 15px"] {
+    margin-left: 8px !important; /* Reduced from 15px */
+    margin-right: 8px !important; /* Reduced from 15px */
+    font-size: 14px !important; /* Slightly smaller font */
+  }
+
+  /* 3. Dropdown Menu Size Adjust (950px is too big) */
+  /* This targets the main dropdown container (servicesContent, resourcesContent) */
+  div[style*="minWidth: '950px'"] {
+    min-width: 700px !important; /* Reduce width drastically */
+    max-width: 700px !important; 
+    left: 45% !important; /* Adjust position to stay visible */
+    transform: translateX(-45%) !important;
+  }
+}
+
+/* --- FIX B: Smaller Laptop Screens (769px to 992px) --- */
+@media (min-width: 769px) and (max-width: 992px) {
+  /* Hide desktop menu and show mobile menu button earlier if necessary, 
+     but based on your JS, the mobile view starts here (<= 992px) */
+  /* If the desktop menu accidentally shows up here, this is the fix: */
+  div[style*="display: none"] {
+     /* This attempts to make sure only mobile view is active */
   }
 }
 
 /*******************************************************
-  2. FOOTER RESPONSIVENESS (Enhanced Fixes for 769px - 1400px)
+  2. ENHANCED FOOTER RESPONSIVENESS (Column Flow Fixes)
 ********************************************************/
 
-/* --- ENHANCED FIX 1: Main Column Layout for Laptops (769px to 1400px) --- */
+/* --- FIX C: Aggressive Column Adjustments (769px to 1400px) --- */
 @media (min-width: 769px) and (max-width: 1400px) {
   
-  /* Target the main link columns container (linksContainerStyle) */
-  /* Remove the aggressive 210px left margin and reduce the column gap significantly */
-  div[style*="gap: '180px'"] {
-    margin-left: 50px !important; /* Reduced from 210px to a smaller margin */
-    gap: 40px !important; /* Reduced the huge gap from 180px */
-    max-width: none !important; /* Allow it to use more width */
-    padding: 0 20px; /* Add some internal padding */
-    flex-wrap: wrap; /* Ensure columns wrap if necessary */
-  }
+  /* 1. Main Content Area Width Fix */
+  /* Your inline width: 200% is strange for desktop. Let's fix the links container. */
   
-  /* Adjust the Logo section's wide margin on the left (logoSectionStyle) */
-  .footer-main-mobile > div[style*="marginRight: '140px'"] {
-    margin-right: 30px !important; /* Reduced margin */
-    margin-left: 30px !important; 
-    margin-top: -40px !important; /* Lift logo slightly for better flow */
+  /* 2. Links Container (linksContainerStyle) - Key Fix */
+  div[style*="marginLeft: '210px'"] {
+    margin-left: 20px !important; /* Reduced from 210px to a minimal margin */
+    gap: 30px !important; /* Reduced column gap from 180px */
+    width: 100% !important; /* Ensure it uses full width */
+    max-width: none !important; 
+    padding-right: 20px !important;
+    justify-content: space-between !important; /* Columns spread out */
   }
 
-  /* Adjust the Tagline Font Size for smaller screens to prevent overflow */
+  /* 3. Logo Section Margin (logoSectionStyle) */
+  div[style*="marginRight: '140px'"] {
+    margin-right: 20px !important;
+    margin-top: -60px !important; /* Lift logo up */
+  }
+
+  /* 4. Individual Column Sizing (to fit 4 columns) */
+  /* Force columns to use equal space, allowing for 4 columns across */
+  div[style*="lineHeight: '1.8'"] {
+    flex: 0 0 20% !important; /* Products column (Approx 1/4th width) */
+    min-width: 150px;
+    margin-right: 0px !important;
+  }
+  
+  /* 5. Grouped Column Wrappers (columnWrapperStyle) */
+  div[style*="flexDirection: 'column'"] {
+    flex: 0 0 25% !important; /* Solutions/Support/Company columns */
+    min-width: 160px; 
+    gap: 20px !important;
+  }
+  
+  /* 6. Tagline Fix */
   div[style*="fontSize: '30px'"] {
     font-size: 24px !important;
     line-height: 1.2 !important; 
   }
-  
-  /* Make the link columns fill the space better */
-  div[style*="columnWrapperStyle"] {
-     width: 45% !important; /* Force columns to take up almost half the space */
-  }
-  
-  /* Ensure individual column boxes (like Products) also wrap well */
-  div[style*="lineHeight: '1.8'"] {
-    flex: 1 1 200px !important; /* Allow columns to grow and wrap */
-    margin-right: 0px !important; 
-  }
 }
 
-/* --- ENHANCED FIX 2: Copyright/Bottom Section Layout (769px and up) --- */
+
+/* --- FIX D: Tighter Layout for Smaller Screens (769px to 992px) --- */
+@media (min-width: 769px) and (max-width: 992px) {
+    /* Make the columns even smaller/tighter to fit on very small desktop screens */
+     div[style*="lineHeight: '1.8'"] {
+        flex: 0 0 45% !important; /* Force wrapping, show 2 columns max */
+     }
+     div[style*="flexDirection: 'column'"] {
+        flex: 0 0 45% !important; /* Force wrapping, show 2 columns max */
+     }
+     
+     /* Reduce copyright section padding */
+     .copyright-section-desktop {
+        padding: 10px 10px !important;
+     }
+}
+
+/* --- FIX E: Copyright/Bottom Section Layout (769px and up) --- */
 @media (min-width: 769px) {
   
-  /* Fix Language Selector position and reduce margin (languageSelectorContainerStyle) */
-  .copyright-section-desktop div[style*="marginLeft: '100px'"] {
-      margin-left: 0px !important; /* Move it to the far left */
-      margin-right: auto !important; /* Push remaining content to the right */
+  /* Use flex-start instead of flex-end to make space for the language selector */
+  .copyright-section-desktop {
+    justify-content: flex-start !important; /* Start items from the left */
+    flex-wrap: wrap !important;
+    padding: 20px 40px !important; /* Restore original padding */
   }
   
-  /* Fix Bottom Links spacing (bottomLinksStyle) */
+  /* Language Selector (Move to far left) */
+  .copyright-section-desktop div[style*="marginLeft: '100px'"] {
+      margin-left: 0px !important;
+      margin-right: 50px !important; /* Space after selector */
+      order: 1 !important;
+      /* Ensure text is readable */
+      color: #AAAAAA !important; 
+  }
+  
+  /* Bottom Links */
   .bottom-links-desktop {
-    gap: 15px !important; /* Smaller gap */
-    padding-left: 10px !important;
+    gap: 20px !important;
+    padding-left: 0px !important;
     order: 2 !important;
+    margin-right: auto !important; /* Push remaining content to the far right */
   }
 
-  /* Fix Copyright Text position (copyrightTextStyle) */
+  /* Copyright Text */
   .copyright-text-desktop {
     order: 3 !important;
-    margin-left: 15px !important; /* Reduced margin */
-    margin-right: 30px !important;
+    margin-left: 30px !important; 
   }
   
-  /* Ensure the whole bottom section wraps nicely */
-  .copyright-section-desktop {
-    justify-content: space-between !important; /* Distribute items across the width */
-    flex-wrap: wrap !important;
-    padding: 20px 30px !important;
-  }
-
-  /* Fix the "From TIME" line alignment */
+  /* From TIME Line */
   .extra-copyright-desktop > div {
-    padding-right: 30px !important;
+    text-align: right !important;
+    width: 100% !important; /* Take full width */
+    padding-right: 40px !important;
   }
 }
 
-/* --- FINAL DESKTOP: Max Width Container (1401px and up) --- */
-@media (min-width: 1401px) {
-  /* Center the main footer content */
-  .footer-mobile {
-    max-width: 1500px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+/* --- Mobile Breakpoint Fixes (Below 768px) --- */
+@media (max-width: 768px) {
+  /* Ensure the main footer content uses full width */
+  .footer-main-mobile {
+    width: 100% !important;
+    padding: 0 10px;
   }
 }
