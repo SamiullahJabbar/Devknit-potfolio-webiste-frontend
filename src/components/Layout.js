@@ -1,4 +1,12 @@
-// File: Header.js
+// File: Layout.js (Combining Header, Footer, and Layout Components)
+
+// *************************************************************
+// NEW IMPORT: Adding the responsive adjustments CSS file here
+// Make sure this file exists in the same directory!
+import './responsive.css'; 
+// *************************************************************
+
+// --- 1. Header Component (Original Code - UNTOUCHED) ---
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -767,8 +775,6 @@ const Header = () => {
     </div>
   );
 
-
-
   // --- Header Render ---
 
   return (
@@ -835,7 +841,7 @@ const Header = () => {
   );
 };
 
-// --- 2. Footer Component ---
+// --- 2. Footer Component (Original Code - UNTOUCHED) ---
 
 const Footer = () => {
   const navigate = useNavigate();

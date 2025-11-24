@@ -1,0 +1,98 @@
+/* responsive.css */
+
+/*******************************************************
+  1. HEADER RESPONSIVENESS (Fixing Dropdown and Padding)
+********************************************************/
+
+/* --- Adjust Header Padding/Margin for Larger Screens (993px and up) --- */
+/* Your inline style uses 40px padding. Let's ensure the content stays centered 
+   and doesn't feel too wide on huge screens. */
+@media (min-width: 1400px) {
+  /* Set a max-width on the main header content if needed, 
+     or just adjust the padding for better edge spacing. */
+  .header-mobile { /* Assuming you use a class on the outer header element */
+    /* If your header isn't containerized, this might not apply directly 
+       without changing the inline style, but we target the content area. */
+  }
+}
+
+/* --- CRITICAL FIX: Laptop Screen Adjustment (993px to 1200px) --- */
+/* The inline dropdown width is 950px, which breaks layouts below ~1050px.
+   We need to reduce the padding or scale elements slightly in this range.
+   Since the styles are inline, we can only target general screen properties 
+   or rely on the browser's responsiveness, but we can target the *container* if we had a class. Since we don't, the most effective CSS fix is to 
+   target the elements *around* the dropdown to give it more space. */
+@media (min-width: 993px) and (max-width: 1200px) {
+  /* HACK: Reduce the large left/right padding (40px) on the header for smaller laptops 
+     to provide more room for the 950px dropdown. */
+  .header-mobile { /* Assuming you apply the class to the <header> element */
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  /* Optional: Adjust menu item spacing on smaller laptops */
+  .header-mobile div[style*="margin: 0 15px"] {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+  }
+}
+
+/*******************************************************
+  2. FOOTER RESPONSIVENESS (Fixing Column Layout)
+********************************************************/
+
+/* --- Footer Column Fix for Mid-Sized Desktops/Laptops (769px to 1400px) --- */
+/* Your inline style for linksContainerStyle uses a huge gap: 'gap: 180px', 
+   and a large marginLeft: '210px', which causes wrapping/overflow issues 
+   on medium screens (769px to ~1400px). */
+@media (min-width: 769px) and (max-width: 1400px) {
+  
+  /* Target the main link columns container */
+  .copyright-section-desktop + div[style*="linksContainerStyle"] {
+    margin-left: 100px !important; /* Reduce the left margin */
+    gap: 50px !important; /* Reduce the huge gap between columns */
+    /* Ensure columns wrap if space is tight */
+    flex-wrap: wrap; 
+  }
+  
+  /* Adjust the logo section's wide margin */
+  .footer-main-mobile div[style*="marginRight: '140px'"] {
+    margin-right: 50px !important;
+  }
+
+  /* Target the column title spacing if they are too wide */
+  /* This relies on the inline style being consistent, which it is. */
+  div[style*="lineHeight: '1.8'"] {
+    margin-right: 15px !important; /* Add slight margin between columns if gap is small */
+  }
+  
+  /* Reduce language selector margin */
+  .copyright-section-desktop div[style*="marginLeft: '100px'"] {
+      margin-left: 50px !important;
+  }
+  
+  /* Adjust copyright section margins to prevent links from breaking prematurely */
+  .copyright-section-desktop {
+    padding: 20px 20px !important;
+  }
+}
+
+/* --- Final Desktop Adjustment (1401px and up) --- */
+@media (min-width: 1401px) {
+    /* Center the footer content or give it a consistent max-width */
+    .footer-mobile {
+        max-width: 1440px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* --- Mobile Breakpoint Fixes (If needed, check if 768px break is clean) --- */
+/* Your mobile styles already exist in Header.css/Footer.css for < 768px, 
+   but this ensures smooth transition into the mobile layout at 769px. */
+@media (max-width: 768px) {
+  /* Ensure the main footer content uses full width */
+  .footer-main-mobile {
+    width: 100% !important;
+  }
+}
