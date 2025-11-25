@@ -1,28 +1,282 @@
 /* File: Footer.css */
 
+/* 1. Base Setup for REM Units and Accessibility */
+:root {
+  font-size: 16px; 
+}
+
+/* Base Styles for Footer */
+.sq-footer-container {
+  background-color: #000;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  padding: 2.5rem 0 0; 
+  border-top: 1px solid #333; 
+}
+
+/* --- TOP SECTION (Branding + Links Grid) --- */
+.sq-footer-top-section {
+  padding: 0 2.5rem 3.75rem; 
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 🔥🔥 UPDATED: Left Side Branding (Desktop & Mobile Unified) 🔥🔥 */
+.sq-footer-branding {
+  /* Default Desktop styles */
+  display: flex;
+  flex-direction: column;
+  /* --- FIX: Top alignment ke liye 'justify-content' hata diya ya flex-start kar diya --- */
+  align-items: flex-start; 
+  justify-content: flex-start; /* FIX: Content ko top (start) mein rakhega */
+  /* ----------------------------------------------------------------------------------- */
+  max-width: 25%;
+  width: 25%; 
+  padding-right: 3.125rem; 
+}
+
+.sq-footer-logo {
+  width: 150px; 
+  height: auto;
+  margin-bottom: 0.5rem; 
+  /* filter: invert(1);  */
+}
+
+.sq-footer-tagline {
+  font-size: 1.25rem; /* 20px */
+  font-weight: 400;
+  line-height: 1.0;
+  margin: 0;
+  color: #ccc; 
+  text-align: left; 
+}
+
+
+/* Right Side Links Grid (Desktop: 75% width, 4 Columns) */
+.sq-footer-links-grid {
+  width: 75%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 2.5rem; 
+}
+
+.sq-footer-heading {
+  font-size: 0.875rem; 
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 0.9375rem; 
+}
+
+.sq-footer-sub-section {
+  margin-top: 1.875rem; 
+}
+
+.sq-footer-sub-heading {
+  margin-bottom: 0.9375rem; 
+}
+
+.sq-footer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sq-footer-list li {
+  margin-bottom: 0.3125rem; 
+}
+
+.sq-footer-list a {
+  color: #ccc;
+  text-decoration: none;
+  font-size: 0.8125rem; 
+  line-height: 1.6;
+}
+
+.sq-footer-list a:hover {
+  color: #fff;
+}
+
+/* --- BOTTOM BAR SECTION --- */
+.sq-footer-bottom-bar {
+  padding: 0 2.5rem 0; 
+}
+
+.sq-footer-certification {
+  font-size: 0.75rem; 
+  color: #ccc;
+  padding: 1.25rem 0; 
+}
+
+.sq-footer-separator {
+  border: 0;
+  border-top: 1px solid #333;
+  margin: 0;
+}
+
+.sq-footer-bottom-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.25rem 0; 
+}
+
+.sq-footer-language {
+  font-size: 0.8125rem; 
+}
+
+.sq-footer-language span {
+  color: #ccc;
+  cursor: pointer;
+}
+
+.sq-footer-legal-links {
+  display: block;
+  font-size: 0.8125rem; 
+  text-align: right;
+}
+
+.sq-footer-legal-top-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end; 
+    margin-bottom: 0.3125rem; 
+}
+
+.sq-footer-legal-top-line a {
+  color: #ccc;
+  text-decoration: none;
+  margin-left: 1.25rem; 
+}
+
+.sq-footer-legal-top-line span {
+  color: #999;
+  margin-left: 1.25rem; 
+}
+
+.sq-footer-time-license {
+    color: #999;
+    font-size: 0.6875rem; 
+    margin: 5;
+}
+
+
+/* --- ⬇️ RESPONSIVENESS START (For non-Accordion Tablet/Laptop) ⬇️ --- */
+
+/* 1. Tablet/Small Laptop (Max-width: 1024px) */
+@media (max-width: 1024px) {
+  .sq-footer-top-section {
+    flex-direction: column; 
+  }
+  
+  .sq-footer-branding {
+    max-width: 100%;
+    width: 100%;
+    margin-bottom: 2.5rem; 
+    padding-right: 0;
+    /* FIX: Tablet size par bhi left align rehna chahiye */
+    align-items: flex-start; 
+    justify-content: flex-start;
+  }
+
+  .sq-footer-links-grid {
+    width: 100%;
+    gap: 1.25rem; 
+  }
+}
+
+/* 2. Mobile (Max-width: 768px) - General non-accordion styles */
+@media (max-width: 768px) {
+    .sq-footer-top-section {
+        padding: 0 1.25rem 2.5rem; 
+    }
+
+    .sq-footer-bottom-bar {
+        padding: 0 1.25rem; 
+    }
+
+    .sq-footer-links-grid {
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 2.5rem 1.25rem; 
+    }
+
+    .sq-footer-bottom-content {
+        flex-direction: column;
+        align-items: flex-start; 
+    }
+
+    .sq-footer-legal-links {
+        width: 100%; 
+        margin-top: 0.9375rem; 
+        text-align: left; 
+    }
+    
+    .sq-footer-legal-top-line {
+        justify-content: flex-start; 
+    }
+
+    .sq-footer-legal-top-line a, 
+    .sq-footer-legal-top-line span {
+        margin-left: 0;
+        margin-right: 1.25rem; 
+        margin-bottom: 0.625rem; 
+    }
+}
+
+
 /* =============================================================== */
-/* --- FOOTER MOBILE ACCORDION STYLES (max-width: 768px) --- */
+/* 🔥🔥🔥 FOOTER MOBILE ACCORDION STYLES (max-width: 768px) 🔥🔥🔥 */
 /* =============================================================== */
 
 @media (max-width: 768px) {
     
     /* --- Footer Base Container --- */
-    .footer-mobile {
+    .sq-footer-container.footer-mobile {
         padding: 0 20px 10px 20px !important; 
         top: 0 !important; 
+    }
+
+    /* --- Branding section in mobile (centralized) --- */
+    /* Mobile par center align hi rakha gaya hai jaisa pichli baat set kiya tha */
+    .sq-footer-branding-mobile { 
+        max-width: 100%;
+        width: 100%;
+        padding-right: 0;
+        align-items: center; /* Mobile par center align */
+        margin-bottom: 30px; 
+        padding-top: 30px; 
+    }
+
+    .sq-footer-branding-mobile .sq-footer-logo {
+        width: 120px; 
+        margin-bottom: 0.5rem;
+    }
+    
+    .sq-footer-branding-mobile .sq-footer-tagline {
+        font-size: 1rem; 
+        text-align: center;
+    }
+
+    /* Hide the desktop grid in mobile view */
+    .sq-footer-top-section {
+        display: none;
+    }
+
+    /* Show the accordion container in mobile view */
+    .footer-accordion-container {
+        display: block; 
+        width: 100%;
+        margin-left: 0 !important;
     }
 
     /* --- Main Content Area (Accordion Links) --- */
     .footer-main-mobile {
         padding-bottom: 20px !important; 
-        /* border-bottom: 1px solid #333 !important;  */
         width: 100% !important;
         margin: 0 !important;
-    }
-
-    .footer-accordion-container {
-        width: 100%;
-        margin-left: 0 !important;
+        border-top: 1px solid #333; 
     }
 
     /* Accordion Item */
@@ -77,47 +331,6 @@
         color: white;
     }
     
-    /* --- Mobile Logo Section --- */
-    .footer-logo-mobile-section {
-        padding: 30px 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center; 
-        /* border-bottom: 1px solid #333; */
-        margin-bottom: 20px;
-    }
-
-    .footer-logo-container-mobile {
-        display: flex;
-        flex-direction: column; 
-        align-items: center;
-        font-size: 24px;
-        font-weight: bold;
-        cursor: pointer;
-        margin-bottom: 15px;
-    }
-    
-    .footer-logo-container-mobile img {
-        width: 100px;
-        height: 100px; 
-        margin-right: 0 !important;
-        margin-bottom: 10px; 
-    }
-
-    .footer-logo-text-mobile {
-        margin-left: 0 !important;
-        font-size: 30px;
-        line-height: 1;
-    }
-
-    .footer-tagline-mobile {
-        font-size: 20px;
-        font-weight: normal;
-        color: white;
-        margin-top: -90px; 
-        margin-bottom: 100px;
-        text-align: center;
-    }
 
     /* Language Dropdown Container Fix */
     .footer-language-selector-container {
@@ -128,7 +341,6 @@
     }
 
     .footer-language-selector-container .language-dropdown {
-        /* Dropdown ki width aur styles set kiye hain taaki woh screen se bahar na jaye */
         background-color: #1c1c1c;
         color: white;
         border: 1px solid #333;
@@ -148,7 +360,6 @@
 
     /* --- Copyright Section Order Fix --- */
     .copyright-section-mobile {
-        /* Reverse order hata kar specific order set kiya */
         flex-direction: column !important; 
         align-items: center !important; 
         margin-top: 0 !important;
@@ -170,7 +381,7 @@
     order: 2;
     font-size: 16px !important; 
     margin-top: 5px;
-    margin-bottom: 20px; 
+    margin-bottom: 25px; 
     text-align: center;
     color: #ffffff !important;
 }
@@ -178,15 +389,12 @@
     /* 3. Bottom Links */
     .bottom-links-mobile {
         order: 3;
-        gap: 20px !important; /* Links ke beech mein space */
+        gap: 20px !important; 
         margin-left: 0 !important;
         padding-left: 0 !important;
         margin-bottom: 20px;
         justify-content: center;
-        /* Links ko thoda upar karne ke liye font size adjust kiya */
-        /* line-height: 1.2;  */
         padding-top: 5px;
-        /* border-top: 1px solid #333; */
         width: 100%;
     }
     

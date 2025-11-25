@@ -4,7 +4,65 @@
 
 @media (max-width: 992px) {
     
-    /* ... (Existing Header and Mobile Menu Base Styles wahi hain) ... */
+    /* Header padding for mobile */
+    .header-main {
+        padding: 0 20px; 
+    }
+
+    /* Hide utility/center menu on mobile */
+    .header-center-menu.hidden,
+    .header-utility-container.hidden {
+        display: none;
+    }
+    
+    /* --- NEW: Mobile Utility Wrapper for Translate Icon and Toggle Button --- */
+    .mobile-utility-wrapper {
+        display: none; /* Default hide */
+        align-items: center;
+        z-index: 1001;
+    }
+    .mobile-utility-wrapper.show {
+        display: flex; /* Show on mobile */
+    }
+    
+    /* NEW: Google Translate Placeholder styling for mobile view */
+    .google-translate-mobile-placeholder {
+        /* Desktop icon jaisa dikhane ke liye */
+        margin-right: 15px; 
+        display: flex;
+        align-items: center;
+        height: 30px; 
+    }
+    
+    /* FIX: Force show Google Translate widget and make it look like desktop */
+    /* Targetting the internal IDs/classes */
+    #google_translate_element_mobile,
+    .google-translate-mobile-placeholder,
+    .google-translate-mobile-placeholder .goog-te-gadget {
+        display: flex !important; 
+        align-items: center;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    .google-translate-mobile-placeholder .goog-te-gadget-simple {
+        display: flex !important; 
+        background-color: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+    }
+
+    /* Globe Icon aur Dropdown text ko white karna */
+    .google-translate-mobile-placeholder .goog-te-gadget-simple a {
+        color: white !important; 
+        text-decoration: none !important;
+        font-size: 14px !important; 
+    }
+    
+    /* Remove the unwanted separator line (usually a vertical bar) */
+    .google-translate-mobile-placeholder .goog-te-gadget-simple .VIpgJd-ZVi9od-xl07O-t7I0Qe-hrfTtc {
+        display: none !important;
+    }
     
     /* --- Mobile Menu Overlay --- */
     .mobile-menu-overlay {
@@ -54,12 +112,25 @@
     
     /* --- Submenu Container (Collapsible Content) --- */
     .mobile-submenu {
+        max-height: 0;
         overflow: hidden;
         transition: max-height 0.5s ease-in-out, padding 0.3s ease-in-out;
         padding: 0;
     }
 
-    /* --- Submenu Group Title (DEVELOPMENT, SECURITY, GET INSPIRED, etc.) --- */
+    .services-submenu.open {
+        max-height: 1200px; /* Large enough for content */
+        padding: 10px 0;
+        border-bottom: 1px solid #333; 
+        margin-bottom: 5px; 
+    }
+
+    .resources-submenu.open {
+        max-height: 800px;
+        padding: 10px 0;
+        border-bottom: 1px solid #333;
+    }
+
     .mobile-submenu-title {
         font-size: 13px;
         font-weight: bold;
@@ -68,12 +139,12 @@
         margin-top: 15px; 
         margin-bottom: 5px;
         letter-spacing: 0.5px;
+        padding-left: 5px;
     }
     
-    /* --- Individual Links within Submenu --- */
     .mobile-submenu-link {
         font-size: 18px; 
-        padding: 8px 0;
+        padding: 8px 5px;
         color: white;
         cursor: pointer;
         transition: color 0.2s ease;
@@ -85,60 +156,25 @@
 
     /* --- Special Links/Boxes --- */
     
-    /* View All Features */
     .mobile-submenu-link.view-all-features {
         font-weight: 600;
-        padding: 15px 0;
+        padding: 15px 5px;
         border-top: 1px solid #333;
         margin-top: 10px;
     }
 
-    /* B2B Section Container */
-    .mobile-b2b-section {
-        margin-top: 20px;
-        margin-bottom: 15px;
-    }
-
-    /* Circle Box */
-    .mobile-circle-box {
-        background-color: #1c1c1c; 
-        padding: 15px;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-    
-    .mobile-circle-title {
-        color: white; 
-        font-size: 20px; 
-        font-weight: 500; 
-        margin-bottom: 5px; 
-    }
-    
-    .mobile-circle-description {
-        color: #AAAAAA; 
-        font-size: 14px; 
-    }
-
-    /* --- NEW: GET INSPIRED Section Styles --- */
-    
-    /* GET INSPIRED Heading (Already uses .mobile-submenu-title class) */
-    .mobile-get-inspired-title {
-        /* Additional margin if needed, but the base class covers it */
-    }
-
-    /* Made with Devknit Box (Similar to Circle Box) */
     .mobile-get-inspired-box {
         background-color: #1c1c1c; 
         padding: 15px;
         border-radius: 4px;
         cursor: pointer;
-        margin-top: 10px; /* Spacing below the GET INSPIRED title */
+        margin-top: 10px; 
         margin-bottom: 15px; 
     }
 
     .mobile-get-inspired-title-box {
         color: white; 
-        font-size: 20px; /* Larger font size as per image */
+        font-size: 20px; 
         font-weight: 500; 
         margin-bottom: 5px; 
     }
@@ -147,8 +183,6 @@
         color: #AAAAAA; 
         font-size: 14px; 
     }
-    /* --- END: GET INSPIRED Section Styles --- */
-    
     
     /* --- CTA Button --- */
     .mobile-cta-container {
@@ -168,4 +202,381 @@
         letter-spacing: 1px; 
         text-transform: uppercase;
     }
+}
+
+/* ========================================================================= */
+/* --- GENERAL DESKTOP STYLES (ALIGNMENT, ETC.) --- */
+/* ========================================================================= */
+
+.header-main {
+    background-color: #000000;
+    color: white;
+    padding: 0 40px; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 65px;
+    border-bottom: 1px solid #333;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.header-logo-container { 
+    display: flex; 
+    align-items: center; 
+    font-size: 18px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    flex-shrink: 0; 
+    z-index: 1001;
+}
+
+.header-logo-img {
+    width: 130px; 
+    height: 80px; 
+    margin-right: 10px;
+    object-fit: contain;
+}
+
+.header-center-menu { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    flex-grow: 1; 
+}
+
+.header-utility-container { 
+    display: flex; 
+    align-items: center; 
+    flex-shrink: 0; 
+    max-width: 400px; 
+}
+
+.header-menu-item { 
+    position: relative; 
+    margin: 0 15px; 
+    padding: 5px 0; 
+    cursor: pointer; 
+    font-weight: 500; 
+    font-size: 15px; 
+    letter-spacing: 0.5px; 
+}
+
+.header-cta-button {
+    background-color: white; 
+    color: #000000; 
+    border: none; 
+    padding: 10px 15px; 
+    margin-left: 15px; 
+    font-size: 13px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    border-radius: 1px; 
+    letter-spacing: 1px; 
+    text-transform: uppercase;
+}
+
+.mobile-menu-toggle-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1001;
+    display: none; 
+}
+
+.mobile-menu-toggle-button.show {
+    display: block; 
+}
+
+/* --- DROPDOWN MENU STYLES (Desktop) --- */
+.dropdown-menu {
+    position: absolute; 
+    top: 55px; 
+    left: 50%; 
+    transform: translateX(-50%) scale(0.95); 
+    background-color: #000000; 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6); 
+    z-index: 100; 
+    padding: 25px 2%; 
+    display: flex; 
+    flex-direction: row;
+    border-radius: 4px; 
+    opacity: 0; 
+    visibility: hidden; 
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease; 
+    pointer-events: none;
+    max-width: 95vw; 
+    width: auto; 
+}
+
+.dropdown-menu.show { 
+    opacity: 1; 
+    visibility: visible; 
+    pointer-events: auto; 
+    transform: translateX(-50%) scale(1);
+}
+
+.services-dropdown-menu {
+    width: 70vw; 
+    max-width: 800px; 
+}
+
+.resources-dropdown-menu {
+    width: 60vw;
+    max-width: 800px; 
+}
+
+
+@media (max-width: 1200px) {
+    .services-dropdown-menu {
+        width: 850px;
+    }
+}
+
+@media (max-width: 1050px) {
+    .services-dropdown-menu {
+        width: 750px;
+    }
+    .resources-dropdown-menu {
+        width: 700px;
+    }
+    .header-main {
+        padding: 0 25px; 
+    }
+}
+
+@media (max-width: 992px) {
+    .dropdown-menu {
+        display: none !important;
+    }
+}
+
+/* --- DROPDOWN COLUMN AND ITEM STYLES --- */
+.dropdown-column { 
+    padding: 0 20px; 
+    flex: 1; 
+}
+
+.services-dropdown-menu .dropdown-column-1 { padding-right: 40px; }
+.services-dropdown-menu .dropdown-column-2 { padding-left: 20px; padding-right: 80px; }
+.services-dropdown-menu .dropdown-column-3-security-tools { 
+    padding-left: 20px; 
+    padding-right: 20px; 
+    border-right: 1px solid #333; 
+}
+
+.resources-dropdown-menu .dropdown-column-2-blog-contact {
+    border-right: 1px solid #333;
+}
+
+.dropdown-column-title { 
+    font-size: 14px; 
+    font-weight: bold; 
+    color: #878787; 
+    margin-bottom: 30px; 
+    text-transform: uppercase; 
+    padding-top: 5px; 
+}
+
+.dropdown-item-style { 
+    font-size: 13px; 
+    padding: 7px 0; 
+    cursor: pointer; 
+    white-space: nowrap; 
+    color: #FFFFFF;
+    transition: color 0.2s ease;
+}
+
+.dropdown-view-all-features {
+    margin-top: 55px; 
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffffff; 
+}
+
+.dropdown-tools-section {
+    margin-top: 20px;
+}
+
+.resource-link-container {
+    margin-bottom: 25px;
+}
+
+.resource-link-title { 
+    padding: 0; 
+    font-size: 16px; 
+    font-weight: 600;
+    color: #FFFFFF;
+    transition: color 0.2s ease;
+    cursor: pointer;
+}
+
+.resource-link-description { 
+    margin-top: 5px;
+    font-size: 13px; 
+    color: #AAAAAA; 
+    line-height: 1.4; 
+}
+
+.special-box-container { 
+    padding-left: 30px; 
+    width: 240px; 
+    flex-shrink: 0;
+}
+
+.resources-dropdown-menu .dropdown-column-3-inspired {
+    border-left: 2px solid #333;
+}
+
+.special-box-style { 
+    padding: 15px; 
+    border-radius: 4px; 
+    margin-bottom: 10px; 
+    width: 100%; 
+    cursor: pointer; 
+    transition: background-color 0.2s ease;
+    background-color: #000000;
+}
+
+.special-box-inspired {
+    padding: 0; 
+    background-color: transparent;
+    margin-top: 30px;
+}
+
+.special-box-title { 
+    font-size: 14px; 
+    font-weight: bold; 
+    margin-bottom: 5px; 
+    color: white;
+}
+
+.special-box-description { 
+    font-size: 13px; 
+    color: #AAAAAA; 
+    line-height: 1.4; 
+}
+
+.resource-title-link {
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFF;
+    transition: color 0.2s ease;
+    cursor: pointer;
+}
+
+/* --- MOBILE MENU STYLES --- */
+
+.mobile-menu-item {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 15px 0;
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.mobile-menu-item-bordered {
+    border-top: 1px solid #333;
+}
+
+.mobile-menu-item-icon {
+    font-size: 16px;
+    transition: transform 0.3s ease;
+}
+
+.mobile-menu-item-icon.open {
+    transform: rotate(180deg);
+}
+
+.mobile-submenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out, padding 0.4s ease, border-bottom 0.4s ease, margin-bottom 0.4s ease;
+    padding: 0;
+    border-bottom: none; 
+    margin-bottom: 0; 
+}
+
+.services-submenu.open {
+    max-height: 1200px; 
+    padding: 10px 0;
+    border-bottom: 1px solid #333; 
+    margin-bottom: 5px; 
+}
+
+.resources-submenu.open {
+    max-height: 800px;
+    padding: 10px 0;
+    border-bottom: 1px solid #333;
+}
+
+.mobile-submenu-title {
+    font-size: 12px;
+    font-weight: bold;
+    color: #878787;
+    text-transform: uppercase;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    padding-left: 5px;
+}
+
+.mobile-submenu-link {
+    font-size: 15px;
+    padding: 10px 5px;
+    color: white;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.mobile-submenu-link.view-all-features {
+    font-weight: bold;
+}
+
+.mobile-get-inspired-box {
+    background-color: transparent;
+    padding: 10px 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.mobile-get-inspired-title-box {
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+}
+
+.mobile-get-inspired-description {
+    font-size: 13px;
+    color: #AAAAAA;
+    margin-top: 5px;
+}
+
+.mobile-cta-container {
+    padding: 20px 0;
+    text-align: center;
+}
+
+.mobile-cta-button {
+    width: 100%;
+    max-width: 300px;
+    background-color: white;
+    color: #000000;
+    border: none;
+    padding: 15px 20px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 2px;
+    text-transform: uppercase;
 }
