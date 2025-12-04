@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import { API_BASE_URL } from '../api/baseurl';
 import EXPERT_PROFILE_IMAGE from '../images/man.png'; 
@@ -54,14 +54,17 @@ const ContactUs = () => {
     message: ''
   });
   const [companyInfo, setCompanyInfo] = useState(null);
+  const [developerInfo, setDeveloperInfo] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingDeveloper, setLoadingDeveloper] = useState(true);
   const [submitMessage, setSubmitMessage] = useState('');
   
-  const [countryCode, setCountryCode] = useState('+92'); 
+  const [countryCode, setCountryCode] = useState('+7'); 
   const [customTimeline, setCustomTimeline] = useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchCompanyInfo();
+    fetchDeveloperInfo();
   }, []);
 
   const fetchCompanyInfo = async () => {
@@ -74,6 +77,25 @@ const ContactUs = () => {
       setCompanyInfo(data);
     } catch (error) {
       console.error('Error fetching company info:', error);
+    }
+  };
+
+  const fetchDeveloperInfo = async () => {
+    try {
+      setLoadingDeveloper(true);
+      const response = await fetch(`${API_BASE_URL}developers/`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      // Assuming the API returns an array, take the first developer
+      if (data && data.length > 0) {
+        setDeveloperInfo(data[0]);
+      }
+    } catch (error) {
+      console.error('Error fetching developer info:', error);
+    } finally {
+      setLoadingDeveloper(false);
     }
   };
 
@@ -160,6 +182,13 @@ const ContactUs = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Format the title by removing "Developer Expert" from the beginning if it exists
+  const formatDeveloperTitle = (title) => {
+    if (!title) return '';
+    // Remove "Developer Expert" from the start of the title
+    return title.replace(/^Developer Expert\s*/i, '');
   };
 
   return (
@@ -391,17 +420,48 @@ const ContactUs = () => {
           </section>
         )}
         
+        {/* Expert Profile Section - Now dynamic from API */}
         <section className="expert-profile-section-top">
           <div className="container">
-            <div className="expert-card-image-1">
-              {/* Using the imported image variable */}
-              <img src={EXPERT_PROFILE_IMAGE} alt="Developer Expert" className="profile-image-round" />
-              <div className="profile-content-image-1">
-                <h1>Developer Expert Falmouth, Cornwall, UK</h1>
-                <p>I'm a conversion-focused Web Designer with a proven track record of delivering world-class websites for brands across the globe. I collaborate with the best developers and Designer specialists to ensure your store performs at its highest potential.</p>
-                <button className="expert-tag-button">Developer Expert</button>
+            {loadingDeveloper ? (
+              <div className="expert-card-image-1 loading">
+                <div className="profile-image-round loading-skeleton"></div>
+                <div className="profile-content-image-1">
+                  <div className="loading-skeleton title-skeleton"></div>
+                  <div className="loading-skeleton text-skeleton"></div>
+                  <div className="loading-skeleton text-skeleton"></div>
+                  <div className="loading-skeleton button-skeleton"></div>
+                </div>
               </div>
-            </div>
+            ) : developerInfo ? (
+              <div className="expert-card-image-1">
+                {/* Use API image if available, otherwise fallback to local image */}
+                <img 
+                  src={developerInfo.pic || EXPERT_PROFILE_IMAGE} 
+                  alt={developerInfo.title || "Developer Expert"} 
+                  className="profile-image-round" 
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = EXPERT_PROFILE_IMAGE;
+                  }}
+                />
+                <div className="profile-content-image-1">
+                  <h1>{developerInfo.title || "Developer Expert"}</h1>
+                  <p>{developerInfo.detail || "I'm a conversion-focused Web Designer with a proven track record of delivering world-class websites for brands across the globe."}</p>
+                  <button className="expert-tag-button">Developer Expert</button>
+                </div>
+              </div>
+            ) : (
+              <div className="expert-card-image-1">
+                {/* Fallback to static content if API fails */}
+                <img src={EXPERT_PROFILE_IMAGE} alt="Developer Expert" className="profile-image-round" />
+                <div className="profile-content-image-1">
+                  <h1>Developer Expert Falmouth, Cornwall, UK</h1>
+                  <p>I'm a conversion-focused Web Designer with a proven track record of delivering world-class websites for brands across the globe. I collaborate with the best developers and Designer specialists to ensure your store performs at its highest potential.</p>
+                  <button className="expert-tag-button">Developer Expert</button>
+                </div>
+              </div>
+            )}
           </div>
         </section>
       </div>

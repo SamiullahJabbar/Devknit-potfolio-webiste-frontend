@@ -1037,3 +1037,55 @@
     max-width: 100% !important;
   }
 }
+
+
+
+
+/* Loading skeleton styles */
+.loading-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+.title-skeleton {
+  height: 28px;
+  width: 80%;
+  margin-bottom: 15px;
+}
+
+.text-skeleton {
+  height: 20px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.text-skeleton:nth-child(3) {
+  width: 90%;
+}
+
+.button-skeleton {
+  height: 40px;
+  width: 150px;
+  margin-top: 20px;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.expert-card-image-1.loading {
+  opacity: 0.7;
+}
+
+.profile-image-round.loading-skeleton {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+}

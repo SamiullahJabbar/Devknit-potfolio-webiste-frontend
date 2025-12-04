@@ -10,8 +10,6 @@ const INCLUDED_LANGUAGES = 'en,ru,uk,kk,uz,ky,tk';
 
 function googleTranslateElementInit() {
   if (window.google && window.google.translate) {
-    // Check if the IDs exist before initializing (important for React component lifecycle)
-
     const desktopIdExists = document.getElementById('google_translate_element');
     const mobileIdExists = document.getElementById('google_translate_element_mobile');
 
@@ -30,7 +28,6 @@ function googleTranslateElementInit() {
           includedLanguages: INCLUDED_LANGUAGES // <--- UPDATED
         }, 'google_translate_element_mobile'); // Mobile ID
     }
-    
   }
 }
 
@@ -54,6 +51,12 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [services, setServices] = useState([]);
+  const [filteredServices, setFilteredServices] = useState({
+    development: [],
+    maintenance: [],
+    security: [],
+    businessTools: []
+  });
   const [loading, setLoading] = useState(true);
   
   const servicesTimeoutRef = useRef(null);
@@ -61,6 +64,35 @@ const Header = () => {
   
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Define the exact sequence for each category
+  const categorySequence = {
+    development: [
+      'Mobile Development',
+      'Integrations', 
+      'Web Design',
+      'Maintenance and Support',
+      'SEO & Analytics'
+    ],
+    maintenance: [
+      'Hosting & Deployment',
+      'Web Security',
+      'UI/UX & Branding',
+      'Shopify Store Setup'
+    ],
+    security: [
+      'Web Audit',
+      'SSL & Encryption',
+      'Code Review',
+      'Vulnerability Assessment'
+    ],
+    businessTools: [
+      'Technical SEO',
+      'Optimization',
+      'Content Strategy',
+      'Technical Support'
+    ]
+  };
 
   // Fetch services from API
   useEffect(() => {
@@ -70,6 +102,9 @@ const Header = () => {
         if (response.ok) {
           const data = await response.json();
           setServices(data);
+          
+          // Organize services into the exact sequence
+          organizeServicesBySequence(data);
         } else {
           console.error('Failed to fetch services');
         }
@@ -83,6 +118,134 @@ const Header = () => {
     fetchServices();
   }, []);
 
+  // Organize services into exact sequence
+  const organizeServicesBySequence = (servicesList) => {
+    // Initialize arrays for each category with matched services
+    let development = [];
+    let maintenance = [];
+    let security = [];
+    let businessTools = [];
+    let unmatched = [];
+
+    // Pehlay exact sequence match karne ka try karo
+    servicesList.forEach(service => {
+      const title = service.title || service.name || '';
+      const lowerTitle = title.toLowerCase();
+      
+      let matched = false;
+      
+      // Check development sequence
+      for (const seqTitle of categorySequence.development) {
+        if (lowerTitle.includes(seqTitle.toLowerCase())) {
+          development.push(service);
+          matched = true;
+          break;
+        }
+      }
+      
+      // If not matched yet, check maintenance
+      if (!matched) {
+        for (const seqTitle of categorySequence.maintenance) {
+          if (lowerTitle.includes(seqTitle.toLowerCase())) {
+            maintenance.push(service);
+            matched = true;
+            break;
+          }
+        }
+      }
+      
+      // If not matched yet, check security
+      if (!matched) {
+        for (const seqTitle of categorySequence.security) {
+          if (lowerTitle.includes(seqTitle.toLowerCase())) {
+            security.push(service);
+            matched = true;
+            break;
+          }
+        }
+      }
+      
+      // If not matched yet, check business tools
+      if (!matched) {
+        for (const seqTitle of categorySequence.businessTools) {
+          if (lowerTitle.includes(seqTitle.toLowerCase())) {
+            businessTools.push(service);
+            matched = true;
+            break;
+          }
+        }
+      }
+      
+      // If still not matched, add to unmatched array
+      if (!matched) {
+        unmatched.push(service);
+      }
+    });
+
+    // Ab unmatched services ko distribute karte hain
+    // BUSINESS TOOLS aur SECURITY mein sirf 4 items tak hi allow karenge
+    const maxItemsPerCategory = 4;
+    
+    // Sabse pehle ensure karte hain ke BUSINESS TOOLS aur SECURITY 4 se zyada na ho
+    if (businessTools.length > maxItemsPerCategory) {
+      // Extra items ko unmatched mein daal do
+      const extraBusinessTools = businessTools.slice(maxItemsPerCategory);
+      businessTools = businessTools.slice(0, maxItemsPerCategory);
+      unmatched.push(...extraBusinessTools);
+    }
+    
+    if (security.length > maxItemsPerCategory) {
+      // Extra items ko unmatched mein daal do
+      const extraSecurity = security.slice(maxItemsPerCategory);
+      security = security.slice(0, maxItemsPerCategory);
+      unmatched.push(...extraSecurity);
+    }
+
+    // Ab unmatched services ko DEVELOPMENT aur MAINTENANCE mein distribute karte hain
+    // Pehle DEVELOPMENT ko bharne ka try karenge
+    while (unmatched.length > 0 && development.length < 6) { // Max 6 items in development
+      const service = unmatched.shift();
+      development.push(service);
+    }
+
+    // Phir bache hue MAINTENANCE mein daal do
+    while (unmatched.length > 0 && maintenance.length < 6) { // Max 6 items in maintenance
+      const service = unmatched.shift();
+      maintenance.push(service);
+    }
+
+    // Agar phir bhi bache hain to round-robin distribution
+    if (unmatched.length > 0) {
+      // Sabse pehle BUSINESS TOOLS aur SECURITY ko priority denge agar unme jagah ho
+      const categories = [businessTools, security, development, maintenance];
+      
+      let categoryIndex = 0;
+      while (unmatched.length > 0) {
+        const service = unmatched.shift();
+        categories[categoryIndex].push(service);
+        categoryIndex = (categoryIndex + 1) % categories.length;
+      }
+    }
+
+    // Final result - limit to appropriate numbers per category
+    const result = {
+      development: development.slice(0, 6), // Max 6 items in development
+      maintenance: maintenance.slice(0, 6), // Max 6 items in maintenance
+      security: security.slice(0, 4), // Max 4 items in security
+      businessTools: businessTools.slice(0, 4) // Max 4 items in business tools
+    };
+
+    // Debug log for checking distribution
+    console.log('Services Distribution:', {
+      development: result.development.map(s => s.title || s.name),
+      maintenance: result.maintenance.map(s => s.title || s.name),
+      security: result.security.map(s => s.title || s.name),
+      businessTools: result.businessTools.map(s => s.title || s.name)
+    });
+
+    setFilteredServices(result);
+  };
+
   // Check screen size for mobile responsiveness & Init Translate on resize/load
   useEffect(() => {
     const checkScreenSize = () => {
@@ -92,10 +255,6 @@ const Header = () => {
     checkScreenSize();
     window.addEventListener('resize', checkScreenSize);
     
-    // Call the translate init function after mounting/resizing to ensure mobile ID loads
-    // Note: The main initialization is now handled by index.html for robustness, 
-    // but this ensures the function is available and can run if needed.
-    // We only call it if the global Google object is ready.
     if (window.google) { 
         googleTranslateElementInit();
     }
@@ -160,26 +319,6 @@ const Header = () => {
     if (type === 'resources') clearTimeout(resourcesTimeoutRef.current);
   };
 
-  // --- SERVICE GROUPING LOGIC ---
-  const totalServices = services.length;
-  const halfCount = Math.ceil(totalServices / 2); 
-  const developmentServices = services.slice(0, halfCount); 
-  const maintenanceServices = services.slice(halfCount, totalServices); 
-
-  const staticSecurityServices = [
-    { text: 'Web Audit', path: '' },
-    { text: 'SSL & Encryption', path: '' },
-    { text: 'Code Review', path: '' },
-    { text: 'Vulnerability Assessment', path: '' },
-  ];
-
-  const staticBusinessTools = [
-    { text: 'Technical SEO', path: '' },
-    { text: 'Optimization', path: '' },
-    { text: 'Content Strategy', path: '' },
-    { text: 'Technical Support', path: '' },
-  ];
-  
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen && isMobile) {
@@ -216,8 +355,8 @@ const Header = () => {
       {/* COLUMN 1: DEVELOPMENT */}
       <div className="dropdown-column dropdown-column-1">
         <div className="dropdown-column-title">DEVELOPMENT</div>
-        {developmentServices.length > 0 ? (
-          developmentServices.map((service) => (
+        {filteredServices.development.length > 0 ? (
+          filteredServices.development.map((service) => (
             renderDropdownLink(service, handleServiceNavigation, true)
           ))
         ) : (
@@ -237,8 +376,8 @@ const Header = () => {
       {/* COLUMN 2: MAINTENANCE */}
       <div className="dropdown-column dropdown-column-2">
         <div className="dropdown-column-title">MAINTENANCE</div>
-        {maintenanceServices.length > 0 ? (
-          maintenanceServices.map((service) => (
+        {filteredServices.maintenance.length > 0 ? (
+          filteredServices.maintenance.map((service) => (
             renderDropdownLink(service, handleServiceNavigation, true)
           ))
         ) : (
@@ -249,15 +388,23 @@ const Header = () => {
       {/* COLUMN 3: SECURITY & BUSINESS TOOLS */}
       <div className="dropdown-column dropdown-column-3-security-tools">
         <div className="dropdown-column-title">SECURITY</div>
-        {staticSecurityServices.map((item) => (
-            renderDropdownLink(item, handleNavigation, false)
-        ))}
+        {filteredServices.security.length > 0 ? (
+          filteredServices.security.map((service) => (
+            renderDropdownLink(service, handleServiceNavigation, true)
+          ))
+        ) : (
+          <div className="dropdown-item-style">No security services available</div>
+        )}
         
         <div className="dropdown-tools-section">
           <div className="dropdown-column-title">BUSINESS TOOLS</div>
-          {staticBusinessTools.map((item) => (
-            renderDropdownLink(item, handleNavigation, false)
-          ))}
+          {filteredServices.businessTools.length > 0 ? (
+            filteredServices.businessTools.map((service) => (
+              renderDropdownLink(service, handleServiceNavigation, true)
+            ))
+          ) : (
+            <div className="dropdown-item-style">No business tools available</div>
+          )}
         </div>
       </div>
     </div>
@@ -361,12 +508,36 @@ const Header = () => {
     </div>
   );
 
-  // Mobile Menu Content
+  // --- Mobile Services Content ---
   const mobileServicesContent = [
-    { title: 'DEVELOPMENT', items: developmentServices.map(s => ({ text: s.title, path: `/services/${s.slug}` })) },
-    { title: 'MAINTENANCE', items: maintenanceServices.map(s => ({ text: s.title, path: `/services/${s.slug}` })) },
-    { title: 'SECURITY', items: staticSecurityServices.map(s => ({ text: s.text, path: s.path })) },
-    { title: 'BUSINESS TOOLS', items: staticBusinessTools.map(s => ({ text: s.text, path: s.path })) },
+    { 
+      title: 'DEVELOPMENT', 
+      items: filteredServices.development.map(s => ({ 
+        text: s.title || s.name, 
+        path: `/services/${s.slug}` 
+      })) 
+    },
+    { 
+      title: 'MAINTENANCE', 
+      items: filteredServices.maintenance.map(s => ({ 
+        text: s.title || s.name, 
+        path: `/services/${s.slug}` 
+      })) 
+    },
+    { 
+      title: 'SECURITY', 
+      items: filteredServices.security.map(s => ({ 
+        text: s.title || s.name, 
+        path: `/services/${s.slug}` 
+      })) 
+    },
+    { 
+      title: 'BUSINESS TOOLS', 
+      items: filteredServices.businessTools.map(s => ({ 
+        text: s.title || s.name, 
+        path: `/services/${s.slug}` 
+      })) 
+    },
   ];
 
   const mobileResourcesLinks = [

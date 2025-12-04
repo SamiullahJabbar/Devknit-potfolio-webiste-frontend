@@ -204,6 +204,9 @@
     }
 }
 
+
+
+
 /* ========================================================================= */
 /* --- GENERAL DESKTOP STYLES (ALIGNMENT, ETC.) --- */
 /* ========================================================================= */
@@ -245,10 +248,13 @@
 }
 
 .header-center-menu { 
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    flex-grow: 1; 
+    /* gap: 20px;  */
 }
 
 .header-utility-container { 
@@ -256,6 +262,7 @@
     align-items: center; 
     flex-shrink: 0; 
     max-width: 400px; 
+    margin-left: auto;
 }
 
 .header-menu-item { 
@@ -298,8 +305,8 @@
 
 /* --- DROPDOWN MENU STYLES (Desktop) --- */
 .dropdown-menu {
-    position: absolute; 
-    top: 55px; 
+    position: fixed;
+    top: 65px; 
     left: 50%; 
     transform: translateX(-50%) scale(0.95); 
     background-color: #000000; 
@@ -315,6 +322,7 @@
     pointer-events: none;
     max-width: 95vw; 
     width: auto; 
+    min-width: 700px;
 }
 
 .dropdown-menu.show { 
@@ -325,7 +333,7 @@
 }
 
 .services-dropdown-menu {
-    width: 70vw; 
+    width: 60vw; 
     max-width: 800px; 
 }
 

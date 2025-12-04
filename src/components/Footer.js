@@ -5,7 +5,7 @@ import HeaderLogoImage from '../images/1.svg'; // Aapka logo
 // API Base URL (Aapki file se import kiya gaya)
 import { API_BASE_URL } from '../api/baseurl'; 
 
-// Static Footer Data (No Change here, we will flatten it in the component)
+// Static Footer Data
 const StaticFooterData = [
   { 
     heading: 'Products', 
@@ -36,11 +36,11 @@ const StaticFooterData = [
   
   
   { 
-    heading: 'Programs', 
-    links: ['Circle', 'Affiliates'],
+    heading: '', 
+    links: [''],
     sections: [ 
-      { subHeading: 'Support', links: ['Help Center', 'Forum', 'Webinars', 'Hire an Expert', 'Developer Blog', 'Developer Platform', 'System Status'] },
-      { subHeading: 'Resources', links: ['Extensions', 'Squarespace Blog', 'Free Tools', 'Business Name Generator', 'Logo Maker'] }
+      { subHeading: 'Support', links: ['Help Center', 'Forum', 'Webinars'] },
+      { subHeading: 'Resources', links: ['Extensions',  'Free Tools', 'Business Name Generator', 'Logo Maker'] }
     ]
   },
   { 
@@ -62,6 +62,20 @@ const Footer = () => {
   const [openIndex, setOpenIndex] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
+  // Define sequences for SECURITY and BUSINESS TOOLS
+  const securitySequence = [
+    'Web Audit',
+    'SSL & Encryption',
+    'Code Review',
+    'Vulnerability Assessment'
+  ];
+
+  const businessToolsSequence = [
+    'Technical SEO',
+    'Optimization',
+    'Content Strategy',
+    'Technical Support'
+  ];
 
   const toggleAccordion = (index) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -74,15 +88,57 @@ const Footer = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const services = await response.json();
+      const allServices = await response.json();
       
-      if (services && services.length > 0) {
-        const totalServices = services.length;
-        const half = Math.ceil(totalServices / 2);
+      if (allServices && allServices.length > 0) {
+        // Step 1: Pehle SECURITY services filter karte hain
+        const securityServices = [];
+        const securityRemaining = [...securitySequence];
         
-        const productsServices = services.slice(0, half);
-        const solutionsServices = services.slice(half);
+        securitySequence.forEach(seqTitle => {
+          const matchedService = allServices.find(service => {
+            const title = service.title || service.name || '';
+            return title.toLowerCase().includes(seqTitle.toLowerCase());
+          });
+          
+          if (matchedService) {
+            securityServices.push(matchedService);
+            // Remove matched service from allServices
+            const index = allServices.findIndex(s => s.id === matchedService.id);
+            if (index > -1) {
+              allServices.splice(index, 1);
+            }
+          }
+        });
 
+        // Step 2: BUSINESS TOOLS services filter karte hain
+        const businessToolsServices = [];
+        
+        businessToolsSequence.forEach(seqTitle => {
+          const matchedService = allServices.find(service => {
+            const title = service.title || service.name || '';
+            return title.toLowerCase().includes(seqTitle.toLowerCase());
+          });
+          
+          if (matchedService) {
+            businessToolsServices.push(matchedService);
+            // Remove matched service from allServices
+            const index = allServices.findIndex(s => s.id === matchedService.id);
+            if (index > -1) {
+              allServices.splice(index, 1);
+            }
+          }
+        });
+
+        // Step 3: Bache hue services ko Products aur Solutions mein divide karte hain
+        const remainingServices = [...allServices];
+        const totalRemaining = remainingServices.length;
+        const half = Math.ceil(totalRemaining / 2);
+        
+        const productsServices = remainingServices.slice(0, half);
+        const solutionsServices = remainingServices.slice(half);
+
+        // Step 4: Update Footer Data
         const updatedFooterData = StaticFooterData.map(col => {
             if (col.heading === 'Products') {
                 return {
@@ -90,16 +146,49 @@ const Footer = () => {
                     links: productsServices.map(s => ({ title: s.title, slug: s.slug })),
                 };
             }
+            
             if (col.heading === 'Solutions') {
+                // Solutions ke links update karte hain
+                const solutionsLinks = solutionsServices.map(s => ({ title: s.title, slug: s.slug }));
+                
+                // SECURITY aur BUSINESS TOOLS sections ko update karte hain
+                const updatedSections = col.sections?.map(section => {
+                    if (section.subHeading === 'SECURITY') {
+                        return {
+                            ...section,
+                            links: securityServices.map(s => ({ title: s.title, slug: s.slug }))
+                        };
+                    }
+                    
+                    if (section.subHeading === 'BUSINESS TOOLS') {
+                        return {
+                            ...section,
+                            links: businessToolsServices.map(s => ({ title: s.title, slug: s.slug }))
+                        };
+                    }
+                    
+                    return section;
+                }) || [];
+
                 return {
                     ...col,
-                    links: solutionsServices.map(s => ({ title: s.title, slug: s.slug })),
+                    links: solutionsLinks,
+                    sections: updatedSections
                 };
             }
+            
             return col; 
         });
         
         setFooterData(updatedFooterData);
+        
+        // Debug log for checking distribution
+        console.log('Footer Services Distribution:', {
+          securityServices: securityServices.map(s => s.title || s.name),
+          businessToolsServices: businessToolsServices.map(s => s.title || s.name),
+          productsServices: productsServices.map(s => s.title || s.name),
+          solutionsServices: solutionsServices.map(s => s.title || s.name)
+        });
       }
     } catch (error) {
       console.error("Failed to fetch services:", error);
@@ -129,13 +218,15 @@ const Footer = () => {
     let linkIndex = 0;
 
     footerData.forEach(col => {
-        // 1. Main Heading as an Accordion Item
-        flattened.push({
-            id: linkIndex++,
-            heading: col.heading,
-            links: col.links,
-            type: 'main',
-        });
+        // 1. Main Heading as an Accordion Item (only if has links)
+        if (col.links && col.links.length > 0 && (col.heading || col.links[0] !== '')) {
+            flattened.push({
+                id: linkIndex++,
+                heading: col.heading,
+                links: col.links,
+                type: 'main',
+            });
+        }
 
         // 2. Sub-headings (Sections) as separate Accordion Items
         if (col.sections) {
@@ -170,12 +261,10 @@ const Footer = () => {
     });
   };
 
-  // 🔥 NEW: Render Branding Section (reusable for both mobile and desktop)
+  // Render Branding Section
   const renderBrandingSection = (isMobileView) => (
     <div className={`sq-footer-branding ${isMobileView ? 'sq-footer-branding-mobile' : ''}`}>
         <img src={HeaderLogoImage} alt="Devknit Logo" className="sq-footer-logo" />
-        {/* Logo ke saath text agar image mein nahi hai toh */}
-        {/* <span className="sq-footer-logo-text">Devknit</span> */} 
         <p className="sq-footer-tagline">A website makes it real</p>
     </div>
   );
@@ -185,7 +274,6 @@ const Footer = () => {
 
     return (
         <div className="footer-accordion-container">
-            {/* Branding section yahan render hoga */}
             {renderBrandingSection(true)} 
             
             <div className="footer-main-mobile">
@@ -221,17 +309,18 @@ const Footer = () => {
   const renderDesktopGrid = () => (
     <div className="sq-footer-top-section">
         
-        {/* Left Side: Logo and Tagline (Using reusable renderBrandingSection) */}
         {renderBrandingSection(false)}
         
-        {/* Right Side: Links Grid */}
         <div className="sq-footer-links-grid">
           {footerData.map((col, index) => (
             <div key={index} className="sq-footer-column">
-              <h4 className="sq-footer-heading">{col.heading}</h4>
-              <ul className="sq-footer-list">
-                {renderLinks(col.links)}
-              </ul>
+              {col.heading && <h4 className="sq-footer-heading">{col.heading}</h4>}
+              
+              {col.links && col.links.length > 0 && (col.heading || col.links[0] !== '') && (
+                <ul className="sq-footer-list">
+                  {renderLinks(col.links)}
+                </ul>
+              )}
 
               {col.sections && col.sections.map((sec, secIndex) => (
                 <div key={secIndex} className="sq-footer-sub-section">
@@ -248,7 +337,7 @@ const Footer = () => {
   );
 
 
-  // ⬇️ MAIN FOOTER RENDER
+  // Main Footer Render
   return (
     <footer className={`sq-footer-container ${isMobile ? 'footer-mobile' : ''}`}>
       
@@ -263,7 +352,7 @@ const Footer = () => {
 
         <div className="sq-footer-bottom-content">
           <div className="sq-footer-language">
-            {/* <span>🌐 English </span> */}
+            
           </div>
           <div className="sq-footer-legal-links">
             <div className={`sq-footer-legal-top-line ${isMobile ? 'bottom-links-mobile' : ''}`}> 
