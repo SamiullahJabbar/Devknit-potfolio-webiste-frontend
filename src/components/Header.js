@@ -5,7 +5,6 @@ import HeaderLogoImage from '../images/devknit.png';
 import './Header.css';
 
 // --- UPDATED: GOOGLE TRANSLATE INITIALIZATION FUNCTION ---
-// Languages list: English, Russian, Ukrainian, Kazakh, Uzbek, Kyrgyz, Turkmen
 const INCLUDED_LANGUAGES = 'en,ru,uk,kk,uz,ky,tk';
 
 function googleTranslateElementInit() {
@@ -17,21 +16,20 @@ function googleTranslateElementInit() {
         new window.google.translate.TranslateElement({
           pageLanguage: 'en', 
           layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-          includedLanguages: INCLUDED_LANGUAGES // <--- UPDATED
-        }, 'google_translate_element'); // Desktop ID
+          includedLanguages: INCLUDED_LANGUAGES
+        }, 'google_translate_element');
     }
 
     if (mobileIdExists) {
         new window.google.translate.TranslateElement({
           pageLanguage: 'en', 
           layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-          includedLanguages: INCLUDED_LANGUAGES // <--- UPDATED
-        }, 'google_translate_element_mobile'); // Mobile ID
+          includedLanguages: INCLUDED_LANGUAGES
+        }, 'google_translate_element_mobile');
     }
   }
 }
 
-// Global scope mein function ko attach karein
 window.googleTranslateElementInit = googleTranslateElementInit; 
 // ----------------------------------------------------
 
@@ -50,14 +48,10 @@ const Header = () => {
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [services, setServices] = useState([]);
-  const [filteredServices, setFilteredServices] = useState({
-    development: [],
-    maintenance: [],
-    security: [],
-    businessTools: []
-  });
+  const [categories, setCategories] = useState([]);
+  const [categoryServices, setCategoryServices] = useState({});
   const [loading, setLoading] = useState(true);
+  const [displayCategories, setDisplayCategories] = useState([]); // Final display categories
   
   const servicesTimeoutRef = useRef(null);
   const resourcesTimeoutRef = useRef(null);
@@ -65,185 +59,117 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Define the exact sequence for each category
-  const categorySequence = {
-    development: [
-      'Mobile Development',
-      'Integrations', 
-      'Web Design',
-      'Maintenance and Support',
-      'SEO & Analytics'
-    ],
-    maintenance: [
-      'Hosting & Deployment',
-      'Web Security',
-      'UI/UX & Branding',
-      'Shopify Store Setup'
-    ],
-    security: [
-      'Web Audit',
-      'SSL & Encryption',
-      'Code Review',
-      'Vulnerability Assessment'
-    ],
-    businessTools: [
-      'Technical SEO',
-      'Optimization',
-      'Content Strategy',
-      'Technical Support'
-    ]
-  };
+  // Fixed sequence for categories - word matching
+  const CATEGORY_SEQUENCE = ['DEVELOPMENT', 'MAINTENANCE', 'SECURITY', 'BUSINESS TOOLS'];
 
-  // Fetch services from API
+  // Fetch categories and their services from API
   useEffect(() => {
-    const fetchServices = async () => {
+    const fetchCategoriesAndServices = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}services/`);
-        if (response.ok) {
-          const data = await response.json();
-          setServices(data);
-          
-          // Organize services into the exact sequence
-          organizeServicesBySequence(data);
-        } else {
-          console.error('Failed to fetch services');
+        // Fetch all categories
+        const categoriesResponse = await fetch(`${API_BASE_URL}categories/`);
+        if (!categoriesResponse.ok) {
+          throw new Error('Failed to fetch categories');
         }
+        
+        const categoriesData = await categoriesResponse.json();
+        
+        // Create a map of backend categories
+        const categoriesMap = {};
+        categoriesData.forEach(cat => {
+          categoriesMap[cat.id] = cat;
+        });
+        
+        setCategories(categoriesData);
+        
+        // Fetch services for each category
+        const servicesPromises = categoriesData.map(async (category) => {
+          try {
+            const servicesResponse = await fetch(`${API_BASE_URL}categories/${category.id}/services/`);
+            if (servicesResponse.ok) {
+              const servicesData = await servicesResponse.json();
+              return { categoryId: category.id, services: servicesData };
+            }
+            return { categoryId: category.id, services: [] };
+          } catch (error) {
+            console.error(`Error fetching services for category ${category.name}:`, error);
+            return { categoryId: category.id, services: [] };
+          }
+        });
+
+        const servicesResults = await Promise.all(servicesPromises);
+        
+        // Organize services by category ID
+        const organizedServices = {};
+        servicesResults.forEach(result => {
+          const category = categoriesData.find(cat => cat.id === result.categoryId);
+          if (category) {
+            organizedServices[category.id] = {
+              categoryName: category.name,
+              services: result.services
+            };
+          }
+        });
+        
+        setCategoryServices(organizedServices);
+        
+        // NOW: Determine which categories to display in which order
+        // Step 1: Find categories that match our sequence
+        const matchedCategories = [];
+        const unmatchedCategories = [...categoriesData];
+        
+        CATEGORY_SEQUENCE.forEach(seqWord => {
+          const categoryIndex = unmatchedCategories.findIndex(cat => {
+            const catName = cat.name.toUpperCase();
+            return catName.includes(seqWord) || seqWord.includes(catName);
+          });
+          
+          if (categoryIndex !== -1) {
+            matchedCategories.push(unmatchedCategories[categoryIndex]);
+            unmatchedCategories.splice(categoryIndex, 1);
+          }
+        });
+        
+        // Step 2: Combine matched categories (in sequence order) with unmatched categories
+        const finalDisplayCategories = [...matchedCategories];
+        
+        // Add remaining categories but ensure we don't exceed 4 columns total
+        const remainingSlots = Math.max(0, 4 - matchedCategories.length);
+        if (remainingSlots > 0) {
+          // Take only as many categories as we have slots
+          finalDisplayCategories.push(...unmatchedCategories.slice(0, remainingSlots));
+        }
+        
+        setDisplayCategories(finalDisplayCategories);
+        
       } catch (error) {
-        console.error('Error fetching services:', error);
+        console.error('Error fetching data:', error);
+        setCategories([]);
+        setCategoryServices({});
+        setDisplayCategories([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchServices();
+    fetchCategoriesAndServices();
   }, []);
 
-  // Organize services into exact sequence
-  const organizeServicesBySequence = (servicesList) => {
-    // Initialize arrays for each category with matched services
-    let development = [];
-    let maintenance = [];
-    let security = [];
-    let businessTools = [];
-    let unmatched = [];
+  // Get services for a category by ID
+  const getServicesForCategory = (categoryId) => {
+    return categoryServices[categoryId]?.services || [];
+  };
 
-    // Pehlay exact sequence match karne ka try karo
-    servicesList.forEach(service => {
-      const title = service.title || service.name || '';
-      const lowerTitle = title.toLowerCase();
-      
-      let matched = false;
-      
-      // Check development sequence
-      for (const seqTitle of categorySequence.development) {
-        if (lowerTitle.includes(seqTitle.toLowerCase())) {
-          development.push(service);
-          matched = true;
-          break;
-        }
-      }
-      
-      // If not matched yet, check maintenance
-      if (!matched) {
-        for (const seqTitle of categorySequence.maintenance) {
-          if (lowerTitle.includes(seqTitle.toLowerCase())) {
-            maintenance.push(service);
-            matched = true;
-            break;
-          }
-        }
-      }
-      
-      // If not matched yet, check security
-      if (!matched) {
-        for (const seqTitle of categorySequence.security) {
-          if (lowerTitle.includes(seqTitle.toLowerCase())) {
-            security.push(service);
-            matched = true;
-            break;
-          }
-        }
-      }
-      
-      // If not matched yet, check business tools
-      if (!matched) {
-        for (const seqTitle of categorySequence.businessTools) {
-          if (lowerTitle.includes(seqTitle.toLowerCase())) {
-            businessTools.push(service);
-            matched = true;
-            break;
-          }
-        }
-      }
-      
-      // If still not matched, add to unmatched array
-      if (!matched) {
-        unmatched.push(service);
-      }
-    });
-
-    // Ab unmatched services ko distribute karte hain
-    // BUSINESS TOOLS aur SECURITY mein sirf 4 items tak hi allow karenge
-    const maxItemsPerCategory = 4;
+  // Get category name for display (with fallback)
+  const getCategoryDisplayName = (category, position) => {
+    if (category) return category.name;
     
-    // Sabse pehle ensure karte hain ke BUSINESS TOOLS aur SECURITY 4 se zyada na ho
-    if (businessTools.length > maxItemsPerCategory) {
-      // Extra items ko unmatched mein daal do
-      const extraBusinessTools = businessTools.slice(maxItemsPerCategory);
-      businessTools = businessTools.slice(0, maxItemsPerCategory);
-      unmatched.push(...extraBusinessTools);
+    // If no category found for this position, use default from sequence
+    if (position < CATEGORY_SEQUENCE.length) {
+      return CATEGORY_SEQUENCE[position];
     }
     
-    if (security.length > maxItemsPerCategory) {
-      // Extra items ko unmatched mein daal do
-      const extraSecurity = security.slice(maxItemsPerCategory);
-      security = security.slice(0, maxItemsPerCategory);
-      unmatched.push(...extraSecurity);
-    }
-
-    // Ab unmatched services ko DEVELOPMENT aur MAINTENANCE mein distribute karte hain
-    // Pehle DEVELOPMENT ko bharne ka try karenge
-    while (unmatched.length > 0 && development.length < 6) { // Max 6 items in development
-      const service = unmatched.shift();
-      development.push(service);
-    }
-
-    // Phir bache hue MAINTENANCE mein daal do
-    while (unmatched.length > 0 && maintenance.length < 6) { // Max 6 items in maintenance
-      const service = unmatched.shift();
-      maintenance.push(service);
-    }
-
-    // Agar phir bhi bache hain to round-robin distribution
-    if (unmatched.length > 0) {
-      // Sabse pehle BUSINESS TOOLS aur SECURITY ko priority denge agar unme jagah ho
-      const categories = [businessTools, security, development, maintenance];
-      
-      let categoryIndex = 0;
-      while (unmatched.length > 0) {
-        const service = unmatched.shift();
-        categories[categoryIndex].push(service);
-        categoryIndex = (categoryIndex + 1) % categories.length;
-      }
-    }
-
-    // Final result - limit to appropriate numbers per category
-    const result = {
-      development: development.slice(0, 6), // Max 6 items in development
-      maintenance: maintenance.slice(0, 6), // Max 6 items in maintenance
-      security: security.slice(0, 4), // Max 4 items in security
-      businessTools: businessTools.slice(0, 4) // Max 4 items in business tools
-    };
-
-    // Debug log for checking distribution
-    console.log('Services Distribution:', {
-      development: result.development.map(s => s.title || s.name),
-      maintenance: result.maintenance.map(s => s.title || s.name),
-      security: result.security.map(s => s.title || s.name),
-      businessTools: result.businessTools.map(s => s.title || s.name)
-    });
-
-    setFilteredServices(result);
+    return `Category ${position + 1}`;
   };
 
   // Check screen size for mobile responsiveness & Init Translate on resize/load
@@ -332,15 +258,15 @@ const Header = () => {
     };
   }, [isMobileMenuOpen, isMobile]);
 
-  const renderDropdownLink = (item, handleNav, isApi = true) => (
+  const renderDropdownLink = (service) => (
       <div 
-          key={isApi ? item.id : item.text} 
+          key={service.id} 
           className="dropdown-item-style"
           onMouseEnter={(e) => e.target.style.color = '#AAAAAA'}
           onMouseLeave={(e) => e.target.style.color = '#FFFFFF'}
-          onClick={() => handleNav(isApi ? item.slug : item.path)}
+          onClick={() => handleServiceNavigation(service.slug)}
       >
-          {isApi ? item.title : item.text}
+          {service.title}
       </div>
   );
 
@@ -351,62 +277,95 @@ const Header = () => {
       onMouseEnter={() => handleDropdownMouseEnter('services')}
       onMouseLeave={handleServicesMouseLeave}
     >
-      
-      {/* COLUMN 1: DEVELOPMENT */}
-      <div className="dropdown-column dropdown-column-1">
-        <div className="dropdown-column-title">DEVELOPMENT</div>
-        {filteredServices.development.length > 0 ? (
-          filteredServices.development.map((service) => (
-            renderDropdownLink(service, handleServiceNavigation, true)
-          ))
-        ) : (
-          <div className="dropdown-item-style">No development services available</div>
-        )}
-        
-        <div 
-          className="dropdown-item-style dropdown-view-all-features"
-          onMouseEnter={(e) => e.target.style.color = 'white'}
-          onMouseLeave={(e) => e.target.style.color = '#CCCCCC'}
-          onClick={() => handleNavigation('/projects')}
-        >
-          View All Features
-        </div>
-      </div>
+      {loading ? (
+        <div className="dropdown-loading">Loading services...</div>
+      ) : displayCategories.length === 0 ? (
+        <div className="dropdown-error">No categories available</div>
+      ) : (
+        <>
+          {/* COLUMN 1: First category (DEVELOPMENT or first backend category) */}
+          <div className="dropdown-column dropdown-column-1">
+            <div className="dropdown-column-title">
+              {displayCategories[0] ? displayCategories[0].name : 'DEVELOPMENT'}
+            </div>
+            {(() => {
+              const category = displayCategories[0];
+              const services = category ? getServicesForCategory(category.id) : [];
+              
+              return services.length > 0 ? (
+                services.map((service) => renderDropdownLink(service))
+              ) : (
+                <div className="dropdown-item-style">No services available</div>
+              );
+            })()}
+            
+            <div 
+              className="dropdown-item-style dropdown-view-all-features"
+              onMouseEnter={(e) => e.target.style.color = 'white'}
+              onMouseLeave={(e) => e.target.style.color = '#CCCCCC'}
+              onClick={() => handleNavigation('/projects')}
+            >
+              View All Features
+            </div>
+          </div>
 
-      {/* COLUMN 2: MAINTENANCE */}
-      <div className="dropdown-column dropdown-column-2">
-        <div className="dropdown-column-title">MAINTENANCE</div>
-        {filteredServices.maintenance.length > 0 ? (
-          filteredServices.maintenance.map((service) => (
-            renderDropdownLink(service, handleServiceNavigation, true)
-          ))
-        ) : (
-          <div className="dropdown-item-style">No maintenance services available</div>
-        )}
-      </div>
-      
-      {/* COLUMN 3: SECURITY & BUSINESS TOOLS */}
-      <div className="dropdown-column dropdown-column-3-security-tools">
-        <div className="dropdown-column-title">SECURITY</div>
-        {filteredServices.security.length > 0 ? (
-          filteredServices.security.map((service) => (
-            renderDropdownLink(service, handleServiceNavigation, true)
-          ))
-        ) : (
-          <div className="dropdown-item-style">No security services available</div>
-        )}
-        
-        <div className="dropdown-tools-section">
-          <div className="dropdown-column-title">BUSINESS TOOLS</div>
-          {filteredServices.businessTools.length > 0 ? (
-            filteredServices.businessTools.map((service) => (
-              renderDropdownLink(service, handleServiceNavigation, true)
-            ))
-          ) : (
-            <div className="dropdown-item-style">No business tools available</div>
+          {/* COLUMN 2: Second category (MAINTENANCE or second backend category) */}
+          {displayCategories.length > 1 && (
+            <div className="dropdown-column dropdown-column-2">
+              <div className="dropdown-column-title">
+                {displayCategories[1].name}
+              </div>
+              {(() => {
+                const services = getServicesForCategory(displayCategories[1].id);
+                return services.length > 0 ? (
+                  services.map((service) => renderDropdownLink(service))
+                ) : (
+                  <div className="dropdown-item-style">No services available</div>
+                );
+              })()}
+            </div>
           )}
-        </div>
-      </div>
+
+          {/* COLUMN 3: Third and Fourth categories combined (if available) */}
+          {(displayCategories.length > 2 || displayCategories.length === 1) && (
+            <div className="dropdown-column dropdown-column-3-security-tools">
+              {/* Third category (SECURITY or third backend category) */}
+              {displayCategories.length > 2 && (
+                <>
+                  <div className="dropdown-column-title">
+                    {displayCategories[2].name}
+                  </div>
+                  {(() => {
+                    const services = getServicesForCategory(displayCategories[2].id);
+                    return services.length > 0 ? (
+                      services.map((service) => renderDropdownLink(service))
+                    ) : (
+                      <div className="dropdown-item-style">No services available</div>
+                    );
+                  })()}
+                </>
+              )}
+
+              {/* Fourth category (BUSINESS TOOLS or fourth backend category) */}
+              {displayCategories.length > 3 && (
+                <div className="dropdown-tools-section">
+                  <div className="dropdown-column-title">
+                    {displayCategories[3].name}
+                  </div>
+                  {(() => {
+                    const services = getServicesForCategory(displayCategories[3].id);
+                    return services.length > 0 ? (
+                      services.map((service) => renderDropdownLink(service))
+                    ) : (
+                      <div className="dropdown-item-style">No services available</div>
+                    );
+                  })()}
+                </div>
+              )}
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 
@@ -426,7 +385,7 @@ const Header = () => {
     </div>
   );
 
-  // RESOURCES DROPDOWN CONTENT (Desktop)
+  // RESOURCES DROPDOWN CONTENT (Desktop) - SAME AS BEFORE
   const resourcesContent = (
     <div
       className={`dropdown-menu resources-dropdown-menu ${isResourcesOpen ? 'show' : ''}`}
@@ -509,36 +468,17 @@ const Header = () => {
   );
 
   // --- Mobile Services Content ---
-  const mobileServicesContent = [
-    { 
-      title: 'DEVELOPMENT', 
-      items: filteredServices.development.map(s => ({ 
-        text: s.title || s.name, 
-        path: `/services/${s.slug}` 
-      })) 
-    },
-    { 
-      title: 'MAINTENANCE', 
-      items: filteredServices.maintenance.map(s => ({ 
-        text: s.title || s.name, 
-        path: `/services/${s.slug}` 
-      })) 
-    },
-    { 
-      title: 'SECURITY', 
-      items: filteredServices.security.map(s => ({ 
-        text: s.title || s.name, 
-        path: `/services/${s.slug}` 
-      })) 
-    },
-    { 
-      title: 'BUSINESS TOOLS', 
-      items: filteredServices.businessTools.map(s => ({ 
-        text: s.title || s.name, 
-        path: `/services/${s.slug}` 
-      })) 
-    },
-  ];
+  const mobileServicesContent = loading ? [] : 
+    displayCategories.map(category => {
+      const services = getServicesForCategory(category.id);
+      return {
+        title: category.name,
+        items: services.map(service => ({
+          text: service.title,
+          path: `/services/${service.slug}`
+        }))
+      };
+    });
 
   const mobileResourcesLinks = [
     { type: 'link', text: 'Help Center', path: '' },
@@ -580,20 +520,26 @@ const Header = () => {
       <div 
         className={`mobile-submenu services-submenu ${isServicesOpen ? 'open' : ''}`}
       >
-        {mobileServicesContent.map((group) => (
-          <div key={group.title}>
-              <div className="mobile-submenu-title">{group.title}</div>
-              {group.items.map((item) => (
-                <div 
-                  key={item.text}
-                  className="mobile-submenu-link"
-                  onClick={() => handleNavigation(item.path)}
-                >
-                  {item.text}
-                </div>
-              ))}
-          </div>
-        ))}
+        {loading ? (
+          <div className="mobile-submenu-loading">Loading services...</div>
+        ) : mobileServicesContent.length > 0 ? (
+          mobileServicesContent.map((group) => (
+            <div key={group.title}>
+                <div className="mobile-submenu-title">{group.title}</div>
+                {group.items.map((item) => (
+                  <div 
+                    key={item.text}
+                    className="mobile-submenu-link"
+                    onClick={() => handleNavigation(item.path)}
+                  >
+                    {item.text}
+                  </div>
+                ))}
+            </div>
+          ))
+        ) : (
+          <div className="mobile-submenu-error">No services available</div>
+        )}
 
         <div 
             className="mobile-submenu-link view-all-features"
@@ -671,7 +617,7 @@ const Header = () => {
         className="header-logo-container" 
         onClick={() => handleNavigation('/')}
       >
-        <HeaderLogo src={HeaderLogoImage} alt="DevAurora Logo" />
+        <HeaderLogo src={HeaderLogoImage} alt="Devknit Logo" />
       </div>
       
       {/* Desktop Menu */}

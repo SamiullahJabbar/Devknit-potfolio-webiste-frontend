@@ -1,205 +1,310 @@
 import React, { useState, useEffect } from 'react';
 import './Footer.css';
-import HeaderLogoImage from '../images/1.svg'; // Aapka logo
+import HeaderLogoImage from '../images/1.svg';
 
-// API Base URL (Aapki file se import kiya gaya)
+// API Base URL
 import { API_BASE_URL } from '../api/baseurl'; 
 
-// Static Footer Data
-const StaticFooterData = [
-  { 
-    heading: 'Products', 
-    links: [
-      'Website Templates', 'Webinars', 'Domains', 'AI Website Builder', 'Design Intelligence', 
-      'Online Stores', 'Services', 'Invoicing', 'Scheduling', 'Content & Memberships', 
-      'Donations', 'Payments', 'Marketing Tools', 'Email Campaigns', 'Professional Email', 
-      'Feature List', 'Pricing'
-    ]
-  },
-  { 
-    heading: 'Solutions', 
-    links: [
-      'Customer Examples', 'Squarespace Collection', 'Fitness', 'Beauty', 'Photography', 
-      'Restaurants', 'Art & Design', 'Wedding', 'Creators', 'Enterprise', 'Squarespace for Pros',
-    ],
-    sections: [
-        { 
-            subHeading: 'SECURITY', 
-            links: ['Web Audit', 'SSL & Encryption', 'Code Review', 'Vulnerability Assessment'] 
-        },
-        { 
-            subHeading: 'BUSINESS TOOLS', 
-            links: ['Technical SEO', 'Optimization', 'Content Strategy', 'Technical Support'] 
-        }
-    ]
-  },
-  
-  
-  { 
-    heading: '', 
-    links: [''],
-    sections: [ 
-      { subHeading: 'Support', links: ['Help Center', 'Forum', 'Webinars'] },
-      { subHeading: 'Resources', links: ['Extensions',  'Free Tools', 'Business Name Generator', 'Logo Maker'] }
-    ]
-  },
-  { 
-    heading: 'Company', 
-    links: [
-      'About', 'Careers', 'Our History', 'Our Brand', 'Accessibility', 'Newsroom', 
-      'Press & Media', 'Contact Us'
-    ],
-    sections: [
-      { subHeading: 'Follow', links: ['Instagram', 'Youtube', 'LinkedIn', 'Facebook', 'X'] }
-    ]
-  }
-];
-
-
 const Footer = () => {
-  const [footerData, setFooterData] = useState(StaticFooterData);
+  const [footerData, setFooterData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openIndex, setOpenIndex] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [categories, setCategories] = useState([]);
+  const [categoryServices, setCategoryServices] = useState({});
 
-  // Define sequences for SECURITY and BUSINESS TOOLS
-  const securitySequence = [
-    'Web Audit',
-    'SSL & Encryption',
-    'Code Review',
-    'Vulnerability Assessment'
-  ];
-
-  const businessToolsSequence = [
-    'Technical SEO',
-    'Optimization',
-    'Content Strategy',
-    'Technical Support'
-  ];
+  // Define keywords for matching
+  const FOOTER_KEYWORDS = {
+    'Products': ['DEVELOPMENT', 'PRODUCT', 'PRODUCTS'],
+    'Solutions': ['MAINTENANCE', 'SOLUTION', 'SOLUTIONS'],
+    'SECURITY': ['SECURITY', 'SECURE'],
+    'BUSINESS TOOLS': ['BUSINESS TOOLS', 'BUSINESS', 'TOOLS']
+  };
 
   const toggleAccordion = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  const fetchServices = async () => {
-    const url = `${API_BASE_URL}services/`; 
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const allServices = await response.json();
-      
-      if (allServices && allServices.length > 0) {
-        // Step 1: Pehle SECURITY services filter karte hain
-        const securityServices = [];
-        const securityRemaining = [...securitySequence];
-        
-        securitySequence.forEach(seqTitle => {
-          const matchedService = allServices.find(service => {
-            const title = service.title || service.name || '';
-            return title.toLowerCase().includes(seqTitle.toLowerCase());
-          });
-          
-          if (matchedService) {
-            securityServices.push(matchedService);
-            // Remove matched service from allServices
-            const index = allServices.findIndex(s => s.id === matchedService.id);
-            if (index > -1) {
-              allServices.splice(index, 1);
-            }
-          }
-        });
-
-        // Step 2: BUSINESS TOOLS services filter karte hain
-        const businessToolsServices = [];
-        
-        businessToolsSequence.forEach(seqTitle => {
-          const matchedService = allServices.find(service => {
-            const title = service.title || service.name || '';
-            return title.toLowerCase().includes(seqTitle.toLowerCase());
-          });
-          
-          if (matchedService) {
-            businessToolsServices.push(matchedService);
-            // Remove matched service from allServices
-            const index = allServices.findIndex(s => s.id === matchedService.id);
-            if (index > -1) {
-              allServices.splice(index, 1);
-            }
-          }
-        });
-
-        // Step 3: Bache hue services ko Products aur Solutions mein divide karte hain
-        const remainingServices = [...allServices];
-        const totalRemaining = remainingServices.length;
-        const half = Math.ceil(totalRemaining / 2);
-        
-        const productsServices = remainingServices.slice(0, half);
-        const solutionsServices = remainingServices.slice(half);
-
-        // Step 4: Update Footer Data
-        const updatedFooterData = StaticFooterData.map(col => {
-            if (col.heading === 'Products') {
-                return {
-                    ...col,
-                    links: productsServices.map(s => ({ title: s.title, slug: s.slug })),
-                };
-            }
-            
-            if (col.heading === 'Solutions') {
-                // Solutions ke links update karte hain
-                const solutionsLinks = solutionsServices.map(s => ({ title: s.title, slug: s.slug }));
-                
-                // SECURITY aur BUSINESS TOOLS sections ko update karte hain
-                const updatedSections = col.sections?.map(section => {
-                    if (section.subHeading === 'SECURITY') {
-                        return {
-                            ...section,
-                            links: securityServices.map(s => ({ title: s.title, slug: s.slug }))
-                        };
-                    }
-                    
-                    if (section.subHeading === 'BUSINESS TOOLS') {
-                        return {
-                            ...section,
-                            links: businessToolsServices.map(s => ({ title: s.title, slug: s.slug }))
-                        };
-                    }
-                    
-                    return section;
-                }) || [];
-
-                return {
-                    ...col,
-                    links: solutionsLinks,
-                    sections: updatedSections
-                };
-            }
-            
-            return col; 
-        });
-        
-        setFooterData(updatedFooterData);
-        
-        // Debug log for checking distribution
-        console.log('Footer Services Distribution:', {
-          securityServices: securityServices.map(s => s.title || s.name),
-          businessToolsServices: businessToolsServices.map(s => s.title || s.name),
-          productsServices: productsServices.map(s => s.title || s.name),
-          solutionsServices: solutionsServices.map(s => s.title || s.name)
-        });
-      }
-    } catch (error) {
-      console.error("Failed to fetch services:", error);
-    } finally {
-      setLoading(false);
-    }
+  // Function to check if category matches keywords
+  const categoryMatches = (categoryName, keywords) => {
+    const catNameUpper = categoryName.toUpperCase();
+    return keywords.some(keyword => catNameUpper.includes(keyword));
   };
 
+  // Get matching category name for footer section
+  const getMatchingCategoryName = (categoryName, sectionKey) => {
+    const keywords = FOOTER_KEYWORDS[sectionKey];
+    if (keywords && categoryMatches(categoryName, keywords)) {
+      return categoryName; // Use the actual category name from backend
+    }
+    return sectionKey; // Fallback to default section key
+  };
+
+  // Fetch categories and their services from API
   useEffect(() => {
-    fetchServices();
-    
+    const fetchCategoriesAndServices = async () => {
+      try {
+        // Fetch all categories
+        const categoriesResponse = await fetch(`${API_BASE_URL}categories/`);
+        if (!categoriesResponse.ok) {
+          throw new Error('Failed to fetch categories');
+        }
+        
+        const categoriesData = await categoriesResponse.json();
+        setCategories(categoriesData);
+        
+        // Fetch services for each category
+        const servicesPromises = categoriesData.map(async (category) => {
+          try {
+            const servicesResponse = await fetch(`${API_BASE_URL}categories/${category.id}/services/`);
+            if (servicesResponse.ok) {
+              const servicesData = await servicesResponse.json();
+              return { categoryId: category.id, services: servicesData };
+            }
+            return { categoryId: category.id, services: [] };
+          } catch (error) {
+            console.error(`Error fetching services for category ${category.name}:`, error);
+            return { categoryId: category.id, services: [] };
+          }
+        });
+
+        const servicesResults = await Promise.all(servicesPromises);
+        
+        // Organize services by category ID
+        const organizedServices = {};
+        servicesResults.forEach(result => {
+          const category = categoriesData.find(cat => cat.id === result.categoryId);
+          if (category) {
+            organizedServices[category.id] = {
+              categoryName: category.name,
+              services: result.services
+            };
+          }
+        });
+        
+        setCategoryServices(organizedServices);
+        
+        // Now update footer data based on API categories
+        updateFooterDataWithAPI(categoriesData, organizedServices);
+        
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        // Use fallback static data if API fails
+        setFooterData(getFallbackFooterData());
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const updateFooterDataWithAPI = (apiCategories, apiServices) => {
+      // Initialize objects to store matched categories
+      const matchedCategories = {
+        'Products': null,
+        'Solutions': null,
+        'SECURITY': null,
+        'BUSINESS TOOLS': null
+      };
+      
+      const otherCategories = [];
+      
+      // First pass: Match categories to footer sections
+      apiCategories.forEach(category => {
+        const categoryName = category.name;
+        const services = apiServices[category.id]?.services || [];
+        
+        let matched = false;
+        
+        // Check each footer section
+        Object.keys(FOOTER_KEYWORDS).forEach(sectionKey => {
+          if (categoryMatches(categoryName, FOOTER_KEYWORDS[sectionKey])) {
+            matchedCategories[sectionKey] = {
+              categoryName: categoryName,
+              services: services,
+              displayName: categoryName // Use actual category name
+            };
+            matched = true;
+          }
+        });
+        
+        if (!matched) {
+          otherCategories.push({
+            categoryName: categoryName,
+            services: services,
+            displayName: categoryName
+          });
+        }
+      });
+      
+      // Prepare footer data structure
+      const updatedFooterData = [];
+      
+      // 1. Products Section (DEVELOPMENT)
+      const productsCategory = matchedCategories['Products'];
+      updatedFooterData.push({
+        heading: productsCategory?.displayName || 'Products',
+        links: productsCategory ? 
+          productsCategory.services.map(service => ({
+            title: service.title,
+            slug: service.slug
+          })) : [
+            'Website Templates', 'Webinars', 'Domains', 'AI Website Builder', 'Design Intelligence', 
+            'Online Stores', 'Services', 'Invoicing', 'Scheduling', 'Content & Memberships', 
+            'Donations', 'Payments', 'Marketing Tools', 'Email Campaigns', 'Professional Email', 
+            'Feature List', 'Pricing'
+          ],
+        type: 'main'
+      });
+      
+      // 2. Solutions Section (MAINTENANCE + other categories)
+      const solutionsCategory = matchedCategories['Solutions'];
+      const otherSolutionsLinks = [];
+      
+      // Add services from other unmatched categories
+      otherCategories.forEach(cat => {
+        otherSolutionsLinks.push(...cat.services.map(service => ({
+          title: service.title,
+          slug: service.slug
+        })));
+      });
+      
+      // Combine with MAINTENANCE services if available
+      const allSolutionsLinks = solutionsCategory ? 
+        [
+          ...solutionsCategory.services.map(service => ({
+            title: service.title,
+            slug: service.slug
+          })),
+          ...otherSolutionsLinks
+        ] : otherSolutionsLinks;
+      
+      updatedFooterData.push({
+        heading: solutionsCategory?.displayName || 'Solutions',
+        links: allSolutionsLinks.slice(0, 11), // Limit to 11 items
+        sections: [
+          { 
+            subHeading: matchedCategories['SECURITY']?.displayName || 'SECURITY', 
+            links: matchedCategories['SECURITY'] ? 
+              matchedCategories['SECURITY'].services.map(service => ({
+                title: service.title,
+                slug: service.slug
+              })).slice(0, 4) : ['Web Audit', 'SSL & Encryption', 'Code Review', 'Vulnerability Assessment']
+          },
+          { 
+            subHeading: matchedCategories['BUSINESS TOOLS']?.displayName || 'BUSINESS TOOLS', 
+            links: matchedCategories['BUSINESS TOOLS'] ? 
+              matchedCategories['BUSINESS TOOLS'].services.map(service => ({
+                title: service.title,
+                slug: service.slug
+              })).slice(0, 4) : ['Technical SEO', 'Optimization', 'Content Strategy', 'Technical Support']
+          }
+        ],
+        type: 'main'
+      });
+      
+      // 3. Support & Resources Section (Static)
+      updatedFooterData.push({
+        heading: '',
+        links: [''],
+        sections: [ 
+          { 
+            subHeading: 'Support', 
+            links: ['Help Center', 'Forum', 'Webinars'] 
+          },
+          { 
+            subHeading: 'Resources', 
+            links: ['Extensions', 'Free Tools', 'Business Name Generator', 'Logo Maker'] 
+          }
+        ],
+        type: 'static'
+      });
+      
+      // 4. Company Section (Static)
+      updatedFooterData.push({
+        heading: 'Company',
+        links: [
+          'About', 'Careers', 'Contact Us'
+        ],
+        sections: [
+          { 
+            subHeading: 'Follow', 
+            links: ['Instagram', 'Youtube', 'LinkedIn', 'Facebook', 'X'] 
+          }
+        ],
+        type: 'static'
+      });
+      
+      setFooterData(updatedFooterData);
+      
+      // Debug log
+      console.log('Footer API Integration:', {
+        matchedCategories: Object.keys(matchedCategories).map(key => ({
+          section: key,
+          category: matchedCategories[key]?.displayName || 'Not found',
+          servicesCount: matchedCategories[key]?.services.length || 0
+        })),
+        otherCategories: otherCategories.map(c => c.categoryName),
+        totalCategories: apiCategories.length
+      });
+    };
+
+    // Fallback static data
+    const getFallbackFooterData = () => {
+      return [
+        { 
+          heading: 'Products', 
+          links: [
+            'Website Templates', 'Webinars', 'Domains', 'AI Website Builder', 'Design Intelligence', 
+            'Online Stores', 'Services', 'Invoicing', 'Scheduling', 'Content & Memberships', 
+            'Donations', 'Payments', 'Marketing Tools', 'Email Campaigns', 'Professional Email', 
+            'Feature List', 'Pricing'
+          ],
+          type: 'static'
+        },
+        { 
+          heading: 'Solutions', 
+          links: [
+            'Customer Examples', 'Squarespace Collection', 'Fitness', 'Beauty', 'Photography', 
+            'Restaurants', 'Art & Design', 'Wedding', 'Creators', 'Enterprise', 'Squarespace for Pros',
+          ],
+          sections: [
+            { 
+              subHeading: 'SECURITY', 
+              links: ['Web Audit', 'SSL & Encryption', 'Code Review', 'Vulnerability Assessment'] 
+            },
+            { 
+              subHeading: 'BUSINESS TOOLS', 
+              links: ['Technical SEO', 'Optimization', 'Content Strategy', 'Technical Support'] 
+            }
+          ],
+          type: 'static'
+        },
+        { 
+          heading: '', 
+          links: [''],
+          sections: [ 
+            { subHeading: 'Support', links: ['Help Center', 'Forum', 'Webinars'] },
+            { subHeading: 'Resources', links: ['Extensions', 'Free Tools', 'Business Name Generator', 'Logo Maker'] }
+          ],
+          type: 'static'
+        },
+        { 
+          heading: 'Company', 
+          links: [
+            'About', 'Careers', 'Our History', 'Our Brand', 'Accessibility', 'Newsroom', 
+            'Press & Media', 'Contact Us'
+          ],
+          sections: [
+            { subHeading: 'Follow', links: ['Instagram', 'Youtube', 'LinkedIn', 'Facebook', 'X'] }
+          ],
+          type: 'static'
+        }
+      ];
+    };
+
+    fetchCategoriesAndServices();
+  }, []);
+
+  useEffect(() => {
     const handleResize = () => {
         const mobileCheck = window.innerWidth <= 768;
         setIsMobile(mobileCheck);
@@ -212,7 +317,6 @@ const Footer = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
   
-  
   const getFlattenedAccordionData = () => {
     let flattened = [];
     let linkIndex = 0;
@@ -224,7 +328,7 @@ const Footer = () => {
                 id: linkIndex++,
                 heading: col.heading,
                 links: col.links,
-                type: 'main',
+                type: col.type || 'main',
             });
         }
 
@@ -245,6 +349,10 @@ const Footer = () => {
   };
   
   const renderLinks = (links, isAccordion = false) => {
+    if (loading) {
+      return <li>Loading...</li>;
+    }
+    
     return links.map((link, i) => {
         const title = typeof link === 'string' ? link : link.title;
         const slug = typeof link === 'string' ? link.toLowerCase().replace(/ /g, '-') : link.slug;
@@ -255,7 +363,9 @@ const Footer = () => {
 
         return (
             <li key={i}>
-                <a href={href} className={isAccordion ? 'footer-accordion-link' : ''}>{title}</a>
+                <a href={href} className={isAccordion ? 'footer-accordion-link' : ''}>
+                  {title}
+                </a>
             </li>
         );
     });
@@ -305,7 +415,6 @@ const Footer = () => {
     );
   };
 
-
   const renderDesktopGrid = () => (
     <div className="sq-footer-top-section">
         
@@ -336,12 +445,13 @@ const Footer = () => {
       </div>
   );
 
-
   // Main Footer Render
   return (
     <footer className={`sq-footer-container ${isMobile ? 'footer-mobile' : ''}`}>
       
-      {isMobile ? renderAccordion() : renderDesktopGrid()}
+      {loading ? (
+        <div className="footer-loading">Loading...</div>
+      ) : isMobile ? renderAccordion() : renderDesktopGrid()}
       
       <div className="sq-footer-bottom-bar">
         <div className="sq-footer-bottom-left">
