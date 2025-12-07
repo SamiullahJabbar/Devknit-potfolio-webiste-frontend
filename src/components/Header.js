@@ -406,13 +406,13 @@ const Header = () => {
         {renderResourceLink(
           'Forum',
           '', 
-          'An online community for Squarespace users to discuss best practices and seek advice.'
+          'An online community for Devknit users to discuss best practices and seek advice.'
         )}
 
         {renderResourceLink(
           'Webinars',
           '', 
-          "Free online sessions where you'll learn the basics and refine your Squarespace skills."
+          "Free online sessions where you'll learn the basics and refine your Devknit skills."
         )}
       </div>
        

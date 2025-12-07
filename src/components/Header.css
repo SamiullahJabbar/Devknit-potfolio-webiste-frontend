@@ -238,6 +238,7 @@
     cursor: pointer; 
     flex-shrink: 0; 
     z-index: 1001;
+    margin-right: auto;  /*new chaning */
 }
 
 .header-logo-img {
@@ -254,7 +255,8 @@
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    /* gap: 20px;  */
+    gap: 40px; /*   new chaning  Menu items ke darmiyan equal space */
+    margin: 0 auto; /*  new chaning  Center position ensure karega */
 }
 
 .header-utility-container { 
@@ -262,17 +264,17 @@
     align-items: center; 
     flex-shrink: 0; 
     max-width: 400px; 
-    margin-left: auto;
+    margin-left: auto;   /*  new chaning Right side par push karega */
 }
 
 .header-menu-item { 
     position: relative; 
-    margin: 0 15px; 
     padding: 5px 0; 
     cursor: pointer; 
     font-weight: 500; 
     font-size: 15px; 
     letter-spacing: 0.5px; 
+    /* white-space: nowrap; Text wrap hone se bachaye */
 }
 
 .header-cta-button {
@@ -344,8 +346,9 @@
 
 
 @media (max-width: 1200px) {
-    .services-dropdown-menu {
-        width: 850px;
+    .header-center-menu {
+        gap: 30px; /* new chaning  Choti screens par gap kam karna */
+        /* width: 850; */
     }
 }
 

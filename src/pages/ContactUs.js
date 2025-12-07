@@ -385,7 +385,7 @@ const ContactUs = () => {
         </section>
 
         {/* Rest of the component remains the same */}
-        {companyInfo && (
+        {/* {companyInfo && (
           <section className="company-info-section-footer">
             <div className="container">
               <div className="info-card-wrapper">
@@ -406,7 +406,7 @@ const ContactUs = () => {
               </div>
             </div>
           </section>
-        )}
+        )} */}
 
         {companyInfo && companyInfo.map_iframe && (
           <section className="map-section-footer">

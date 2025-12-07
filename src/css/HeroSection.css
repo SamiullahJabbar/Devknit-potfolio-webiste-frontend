@@ -3,22 +3,18 @@
 /* src/css/HeroSection.css */
 
 .hero-section {
-    /* Full viewport height, or a bit less */
     height: 100vh;
-    min-height: 700px; /* Optional: min height for desktop */
+    min-height: 700px;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     position: relative;
-    /* Background Image Styling */
     background-size: cover;
     background-position: center;
-    /* Ensures content is above the image/overlay */
-    z-index: 1; 
-    overflow: hidden; /* Image edges control */
+    z-index: 1;
+    overflow: hidden;
 }
-
 /* Optional: Dark Overlay for better text readability */
 .hero-section::before {
     content: '';
@@ -27,31 +23,38 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.4); /* Subtle dark overlay */
-    z-index: 2; /* Content se neeche, background se upar */
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 2;
 }
 
 .hero-content {
     position: relative;
-    z-index: 10; /* Content ko sabse upar rakhna */
+    z-index: 10;
     max-width: 1000px;
-    padding: 0px;
+    padding: 0 20px; /* Both left and right padding for symmetry */
+    margin: 0 auto; /* Center the entire content block */
+    width: 100%; /* Take full available width */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center all child elements horizontally */
+    justify-content: center; /* Center vertically within section */
 }
 
 .hero-logo {
-    width: 120px; 
+    width: 120px;
     height: 150px;
     margin-bottom: 0px;
-    padding: 0px 0px;
-   
 }
 
+/* new chaning */
 .hero-heading {
-    font-size: 3.4rem; /* Large font size */
+    font-size: 3.4rem;
     line-height: 1.1;
-    font-weight: 550; /* Matching the clean look */
+    font-weight: 550;
     margin-bottom: 10px;
-    color: #faf9f9; /* Text color */
+    color: #faf9f9;
+    text-align: center; /* Ensure text is centered */
+    width: 100%; /* Take full width */
 }
 
 .hero-actions {
