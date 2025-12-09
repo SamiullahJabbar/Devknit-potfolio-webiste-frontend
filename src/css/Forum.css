@@ -1,0 +1,271 @@
+
+.devkni-forum-hero-container {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  /* max-width: 2000px; */
+  margin: 40px auto;
+  min-height: 600px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  margin-top: 0%;
+  background-color: black; 
+}
+
+/* --- Left Column Styles (Text color changed to White) --- */
+.devkni-left-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 150px;
+}
+
+.devkni-solution-heading {
+  font-size: 3em;
+  font-weight: bold;
+  color: white; 
+  margin-bottom: 10px;
+}
+
+.devkni-search-bar-wrapper {
+  width: 80%;
+}
+
+.devkni-search-input {
+  width: 90%;
+  padding: 15px 30px;
+  font-size: 1.1em;
+  border: 2px solid #555;
+  background-color: #222;
+  color: white;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+  margin-bottom: 0; 
+}
+
+.devkni-search-input::placeholder {
+  color: #aaa;
+}
+
+.devkni-search-input:focus {
+  border-color: #5d6061;
+}
+
+/* --- Right Column Styles (Image) --- */
+.devkni-right-column {
+  flex: 1; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* padding: 50px;  */
+}
+
+.devkni-hero-image-styled {
+  max-width: 100%;
+  max-height: 120%;
+  height: 600px;
+  object-fit: contain;
+  margin-bottom: -100px !important;
+  margin-left: 0;
+}
+
+/* === TOPICS SECTION STYLES === */
+.devkni-forum-topics-section {
+  width: 100%;
+  max-width: 1400px;
+  margin: 60px auto 60px; 
+  padding: 0 40px;
+  background-color: white;
+}
+
+/* Header with divider line */
+.devkni-topics-header-container {
+  margin-bottom: 50px;
+    background-color: white;
+}
+
+.devkni-browse-heading {
+  font-size: 32px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  letter-spacing: -0.5px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.devkni-divider-line {
+  height: 1px;
+  background-color: #e0e0e0;
+  width: 100%;
+}
+
+.devkni-topics-grid-container {
+  width: 100%;
+    background-color: white;
+}
+.devkni-forum-container {
+  background-color: white;
+  min-height: 100vh;
+}
+
+.devkni-topics-grid {
+  display: grid; 
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+/* Topic Card - EXACT STYLING */
+.devkni-topic-card {
+  background-color: white;
+  border-radius: 0;
+  padding: 30px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px; 
+  position: relative; 
+  padding-bottom: 60px; 
+}
+
+.devkni-topic-card:hover {
+  border-color: #999;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.devkni-topic-icon {
+  font-size: 28px; 
+  color: #333; 
+  margin-bottom: 8px; 
+}
+
+.devkni-topic-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.4;
+  margin: 0 0 20px 0; 
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.devkni-post-count-text-wrapper {
+  position: absolute;
+  bottom: 25px; 
+  left: 30px; 
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+.devkni-topic-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0; 
+  flex-grow: 1; 
+}
+
+.devkni-topic-link-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px; 
+  padding-bottom: 0;
+  border-bottom: none; 
+}
+
+.devkni-topic-link-item:last-child {
+  margin-bottom: 0;
+}
+
+.devkni-topic-link-text {
+  font-size: 15px;
+  color: #666; 
+  text-decoration: none;
+  line-height: 1.5;
+  transition: color 0.2s;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.devkni-topic-link-text:hover {
+  color: #000000;
+  text-decoration: underline;
+}
+
+/* === NEW BANNER STYLING FOR DEVKNIT AND HOME BUTTON === */
+.devkni-company-footer-banner {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto 150px; /* 🛑 FIX: Topics aur Footer ke beech gap is section se aayega */
+    padding: 20px 40px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.devkni-company-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.devkni-company-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+}
+
+.devkni-home-button {
+    text-decoration: none;
+    background-color: #000000;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.devkni-home-button:hover {
+    background-color: #444;
+}
+
+/* --- Responsiveness --- */
+@media (max-width: 1200px) {
+  .devkni-topics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .devkni-forum-hero-container {
+    flex-direction: column; 
+    min-height: auto;
+    margin: 20px;
+  }
+
+  /* ... (Hero section mobile styles) ... */
+  
+  .devkni-forum-topics-section {
+    padding: 0 20px;
+    margin: 40px auto 40px; /* Mobile par margin kam rakha */
+  }
+  
+  .devkni-topics-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  /* New Banner Mobile Styles */
+  .devkni-company-footer-banner {
+    padding: 15px 20px;
+    margin: 0 auto 100px; 
+  }
+
+  .devkni-company-info {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .devkni-company-name {
+    font-size: 20px;
+  }
+}

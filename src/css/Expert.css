@@ -1,0 +1,478 @@
+/* Main Container */
+.devkni-expert-container {
+  background-color: white;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* === 1. Expert Hero Section Styles (Top Banner - White background) === */
+
+.devkni-expert-hero-section {
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 700px; 
+  align-items: center;
+  padding: 80px 40px;
+  overflow: hidden; 
+  background-color: white;
+  width: 100%; /* Ensure full width */
+}
+
+.devkni-expert-text-column {
+  flex: 1;
+  padding-right: 80px;
+}
+
+.devkni-expert-heading {
+  font-size: 4.5em; 
+  font-weight: 800;
+  line-height: 1.1;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+.devkni-expert-subtext {
+  font-size: 1.1em;
+  color: #080808;
+  width: 70%;
+  margin-bottom: 40px;
+  line-height: 1.5;
+  font-weight: bold;
+}
+
+.devkni-expert-button {
+  background-color: #000;
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  font-size: 0.9em;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.devkni-expert-button:hover {
+  background-color: #333;
+}
+
+.devkni-expert-image-column {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden; 
+  height: 600px; 
+}
+
+.devkni-expert-hero-image {
+  max-width: 120%; 
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: rotate(-5deg) translateX(50px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
+}
+
+/* === 2. Projects Section Styles (Black background) === */
+
+.devkni-projects-section {
+  background-color: #000; 
+  padding: 80px 0 100px;
+  width: 100%;
+}
+
+.devkni-projects-content-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.devkni-projects-heading {
+  font-size: 3em;
+  font-weight: 800;
+  color: white; 
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+
+.devkni-projects-subtext {
+  font-size: 1.1em;
+  color: #ffffff;
+  margin-bottom: 60px;
+  font-weight: bold;
+}
+
+.devkni-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.devkni-project-card {
+  background-color: #000; 
+  cursor: pointer;
+}
+
+.devkni-project-image-wrapper {
+  width: 100%;
+  height: 250px; 
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.devkni-project-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  transition: transform 0.3s ease-in-out;
+}
+
+.devkni-no-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #333;
+  color: #fff;
+  font-size: 1.2em;
+}
+
+.devkni-project-card:hover .devkni-project-image {
+  transform: scale(1.05);
+}
+
+.devkni-project-text-content {
+  padding: 0 5px; 
+}
+
+.devkni-project-title {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.devkni-project-description {
+  font-size: 0.9em;
+  color: #ffffff;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-weight: bold;
+}
+
+/* === 3. FAQs Section Styles === */
+
+.devkni-faqs-section {
+  background-color: #000; 
+  padding: 100px 0; /* Remove side padding */
+  width: 100%;
+}
+
+.devkni-faqs-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 40px; /* Padding here instead */
+}
+
+.devkni-faqs-heading-column {
+  flex: 0 0 40%; 
+}
+
+.devkni-faqs-heading {
+  font-size: 3em;
+  font-weight: 800;
+  line-height: 1.1;
+  color: white; 
+  margin: 0;
+}
+
+.devkni-faqs-accordion-column {
+  flex: 0 0 55%; 
+}
+
+.devkni-faq-item {
+  border-top: 1px solid #333; 
+}
+
+.devkni-faqs-accordion-column .devkni-faq-item:last-child {
+  border-bottom: 1px solid #333;
+}
+
+.devkni-faq-question-button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; 
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 25px 0;
+  cursor: pointer;
+}
+
+.devkni-faq-question {
+  font-size: 1.2em; 
+  font-weight: 600; 
+  color: white;
+  padding-right: 20px;
+  line-height: 1.4;
+}
+
+.devkni-faq-icon {
+  font-size: 1.8em;
+  color: white;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.devkni-faq-answer-container {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+  padding-bottom: 0;
+}
+
+.devkni-faq-answer-container.open {
+  max-height: 500px; 
+  padding-bottom: 30px; 
+}
+
+.devkni-faq-description-content p {
+  color: #ffffff;
+  font-weight: bold;
+  line-height: 1.6;
+  margin: 0;
+  padding-right: 50px;
+}
+
+/* === 4. Match Section Styles === */
+
+.devkni-match-section {
+  display: flex;
+
+  margin: 0 auto;
+  /* min-height: 550px; */
+  align-items: center;
+  padding: 80px 40px;
+  overflow: hidden;
+  background-color: #000;
+  color: rgb(2, 2, 2);
+  flex-direction: row-reverse;
+  /* margin-bottom: 100px; */
+}
+
+.devkni-match-text-column {
+  flex: 1;
+  padding-left: 80px;
+}
+
+.devkni-match-heading {
+  font-size: 3.5em;
+  font-weight: 800;
+  line-height: 1.1;
+  color: white;
+  margin-bottom: 20px;
+  margin-left: 15%;
+}
+
+.devkni-match-subtext {
+  font-size: 1.1em;
+  color: #ffffff;
+  width: 80%;
+  margin-bottom: 40px;
+  line-height: 1.5;
+  font-weight: bold;
+   margin-left: 15%;
+}
+
+.devkni-match-button {
+  background-color: white;
+  color: #000;
+  padding: 15px 30px;
+  border: none;
+  font-size: 0.9em;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+   margin-left: 15%;
+}
+
+.devkni-match-button:hover {
+  background-color: #eee;
+}
+
+.devkni-match-image-column {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  height: 500px;
+}
+
+.devkni-match-hero-image {
+  max-width: 120%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: rotate(5deg) translateX(-50px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Responsive Styles --- */
+@media (max-width: 1200px) {
+  .devkni-expert-heading {
+    font-size: 3.5em;
+  }
+  
+  .devkni-match-heading {
+    font-size: 3em;
+  }
+  
+  .devkni-projects-heading,
+  .devkni-faqs-heading {
+    font-size: 2.5em;
+  }
+}
+
+@media (max-width: 992px) {
+  .devkni-projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .devkni-faqs-wrapper {
+    flex-direction: column;
+  }
+  
+  .devkni-faqs-heading-column,
+  .devkni-faqs-accordion-column {
+    flex: 1;
+    width: 100%;
+  }
+  
+  .devkni-faqs-heading-column {
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .devkni-expert-hero-section {
+    flex-direction: column;
+    min-height: auto;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .devkni-expert-text-column {
+    padding-right: 0;
+    margin-bottom: 40px;
+  }
+  
+  .devkni-expert-heading {
+    font-size: 2.5em;
+  }
+  
+  .devkni-expert-subtext {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .devkni-expert-image-column {
+    width: 100%;
+    height: 400px;
+  }
+  
+  .devkni-expert-hero-image {
+    transform: rotate(-3deg) translateX(20px);
+    max-width: 100%;
+  }
+  
+  .devkni-projects-content-wrapper {
+    padding: 0 20px;
+  }
+  
+  .devkni-projects-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .devkni-faqs-wrapper {
+    padding: 0 20px;
+  }
+  
+  /* Match Section Mobile adjustments */
+  .devkni-match-section {
+    flex-direction: column;
+    min-height: auto;
+    text-align: center;
+    padding: 40px 20px;
+    margin-bottom: 60px;
+  }
+  
+  .devkni-match-text-column {
+    padding-left: 0;
+    margin-top: 40px;
+  }
+  
+  .devkni-match-heading {
+    font-size: 2.5em;
+  }
+  
+  .devkni-match-subtext {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .devkni-match-image-column {
+    width: 100%;
+    height: 350px;
+  }
+  
+  .devkni-match-hero-image {
+    transform: rotate(3deg) translateX(-10px);
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .devkni-expert-heading {
+    font-size: 2em;
+  }
+  
+  .devkni-projects-heading,
+  .devkni-faqs-heading,
+  .devkni-match-heading {
+    font-size: 1.8em;
+  }
+  
+  .devkni-faq-question {
+    font-size: 1em;
+  }
+  
+  .devkni-faq-description-content p {
+    padding-right: 0;
+  }
+}

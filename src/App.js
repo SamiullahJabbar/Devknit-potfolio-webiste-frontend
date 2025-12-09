@@ -54,6 +54,10 @@ import ProjectDetail from './pages/ProjectDetail';
 import ContactUs from './pages/ContactUs';
 import Projects from './pages/Projects';
 import BusinessServiceDetail from './pages/BusinessServiceDetail';
+import HelpCenter from './pages/HelpCenter';
+import Forum from './pages/Forum';
+import Expert from './pages/Expert';
+
 
 
 
@@ -124,6 +128,9 @@ function App() {
         <Route path="/ContactUs" element={<ContactUs />} />
         <Route path="/Projects" element={<Projects />} />
         <Route path="/business-services/:slug" element={<BusinessServiceDetail />} />
+        <Route path="/HelpCenter" element={<HelpCenter />} />
+        <Route path="/Forum" element={<Forum />} />
+        <Route path="/Expert" element={<Expert />} />
       </Routes>
     </Router>
   );

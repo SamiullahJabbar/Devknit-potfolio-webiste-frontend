@@ -399,13 +399,13 @@ const Header = () => {
 
         {renderResourceLink(
           'Help Center',
-          '', 
+          '/HelpCenter', 
           'In-depth guides and videos about the platform, our services, and how to get started.'
         )}
 
         {renderResourceLink(
           'Forum',
-          '', 
+          '/Forum', 
           'An online community for Devknit users to discuss best practices and seek advice.'
         )}
 
@@ -428,7 +428,7 @@ const Header = () => {
 
         {renderResourceLink(
           'Hire an Expert',
-          '', 
+          '/Expert', 
           'Let us do the work of finding you the perfect Expert to help you stand out online.'
         )}
 
