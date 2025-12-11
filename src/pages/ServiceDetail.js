@@ -368,37 +368,37 @@ const ServiceDetail = () => {
                     </section>
                 )} */}
 
-                {/* ❓ Enhanced FAQ Section */}
-                {faqs.length > 0 && (
-                    <section className="enhanced-faq-section">
-                        <div className="faq-container">
-                            <h2 className="section-title">Frequently Asked Questions</h2>
-                            <div className="faq-grid">
-                                {faqs.map((faq, index) => (
-                                    <div 
-                                        key={index} 
-                                        className={`faq-item ${activeFaq === index ? 'active' : ''}`}
-                                    >
-                                        <div 
-                                            className="faq-question"
-                                            onClick={() => toggleFaq(index)}
-                                        >
-                                            <h3>{faq.question}</h3>
-                                            <div className="faq-toggle">
-                                                <span className="toggle-icon">
-                                                    {activeFaq === index ? '' : ''}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div className="faq-answer">
-                                            <p>{faq.answer}</p>
-                                        </div>
-                                    </div>
-                                ))}
+                // ❓ Enhanced FAQ Section
+{faqs.length > 0 && (
+    <section className="enhanced-faq-section">
+        <div className="faq-container">
+            <h2 className="section-title">Frequently Asked Questions</h2>
+            <div className="faq-grid">
+                {faqs.map((faq, index) => (
+                    <div 
+                        key={index} 
+                        className={`faq-item ${activeFaq === index ? 'active' : ''}`}
+                    >
+                        <div 
+                            className="faq-question"
+                            onClick={() => toggleFaq(index)}
+                        >
+                            <h3>{faq.question}</h3>
+                            <div className="faq-toggle">
+                                <span className="toggle-icon">
+                                    {activeFaq === index ? '−' : '+'}
+                                </span>
                             </div>
                         </div>
-                    </section>
-                )}
+                        <div className="faq-answer">
+                            <p>{faq.answer}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+)}
 
                 {/* 🚀 2. Related Projects Slider (Featured Case Studies) */}
                 {allProjects.length > 0 && (

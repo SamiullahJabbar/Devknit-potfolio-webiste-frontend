@@ -11,7 +11,7 @@ import '../css/articles.css';
 
 
 // --- IMAGE IMPORTS (UNCHANGED) ---
-import background from '../images/hero.png';
+import background from '../images/newlogo.png';
 import logo from '../images/icon-logo.png';
 import dotvideo from '../images/dotvideo.mp4';
 

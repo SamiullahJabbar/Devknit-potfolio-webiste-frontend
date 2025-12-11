@@ -888,19 +888,9 @@
     background: #000000;
     color: #ffffff;
     border-radius: 8px;
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: 600;
     transition: all 0.3s ease;
-    position: relative;
-}
-
-.toggle-icon::before {
-    content: '+';
-    transition: transform 0.3s ease;
-}
-
-.faq-item.active .toggle-icon::before {
-    content: '-';
 }
 
 .faq-item.active .toggle-icon {
@@ -908,15 +898,19 @@
     transform: rotate(0deg);
 }
 
+/* ❗ IMPORTANT CHANGE: Initially hide answers */
 .faq-answer {
     max-height: 0;
     overflow: hidden;
-    transition: all 0.4s ease;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     padding: 0 30px;
 }
 
+/* Show answer when active */
 .faq-item.active .faq-answer {
     max-height: 1000px;
+    opacity: 1;
     padding: 0 30px 24px;
 }
 
@@ -928,7 +922,7 @@
     padding-top: 8px;
 }
 
-/* FAQ Numbering */
+/* FAQ Numbering (Optional) */
 .faq-question h3::before {
     content: "Q" counter(faq-counter) ".";
     counter-increment: faq-counter;
@@ -972,7 +966,7 @@
     .toggle-icon {
         width: 28px;
         height: 28px;
-        font-size: 0.9rem;
+        font-size: 1.3rem;
     }
 }
 
