@@ -368,7 +368,7 @@ const ServiceDetail = () => {
                     </section>
                 )} */}
 
-                // ❓ Enhanced FAQ Section
+           
 {faqs.length > 0 && (
     <section className="enhanced-faq-section">
         <div className="faq-container">
