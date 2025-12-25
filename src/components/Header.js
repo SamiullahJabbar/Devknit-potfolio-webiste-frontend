@@ -481,11 +481,11 @@ const Header = () => {
     });
 
   const mobileResourcesLinks = [
-    { type: 'link', text: 'Help Center', path: '' },
-    { type: 'link', text: 'Forum', path: '' },
-    { type: 'link', text: 'Webinars', path: '' },
+    { type: 'link', text: 'Help Center', path: '/HelpCenter' },
+    { type: 'link', text: 'Forum', path: '/Forum' },
+    { type: 'link', text: 'Webinars', path: '/Webinar' },
     { type: 'link', text: 'Blog', path: '/articles' },
-    { type: 'link', text: 'Hire an Expert', path: '' }, 
+    { type: 'link', text: 'Hire an Expert', path: '/Expert' }, 
     { type: 'title', text: 'GET INSPIRED' }, 
     { 
         type: 'box', 
