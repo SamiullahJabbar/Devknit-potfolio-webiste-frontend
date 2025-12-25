@@ -5,7 +5,7 @@ import HeaderLogoImage from '../images/devknit.png';
 import './Header.css';
 
 // --- UPDATED: GOOGLE TRANSLATE INITIALIZATION FUNCTION ---
-const INCLUDED_LANGUAGES = 'en,ru,uk,kk,uz,ky,tk';
+const INCLUDED_LANGUAGES = 'en,kk,ru';
 
 function googleTranslateElementInit() {
   if (window.google && window.google.translate) {
@@ -411,7 +411,7 @@ const Header = () => {
 
         {renderResourceLink(
           'Webinars',
-          '', 
+          '/Webinar', 
           "Free online sessions where you'll learn the basics and refine your Devknit skills."
         )}
       </div>

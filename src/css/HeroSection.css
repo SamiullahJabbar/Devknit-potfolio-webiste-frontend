@@ -56,53 +56,56 @@
     text-align: center; /* Ensure text is centered */
     width: 100%; /* Take full width */
 }
-
 .hero-actions {
     display: flex;
     gap: 15px;
     justify-content: center;
+    align-items: center; /* Dono buttons ko vertically ek line mein rakhne ke liye */
     margin-top: 0px;
     padding: 15px 30px;
-    /* background-color: #000000; */
-    color: #ffffff;
-    border: none;
-    border-radius: 1px;
-    
 }
 
 .hero-cta {
-    padding: 20px 25px;
+    /* Dono buttons ka size same karne ke liye padding fix kar di */
+    padding: 20px 30px; 
     border-radius: 0px;
     text-decoration: none;
     font-weight: 600;
     transition: all 0.3s ease;
     cursor: pointer;
     font-size: 0.95rem;
+    font-family: sans-serif;
+    display: inline-block;
+    text-align: center;
 }
 
+/* --- Primary Button (Initial: White) --- */
 .hero-cta.primary {
     background-color: #ffffff;
     color: #000000;
     border: 1px solid #ffffff;
 }
 
+/* Hover: White se Black */
 .hero-cta.primary:hover {
-    background-color: #f0ff00; /* Subtle hover effect */
-    color: #000000;
-}
-
-.hero-cta.secondary {
-    background-color: transparent;
+    background-color: #000000;
     color: #ffffff;
-    border: 1px solid #ffffff; /* White border */
-    padding: 25px 20px;
-    border-radius: 0px;
+    border: 1px solid #ffffff;
 }
 
+/* --- Secondary Button (Initial: Black/Transparent) --- */
+.hero-cta.secondary {
+    background-color: #000000; /* Original black color */
+    color: #ffffff;
+    border: 1px solid #ffffff;
+}
+
+/* Hover: Black se White */
 .hero-cta.secondary:hover {
-    background-color: rgba(255, 255, 255, 0.1); /* Subtle transparent hover */
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #ffffff;
 }
-
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
     .hero-heading {
@@ -385,6 +388,7 @@
     font-size: 1rem;
     background-color: #ffffff; /* White background to prevent grey lines */
     transition: background-color 0.3s;
+    font-family: sans-serif;
 }
 
 .view-more-cta:hover {
@@ -485,6 +489,7 @@
     font-size: 0.8rem;
     display: inline-block;
     transition: background-color 0.3s, color 0.3s;
+    font-family: sans-serif;
 }
 
 .articles-section-updated .view-all-cta:hover {
@@ -669,6 +674,7 @@
     background-color: #000000;
     color: #ffffff;
     border-color: #ffffff;
+    font-family: sans-serif !important;
 }
 
 /* --- Mobile View Adjustments (For Trial Section) --- */
@@ -857,6 +863,7 @@
     align-items: center;
     transition: background 0.3s;
     margin-right: 0;
+    font-family: sans-serif !important;
 }
 .mobile-overlay-title:hover .overlay-cta-arrow {
     background: #141313;

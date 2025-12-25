@@ -1089,3 +1089,59 @@
   height: 120px;
   border-radius: 50%;
 }
+
+
+
+
+/* Floating Chat Container */
+.floating-chat-container {
+    position: fixed;
+    bottom: 30px; /* Neeche se distance */
+    right: 30px;  /* Right side se distance */
+    display: flex;
+    flex-direction: column; /* Ek ke upar ek dikhane ke liye */
+    gap: 15px;    /* Dono icons ke beech gap */
+    z-index: 9999; /* Taake har cheez ke upar nazar aaye */
+}
+
+.floating-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+}
+
+.floating-icon:hover {
+    transform: scale(1.1); /* Hover karne par thora bada hoga */
+    color: white;
+}
+
+/* WhatsApp Color */
+.whatsapp-float {
+    background-color: #25d366;
+}
+
+/* Telegram Color */
+.telegram-float {
+    background-color: #0088cc;
+}
+
+/* Mobile Responsive */
+@media screen and (max-width: 768px) {
+    .floating-chat-container {
+        bottom: 20px;
+        right: 20px;
+    }
+    .floating-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 25px;
+    }
+}

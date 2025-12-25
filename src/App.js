@@ -57,8 +57,8 @@ import BusinessServiceDetail from './pages/BusinessServiceDetail';
 import HelpCenter from './pages/HelpCenter';
 import Forum from './pages/Forum';
 import Expert from './pages/Expert';
-
-
+import Webinar from './pages/Webinar';
+import WebinarDetail from './pages/WebinarDetail';
 
 
 function App() {
@@ -131,6 +131,8 @@ function App() {
         <Route path="/HelpCenter" element={<HelpCenter />} />
         <Route path="/Forum" element={<Forum />} />
         <Route path="/Expert" element={<Expert />} />
+        <Route path="/Webinar" element={<Webinar />} />
+        <Route path="/webinar/:slug" element={<WebinarDetail />} />
       </Routes>
     </Router>
   );

@@ -253,7 +253,7 @@ const ContactUs = () => {
             <h2 className="form-title">Ready to elevate your business? Let's discuss your project and business goals</h2>
             
             <p className="form-intro">
-              I'm a freelance web Designer and CRO Specialist based in Falmouth, Cornwall, UK. I work with brands of all sizes, from local businesses to international companies, from Cornwall to Canada. No matter what you sell, your business store is in expert hands.
+             We are a specialized team of web designers and CRO specialists working with brands of all sizes, from local businesses to international companies. With operations across Abu Dhabi and Astana, Kazakhstan, we support clients globally, from regional startups to established international brands. No matter what you sell or where you operate, your business and online presence are in expert hands.
             </p>
             {companyInfo && (
               <p className="form-intro contact-email">
@@ -465,6 +465,28 @@ const ContactUs = () => {
           </div>
         </section>
       </div>
+
+      {/* Floating Chat Buttons */}
+<div className="floating-chat-container">
+  <a 
+    href="https://t.me/@NiaziSec"
+    target="_blank" 
+    rel="noopener noreferrer" 
+    className="floating-icon telegram-float"
+    title="Chat on Telegram"
+  >
+    <i className="fab fa-telegram-plane"></i>
+  </a>
+  <a 
+    href="https://wa.me/77752307615"
+    target="_blank" 
+    rel="noopener noreferrer" 
+    className="floating-icon whatsapp-float"
+    title="Chat on WhatsApp"
+  >
+    <i className="fab fa-whatsapp"></i>
+  </a>
+</div>
     </Layout>
   );
 };

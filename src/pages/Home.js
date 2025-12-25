@@ -11,7 +11,7 @@ import '../css/articles.css';
 
 
 // --- IMAGE IMPORTS (UNCHANGED) ---
-import background from '../images/newlogo.png';
+import background from '../images/Page.webp';
 import logo from '../images/icon-logo.png';
 import dotvideo from '../images/dotvideo.mp4';
 
@@ -46,21 +46,14 @@ const HeroSection = () => {
                 </h1>
 
                 <div className="hero-actions">
-                    <Link to="/ContactUs" className="hero-cta primary" style={{
-                        backgroundColor: '#ffffff',
-                        color: '#000000',
-                    }}>
-                        GET STARTED
-                    </Link>
+    <Link to="/ContactUs" className="hero-cta primary">
+        GET STARTED
+    </Link>
 
-                    <Link to="/Projects" className="hero-cta secondary" style={{
-                        backgroundColor: '#000000ff',
-                        color: '#ffffff',
-                        border: '1px solid #ffffff',
-                    }}>
-                        VIEW PORTFOLIO
-                    </Link>
-                </div>
+    <Link to="/Projects" className="hero-cta secondary">
+        VIEW PORTFOLIO
+    </Link>
+</div>
             </div>
         </section>
     );
@@ -834,7 +827,7 @@ const TrialSection = () => {
                 <p className="trial-subheading">
                     No credit card required. Satisfactions guaranteed.
                 </p>
-                <Link to="/ContactUs" className="trial-cta">
+                <Link to="/ContactUs" className="hero-cta primary">
                     GET STARTED
                 </Link>
             </div>

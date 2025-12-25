@@ -208,7 +208,11 @@ const Footer = () => {
         sections: [ 
           { 
             subHeading: 'Support', 
-            links: ['Help Center', 'Forum', 'Webinars'] 
+            links: [
+              { title: 'Help Center', href: '/HelpCenter' },
+              { title: 'Forum', href: '/forum' },
+              { title: 'Webinars', href: '/Webinar' }
+            ] 
           },
           { 
             subHeading: 'Resources', 
@@ -218,16 +222,23 @@ const Footer = () => {
         type: 'static'
       });
       
-      // 4. Company Section (Static)
+      // 4. Company Section (Static) - UPDATED
       updatedFooterData.push({
         heading: 'Company',
         links: [
-          'About', 'Careers', 'Contact Us'
+          { title: 'About', href: '/about' },
+          { title: 'Careers', href: '/careers' },
+          { title: 'Contact Us', href: '/ContactUs' }
         ],
         sections: [
           { 
             subHeading: 'Follow', 
-            links: ['Instagram', 'Youtube', 'LinkedIn', 'Facebook', 'X'] 
+            links: [
+              { title: 'Instagram', href: 'https://www.instagram.com/devknitofficial?igsh=MmlmN29xa3hwNDdu&utm_source=qr', external: true },
+              { title: 'LinkedIn', href: 'https://www.linkedin.com/company/devknit7/', external: true },
+              { title: 'Facebook', href: 'https://facebook.com', external: true },
+              { title: 'X', href: 'https://x.com/devkni2', external: true }
+            ] 
           }
         ],
         type: 'static'
@@ -282,19 +293,38 @@ const Footer = () => {
           heading: '', 
           links: [''],
           sections: [ 
-            { subHeading: 'Support', links: ['Help Center', 'Forum', 'Webinars'] },
-            { subHeading: 'Resources', links: ['Extensions', 'Free Tools', 'Business Name Generator', 'Logo Maker'] }
+            { 
+              subHeading: 'Support', 
+              links: [
+                { title: 'Help Center', href: '/HelpCenter' },
+                { title: 'Forum', href: '/Forum' },
+                { title: 'Webinars', href: '/Webinar' }
+              ] 
+            },
+            { 
+              subHeading: 'Resources', 
+              links: ['Extensions', 'Free Tools', 'Business Name Generator', 'Logo Maker'] 
+            }
           ],
           type: 'static'
         },
         { 
           heading: 'Company', 
           links: [
-            'About', 'Careers', 'Our History', 'Our Brand', 'Accessibility', 'Newsroom', 
-            'Press & Media', 'Contact Us'
+            { title: 'About', href: '/ContactUs' },
+            { title: 'Careers', href: '/' },
+            { title: 'Contact Us', href: '/ContactUs' }
           ],
           sections: [
-            { subHeading: 'Follow', links: ['Instagram', 'Youtube', 'LinkedIn', 'Facebook', 'X'] }
+            { 
+              subHeading: 'Follow', 
+              links: [
+                { title: 'Instagram', href: 'https://www.instagram.com/devknitofficial?igsh=MmlmN29xa3hwNDdu&utm_source=qr', external: true },
+                { title: 'LinkedIn', href: 'https://www.linkedin.com/company/devknit7/', external: true },
+                { title: 'Facebook', href: 'https://facebook.com', external: true },
+                { title: 'X', href: 'https://x.com/devkni2', external: true }
+              ] 
+            }
           ],
           type: 'static'
         }
@@ -354,20 +384,64 @@ const Footer = () => {
     }
     
     return links.map((link, i) => {
-        const title = typeof link === 'string' ? link : link.title;
-        const slug = typeof link === 'string' ? link.toLowerCase().replace(/ /g, '-') : link.slug;
+      // Check if link is an object with href (for custom links)
+      if (typeof link === 'object') {
+        const { title, href, external, slug } = link;
         
-        const href = typeof link === 'string' 
-                     ? `` 
-                     : `/services/${slug}`;
-
-        return (
+        // For external social links
+        if (external) {
+          return (
             <li key={i}>
-                <a href={href} className={isAccordion ? 'footer-accordion-link' : ''}>
-                  {title}
-                </a>
+              <a 
+                href={href} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={isAccordion ? 'footer-accordion-link' : ''}
+              >
+                {title}
+              </a>
             </li>
+          );
+        }
+        
+        // For internal custom links (About, Careers, Contact Us, etc.)
+        if (href) {
+          return (
+            <li key={i}>
+              <a href={href} className={isAccordion ? 'footer-accordion-link' : ''}>
+                {title}
+              </a>
+            </li>
+          );
+        }
+        
+        // For service links with slug
+        if (slug) {
+          return (
+            <li key={i}>
+              <a href={`/services/${slug}`} className={isAccordion ? 'footer-accordion-link' : ''}>
+                {title}
+              </a>
+            </li>
+          );
+        }
+      }
+      
+      // For old string format (backward compatibility)
+      if (typeof link === 'string') {
+        const slug = link.toLowerCase().replace(/ /g, '-');
+        const href = `/services/${slug}`;
+        
+        return (
+          <li key={i}>
+            <a href={href} className={isAccordion ? 'footer-accordion-link' : ''}>
+              {link}
+            </a>
+          </li>
         );
+      }
+      
+      return null;
     });
   };
 

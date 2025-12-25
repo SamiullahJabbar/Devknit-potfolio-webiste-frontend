@@ -71,6 +71,56 @@
   margin-left: 0;
 }
 
+
+/* --- Updated Mobile Responsive Styles --- */
+@media (max-width: 768px) {
+  .devkni-forum-hero-container {
+    flex-direction: column;
+    min-height: auto;
+    padding: 20px 0; /* Padding sahi kar di */
+    margin: 0 !important; /* Side ka gap khatam karne ke liye */
+    width: 100vw; /* Full width screen ke liye */
+  }
+
+  .devkni-left-column {
+    padding: 40px 20px;
+    align-items: center;
+    text-align: center;
+    width: 100%; /* Ensure full width */
+  }
+
+  /* Baki code wahi rahega... */
+  .devkni-solution-heading {
+    font-size: 2em;
+    margin-left: -10%;
+  }
+
+  .devkni-search-bar-wrapper {
+    width: 90%; /* Center mein rakhne ke liye thoda gap */
+    margin-left: -10%;
+  }
+
+  .devkni-search-input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .devkni-right-column {
+    padding: 0; /* Extra space khatam */
+    width: 100%;
+  }
+
+  .devkni-hero-image-styled {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover; /* Gap khatam karne ke liye behtar hai */
+    margin-bottom: -20px !important;
+  }
+}
+
+
+
 /* === TOPICS SECTION STYLES === */
 .devkni-forum-topics-section {
   width: 100%;

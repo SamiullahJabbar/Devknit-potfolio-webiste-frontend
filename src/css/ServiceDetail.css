@@ -4,32 +4,32 @@
 
 /* --- GENERAL STYLES (Keep existing styles for the rest of the page) --- */
 .service-detail-page {
-    /* Basic padding/margin for the container */
-    overflow-x: hidden; /* Prevent horizontal scroll on small screens */
+    overflow-x: hidden;
+    width: 100%;
 }
 
 .service-hero-container,
 .gallery-container,
-.seo-features-section { /* Added .seo-features-section for consistency */
-    max-width: 1400px; /* Increased max-width for modern large screens */
+.seo-features-section { 
+    max-width: 1400px; 
     margin: 0 auto;
-    padding: 0 24px; /* Slightly increased padding */
+    padding: 0 24px; 
 }
 
 /* ------------------------------------------------ */
-/* 🎯 1. HERO SECTION */
+/* 🎯 1. HERO SECTION (Desktop Default) */
 /* ------------------------------------------------ */
 .new-service-hero-section {
     position: relative;
     height: auto; 
-    min-height: 95vh; /* Increased min-height for more impact */
+    min-height: 95vh; 
     background-size: cover;
     background-position: center;
     color: white; 
     display: flex;
-    align-items: flex-end; /* Align content to the bottom */
+    align-items: flex-end; 
     justify-content: center; 
-    padding: 60px 0; /* Adjusted padding */
+    padding: 60px 0; 
 }
 
 .hero-overlay {
@@ -38,12 +38,11 @@
     left: 0;
     width: 100%;
     height: 100%;
-    /* Full Black Overlay (Bottom heavy - slightly smoother gradient) */
     background: linear-gradient(to top, 
         rgba(0, 0, 0, 1) 0%,      
-        rgba(0, 0, 0, 0.9) 40%, /* Smoother transition */
+        rgba(0, 0, 0, 0.9) 40%, 
         rgba(0, 0, 0, 0.6) 80%,
-        rgba(0, 0, 0, 0.3) 100%   /* Lighter at the very top */
+        rgba(0, 0, 0, 0.3) 100%   
     );
     z-index: 1;
 }
@@ -53,28 +52,27 @@
     z-index: 2;
     width: 100%;
     text-align: center; 
-    padding-bottom: 50px; /* Padding from the bottom of the hero section */
+    padding-bottom: 50px; 
 }
 
 .new-service-hero-section .hero-content {
-    max-width: 1200px; /* Increased max-width */
+    max-width: 1200px; 
     margin: 0 auto;
-    /* Removed padding-top here as alignment is now bottom */
 }
 
 .new-service-hero-section .service-main-title {
-    font-size: 5.5rem; /* Increased size for impact */
-    font-weight: 800; /* Bolder font weight */
+    font-size: 5.5rem; 
+    font-weight: 800; 
     margin-bottom: 25px;
     line-height: 1.05;
-    text-transform: uppercase; /* Added uppercase for modern look */
+    text-transform: uppercase; 
     letter-spacing: 2px;
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); /* Subtle shadow for contrast */
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); 
 }
 
 .new-service-hero-section .detail-title-text {
-    font-size: 1.8rem; /* Increased size */
-    font-weight: 500; /* Slightly reduced weight for secondary title */
+    font-size: 1.8rem; 
+    font-weight: 500; 
     max-width: 900px;
     margin: 0 auto 50px auto; 
     opacity: 0.98;
@@ -82,38 +80,87 @@
 }
 
 .hero-full-description-wrapper {
-    text-align: left; /* Changed alignment to left for better readability in a block */
-    max-width: 1000px; /* Controlled width */
-    margin: 40px auto 0 auto; /* Added top margin */
+    text-align: left; 
+    max-width: 1000px; 
+    margin: 40px auto 0 auto; /* Desktop par center rakha hai */
     padding: 40px; 
-    background: rgba(255, 255, 255, 0.08); /* Slightly more opaque background */
-    border-radius: 16px; /* Increased border-radius */
-    backdrop-filter: blur(5px); /* Added subtle blur for modern frosted glass effect */
-    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Stronger shadow */
+    background: rgba(255, 255, 255, 0.08); 
+    border-radius: 16px; 
+    backdrop-filter: blur(5px); 
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); 
 }
 
 .hero-full-description-wrapper .hero-full-description-content {
-    color: #f0f0f0; /* Slightly off-white for softer look */
-    font-size: 1.2rem; /* Reduced slightly for body text */
-    line-height: 1.8; /* Better line-height for readability */
-    font-weight: 300; /* Lighter font weight for body text */
+    color: #f0f0f0; 
+    font-size: 1.2rem; 
+    line-height: 1.8; 
+    font-weight: 300; 
 }
 
 .hero-full-description-wrapper .hero-full-description-content p {
-    margin-bottom: 20px; /* Reduced paragraph spacing slightly */
+    margin-bottom: 20px; 
 }
 
 .hero-full-description-wrapper .hero-full-description-content h3 {
-    font-size: 2rem; /* Increased size */
+    font-size: 2rem; 
     font-weight: 700;
-    margin-top: 40px; /* Increased top margin */
+    margin-top: 40px; 
     margin-bottom: 15px;
-    color: #000000; 
-    border-bottom: 2px solid #070707; /* Added a subtle underline */
+    color: #ffffff; 
+    border-bottom: 2px solid #ffffff; 
     display: inline-block;
     padding-bottom: 5px;
 }
+
+/* ==========================================================================
+   📱 MOBILE & TABLET RESPONSIVE (CENTER FIX)
+   ========================================================================== */
+
+@media screen and (max-width: 768px) {
+    
+    .service-hero-container {
+        padding: 0 15px; /* Side padding */
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .new-service-hero-section .service-main-title {
+        font-size: 2.2rem;
+        padding: 0 10px;
+    }
+
+    /* 🎯 YAHAN FIX KIYA HAI MOBILE CENTER KE LIYE */
+    .hero-full-description-wrapper {
+        margin: 30px auto 0 auto !important; /* Center margin auto set kiya */
+        width: 90% !important; 
+        padding: 25px 20px;
+        text-align: left;
+        float: none; /* Kisi bhi kism ka float khatam karne ke liye */
+        display: block; /* Ensure block element behavior */
+    }
+
+    .hero-full-description-wrapper .hero-full-description-content {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .new-service-hero-section .service-main-title {
+        font-size: 1.8rem;
+    }
+
+    .hero-full-description-wrapper {
+        width: 90% !important; /* Thora aur wide chote phones par */
+        margin: 20px auto !important;
+        /* padding: 20px 20px; */
+        margin-left: -5.5% !important; 
+    }
+}
+
+
+
 
 /* ------------------------------------------------ */
 /* ⭐ WHITE SPACE/GAP SECTION (Feature Points Wrapper) */
